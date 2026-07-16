@@ -63,7 +63,54 @@ export function ProjectVisual({ project }: { project: Project }) {
           </>
         )}
 
-        {project.slug !== 'breast-cancer-prediction' && project.slug !== 'fire-weather-index' && (
+        {project.slug === 'customer-churn-prediction' && (
+          <>
+            <div className="flex items-center gap-3" aria-hidden="true">
+              <div className="rounded-lg border border-white/10 bg-base-900/50 px-3 py-2 backdrop-blur">
+                <div className={`font-display text-2xl font-bold ${a.text}`}>0.84</div>
+                <div className="text-[10px] text-ink-muted">ROC-AUC</div>
+              </div>
+              <div className="rounded-lg border border-white/10 bg-base-900/50 px-3 py-2 backdrop-blur">
+                <div className="font-display text-2xl font-bold text-ink">78%</div>
+                <div className="text-[10px] text-ink-muted">Churn recall</div>
+              </div>
+            </div>
+            <div className="mt-1 flex items-center gap-2" aria-hidden="true">
+              <span className="text-[10px] text-ink-muted">Risk</span>
+              <div className="h-2 flex-1 rounded-full bg-white/10">
+                <div className={`h-2 rounded-full bg-current ${a.text}`} style={{ width: '72%' }} />
+              </div>
+              <span className="rounded border border-white/10 bg-base-900/50 px-1.5 py-0.5 text-[9px] text-ink-muted">
+                Retain
+              </span>
+            </div>
+          </>
+        )}
+
+        {project.slug === 'ai-resume-analyzer' && (
+          <>
+            <div className="flex items-center gap-3" aria-hidden="true">
+              <div className={`flex h-14 w-14 items-center justify-center rounded-full border-2 border-current ${a.text}`}>
+                <span className="font-display text-sm font-bold">49%</span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="text-[10px] text-ink-muted">Match score</span>
+                <span className="text-[10px] text-ink-faint">17 matched · 8 gaps</span>
+              </div>
+            </div>
+            <div className="mt-1 flex flex-wrap gap-1.5" aria-hidden="true">
+              {['Python', 'SQL', 'Pandas', 'Power BI'].map((s) => (
+                <span key={s} className="rounded border border-white/10 bg-base-900/50 px-1.5 py-0.5 text-[9px] text-ink-muted">
+                  {s}
+                </span>
+              ))}
+            </div>
+          </>
+        )}
+
+        {!['breast-cancer-prediction', 'fire-weather-index', 'customer-churn-prediction', 'ai-resume-analyzer'].includes(
+          project.slug,
+        ) && (
           <div className="flex flex-col gap-2" aria-hidden="true">
             <div className="h-2 w-2/3 rounded-full bg-white/30" />
             <div className="h-2 w-1/2 rounded-full bg-white/20" />

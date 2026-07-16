@@ -245,28 +245,134 @@ export const portfolio: PortfolioData = {
       accent: 'cyan',
     },
     {
-      slug: 'data-analytics-dashboard',
-      title: 'Business Analytics Dashboard',
+      slug: 'customer-churn-prediction',
+      title: 'Customer Churn Prediction & Retention Dashboard',
       year: '2026',
-      status: 'building',
-      featured: false,
-      tagline: 'Interactive BI dashboard for business KPI storytelling.',
+      status: 'shipped',
+      featured: true,
+      tagline: 'Predicting telecom churn and turning it into retention action.',
       description:
-        'A currently-in-progress interactive analytics dashboard exploring KPI reporting, cohort and funnel analysis on business datasets.',
+        'An end-to-end machine-learning pipeline that predicts which telecom customers are likely to churn, served through an interactive retention dashboard.',
       problem:
-        'Turning raw business data into a clear, decision-ready view that non-technical stakeholders can act on.',
+        'Losing customers is expensive. The goal was to flag at-risk customers early — with enough recall to actually catch churners — so retention teams can act before they leave.',
       approach:
-        'Combining SQL data preparation with BI tooling (Power BI / Tableau) and Python visualisation to build cohort, funnel and KPI views.',
-      technologies: ['SQL', 'Power BI', 'Tableau', 'Pandas', 'Business Intelligence'],
-      keyResult: 'In active development',
-      achievements: [],
-      caseStudy: [],
-      metrics: [],
+        'Cleaned a 7,043-customer dataset, built a Scikit-learn preprocessing + model pipeline (scaling + one-hot encoding), compared Logistic Regression and Random Forest with balanced class weights, and selected the best by ROC-AUC. Predictions are served through a Streamlit dashboard.',
+      technologies: ['Python', 'Pandas', 'NumPy', 'Scikit-learn', 'Streamlit', 'Machine Learning'],
+      keyResult: '0.84 ROC-AUC, catching 78% of churners',
+      achievements: [
+        'Built an end-to-end churn pipeline on a 7,043-customer telecom dataset with 19 features.',
+        'Achieved 0.84 ROC-AUC and 74% accuracy, with 78% recall on churners using balanced class weights.',
+        'Identified the top churn drivers — tenure, contract type, fibre-optic internet and monthly charges.',
+        'Deployed an interactive Streamlit dashboard that turns predictions into concrete retention actions.',
+      ],
+      caseStudy: [
+        {
+          heading: 'Problem',
+          body: 'Customer churn directly hits revenue. The project set out to predict churn from customer attributes with high enough recall to be useful to a retention team, not just high headline accuracy.',
+        },
+        {
+          heading: 'Dataset',
+          body: 'The public Telco Customer Churn dataset — 7,043 customers described by 19 features (contract, tenure, services, charges) with a binary churn label. The base churn rate is ~26.5%.',
+        },
+        {
+          heading: 'Data cleaning',
+          body: 'Dropped the identifier column, coerced the text TotalCharges field to numeric (blank for new customers), and mapped the churn target to 0/1.',
+        },
+        {
+          heading: 'Modelling & class imbalance',
+          body: 'A ColumnTransformer scales numeric features and one-hot encodes categoricals inside a single pipeline. Logistic Regression and Random Forest were trained with balanced class weights so the minority churn class was not ignored.',
+        },
+        {
+          heading: 'Evaluation',
+          body: 'On a stratified held-out test set the best model reached 0.84 ROC-AUC and 74% accuracy, correctly identifying 78% of customers who actually churned.',
+        },
+        {
+          heading: 'Key churn drivers',
+          body: 'Short tenure, month-to-month contracts, fibre-optic internet and high monthly charges were the strongest churn signals — consistent with known telecom retention patterns.',
+        },
+        {
+          heading: 'Dashboard',
+          body: 'A Streamlit app loads the saved pipeline and scores a customer profile in real time, returning a churn probability and a suggested retention action.',
+        },
+        {
+          heading: 'Future improvements',
+          body: 'Probability calibration, a tunable decision threshold, SHAP explanations per prediction, and batch scoring from an uploaded CSV.',
+        },
+      ],
+      metrics: [
+        { value: '0.84', label: 'ROC-AUC' },
+        { value: '74%', label: 'Accuracy' },
+        { value: '7,043', label: 'Customers' },
+        { value: '78%', label: 'Churn recall' },
+      ],
       links: {
         github: '',
         demo: '',
       },
       accent: 'blue',
+    },
+    {
+      slug: 'ai-resume-analyzer',
+      title: 'AI Resume Analyzer & Job-Description Matcher',
+      year: '2026',
+      status: 'shipped',
+      featured: true,
+      tagline: 'NLP app scoring resume–job fit with a skill-gap report.',
+      description:
+        'An NLP application that scores how well a resume matches a job description and reports the exact skills to add.',
+      problem:
+        "Applicants rarely know why their resume does or doesn't fit a role. The goal was an instant, explainable match score plus a concrete skill-gap report.",
+      approach:
+        'Cleaned and tokenised resume and job-description text, vectorised both with TF-IDF (uni- and bi-grams), and computed cosine similarity — blended with skill-coverage against a curated tech vocabulary — for an intuitive match score. Built a Streamlit interface for upload-and-analyse.',
+      technologies: ['Python', 'Scikit-learn', 'NLP', 'TF-IDF', 'Streamlit'],
+      keyResult: 'Instant match score + skill-gap report',
+      achievements: [
+        'Built an NLP matcher using TF-IDF and cosine similarity, blended with skill-coverage for an intuitive fit score.',
+        'Engineered a text pipeline — cleaning, tokenisation and keyword extraction — over unstructured resume and job-description documents.',
+        'Detects matched vs. missing skills against a curated technical vocabulary and surfaces the job description’s top keywords.',
+        'Delivered a Streamlit app supporting PDF and text resume upload with an instant match score and skill-gap report.',
+      ],
+      caseStudy: [
+        {
+          heading: 'Problem',
+          body: 'Tailoring a resume to each role is guesswork. The project provides an objective match score and a specific list of skills to add before applying.',
+        },
+        {
+          heading: 'Inputs',
+          body: 'A resume (uploaded as PDF or text) and a pasted job description. Text is extracted from PDFs and normalised for analysis.',
+        },
+        {
+          heading: 'Text preprocessing',
+          body: 'Both documents are lowercased, stripped of noise and collapsed to clean tokens, preserving technical tokens like c++ and c#.',
+        },
+        {
+          heading: 'Matching approach',
+          body: 'TF-IDF vectors (uni- and bi-grams, English stop-words removed) are compared with cosine similarity, then blended with skill-coverage so the score reflects how many of the role’s required skills the resume actually has.',
+        },
+        {
+          heading: 'Skill-gap analysis',
+          body: 'A curated technical vocabulary is matched (word-boundary aware) against both texts to report skills the resume already covers versus those it is missing.',
+        },
+        {
+          heading: 'Interface',
+          body: 'A Streamlit app returns an overall match score, matched vs. missing skills, and the top keywords from the job description — with a sample resume and JD preloaded to try instantly.',
+        },
+        {
+          heading: 'Future improvements',
+          body: 'Sentence-transformer embeddings for semantic matching, section-aware parsing, and ranking one resume against many job descriptions.',
+        },
+      ],
+      metrics: [
+        { value: 'TF-IDF', label: 'Vectorisation' },
+        { value: 'Cosine', label: 'Similarity' },
+        { value: 'PDF+TXT', label: 'Resume input' },
+        { value: 'NLP', label: 'Text pipeline' },
+      ],
+      links: {
+        github: '',
+        demo: '',
+      },
+      accent: 'coral',
     },
   ],
 
@@ -454,6 +560,20 @@ export const portfolio: PortfolioData = {
         description:
           "Flask REST API predicting Canada's Fire Weather Index with sub-200ms inference.",
         tech: ['Python', 'Flask', 'Ridge Regression'],
+        url: '',
+      },
+      {
+        name: 'Customer Churn Prediction',
+        description:
+          'End-to-end churn pipeline (0.84 ROC-AUC) on 7,043 customers with a Streamlit retention dashboard.',
+        tech: ['Python', 'Scikit-learn', 'Streamlit'],
+        url: '',
+      },
+      {
+        name: 'AI Resume Analyzer',
+        description:
+          'NLP resume–job matcher using TF-IDF + cosine similarity with a skill-gap report.',
+        tech: ['Python', 'Scikit-learn', 'NLP'],
         url: '',
       },
     ],
