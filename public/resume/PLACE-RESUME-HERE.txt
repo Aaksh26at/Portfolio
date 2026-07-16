@@ -1,0 +1,23 @@
+RESUME PDF — how to add it
+===========================
+
+1. Save your CV/resume PDF in THIS folder (public/resume/).
+
+2. Name it exactly:
+       Aakshat-Agarwal-Resume.pdf
+
+   Full path:
+       public/resume/Aakshat-Agarwal-Resume.pdf
+
+3. Every "Download Resume" button on the site points here automatically
+   (navigation, hero, recruiter snapshot and contact area).
+
+To use a different filename, change `resumePath` in:
+       data/portfolio.ts
+   (and the `download` filename in components/ui/ResumeButton.tsx if you want
+    the downloaded file named differently).
+
+Until the PDF is added, the download buttons will resolve to a missing file
+(404). Add the PDF before deploying.
+
+You can delete this .txt file once the resume is in place.
