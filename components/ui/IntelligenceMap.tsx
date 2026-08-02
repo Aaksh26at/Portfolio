@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
-import { IntelligenceCore } from '@/components/3d/IntelligenceCore'
 
 type SignalId = 'diagnose' | 'forecast' | 'retain' | 'match'
 
@@ -63,7 +62,6 @@ export function IntelligenceMap() {
       </figcaption>
 
       <div className="relative mt-4 aspect-[5/4] min-h-[20rem] overflow-hidden rounded-[calc(var(--radius-card)-0.4rem)] bg-[var(--color-paper)]">
-        <IntelligenceCore className="intelligence-core absolute inset-[8%_14%_20%_14%] z-0" />
         <svg
           viewBox="0 0 640 510"
           role="img"

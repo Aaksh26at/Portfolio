@@ -188,113 +188,6 @@
   }
   @keyframes signal-flow { to { stroke-dashoffset: -40; } }
 
-  .depth-stage {
-    perspective: var(--depth-perspective);
-    transform-style: preserve-3d;
-  }
-
-  .depth-stage__surface {
-    --local-rx: 0deg;
-    --local-ry: 0deg;
-    transform:
-      rotateX(var(--local-rx))
-      rotateY(var(--local-ry))
-      translateZ(var(--depth-mid));
-    transform-style: preserve-3d;
-    transition: transform var(--dur-long) var(--ease-out);
-    animation: depth-settle var(--dur-long) var(--ease-out) both;
-  }
-
-  @keyframes depth-settle {
-    from {
-      opacity: 0.72;
-      transform: rotateX(3deg) rotateY(-2deg) translateZ(var(--depth-far));
-    }
-    to {
-      opacity: 1;
-      transform:
-        rotateX(var(--local-rx))
-        rotateY(var(--local-ry))
-        translateZ(var(--depth-mid));
-    }
-  }
-
-  .intelligence-core {
-    transform: translateZ(var(--depth-far));
-  }
-
-  .intelligence-core > div,
-  .intelligence-core canvas {
-    height: 100% !important;
-    width: 100% !important;
-  }
-
-  .scene-fallback {
-    position: relative;
-    display: grid;
-    height: 100%;
-    width: 100%;
-    place-items: center;
-    perspective: var(--depth-perspective);
-    transform-style: preserve-3d;
-  }
-
-  .scene-fallback__ring,
-  .scene-fallback__axis,
-  .scene-fallback__core,
-  .scene-fallback__node {
-    position: absolute;
-    display: block;
-  }
-
-  .scene-fallback__ring {
-    aspect-ratio: 1;
-    border: 1px solid var(--color-rule);
-    border-radius: var(--radius-pill);
-  }
-
-  .scene-fallback__ring--outer {
-    width: 68%;
-    transform: rotateX(66deg) rotateZ(-12deg) translateZ(var(--depth-far));
-  }
-
-  .scene-fallback__ring--inner {
-    width: 47%;
-    border-color: var(--color-accent);
-    opacity: 0.62;
-    transform: rotateY(68deg) rotateZ(22deg) translateZ(var(--depth-mid));
-  }
-
-  .scene-fallback__axis {
-    height: 1px;
-    width: 74%;
-    background: var(--color-rule);
-    transform-origin: center;
-  }
-
-  .scene-fallback__axis--one { transform: rotate(31deg); }
-  .scene-fallback__axis--two { transform: rotate(-47deg); }
-
-  .scene-fallback__core {
-    width: 25%;
-    aspect-ratio: 1;
-    background: var(--color-paper-3);
-    border: 1px solid var(--color-accent);
-    clip-path: polygon(50% 0, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
-    transform: rotateX(58deg) rotateZ(18deg) translateZ(var(--depth-near));
-  }
-
-  .scene-fallback__node {
-    width: 0.5rem;
-    aspect-ratio: 1;
-    border-radius: var(--radius-pill);
-    background: var(--color-accent);
-  }
-
-  .scene-fallback__node--one { inset: 23% auto auto 27%; }
-  .scene-fallback__node--two { inset: auto 24% 27% auto; }
-  .scene-fallback__node--three { inset: 31% 20% auto auto; background: var(--color-ink-2); }
-
   .project-visual {
     transform-style: preserve-3d;
   }
@@ -381,12 +274,19 @@
     scroll-behavior: auto !important;
   }
   .signal-path { animation: none !important; stroke-dasharray: none; }
-  .depth-stage__surface,
   .project-visual__plot,
   .project-visual__needle {
     transform: none !important;
   }
-  .depth-stage__surface { opacity: 1 !important; }
   .data-world__canvas { display: none; }
   .data-world__fallback { opacity: 0.28; }
+
+  /* Reveal drives inline styles via framer-motion, which this media
+   * query cannot reach — the component checks useReducedMotion() in JS.
+   * This is the belt-and-braces guard for the SSR'd initial styles. */
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
 }
