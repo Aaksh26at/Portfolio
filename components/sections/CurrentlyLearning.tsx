@@ -2,7 +2,7 @@ import { portfolio } from '@/data/portfolio'
 
 export function CurrentlyLearning() {
   return (
-    <section data-world="4" aria-label="Currently learning" className="pb-16 sm:pb-24 lg:pb-32">
+    <section data-world="4" aria-label="Currently learning" className="section surface surface--inset">
       <div className="container-page">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>

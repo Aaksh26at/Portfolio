@@ -5,7 +5,7 @@ export function About() {
   const { about } = portfolio
 
   return (
-    <section id="about" data-world="1" className="section-pad">
+    <section id="about" data-world="1" className="section surface surface--paper">
       <div className="container-page">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:items-start lg:gap-16">
           <div className="lg:sticky lg:top-32">

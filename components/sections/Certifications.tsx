@@ -2,7 +2,7 @@ import { portfolio } from '@/data/portfolio'
 
 export function Certifications() {
   return (
-    <section id="certifications" data-world="4" className="pb-16 sm:pb-24 lg:pb-32">
+    <section id="certifications" data-world="4" className="section surface surface--wash-signal">
       <div className="container-page">
         <div className="observatory-panel overflow-hidden">
           <div className="grid gap-6 px-6 py-9 sm:px-9 lg:grid-cols-[0.8fr_1.2fr] lg:items-end lg:px-12 lg:py-12">

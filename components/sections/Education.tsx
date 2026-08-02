@@ -3,7 +3,7 @@ import { portfolio } from '@/data/portfolio'
 
 export function Education() {
   return (
-    <section id="education" data-world="4" className="section-pad">
+    <section id="education" data-world="4" className="section surface surface--paper">
       <div className="container-page">
         <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-end lg:gap-16">
           <div>

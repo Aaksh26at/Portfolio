@@ -7,8 +7,8 @@ export function Hero() {
   const { hero, person } = portfolio
 
   return (
-    <section id="home" data-world="0" className="overflow-hidden" aria-label="Introduction">
-      <div className="container-page flex min-h-[82dvh] flex-col pb-36 pt-28 sm:pb-40 sm:pt-32">
+    <section id="home" data-world="0" aria-label="Introduction" className="section section--hero surface surface--paper overflow-hidden">
+      <div className="container-page flex min-h-[72dvh] flex-col">
         <div className="grid gap-2 text-xs text-ink-muted sm:flex sm:flex-wrap sm:items-center sm:gap-x-5">
           <span className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />

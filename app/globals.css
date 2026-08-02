@@ -128,7 +128,182 @@
 @layer components {
   .container-page { @apply mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12 xl:px-16; }
 
-  .section-pad { padding-block: var(--space-section); }
+  /* ── section rhythm ────────────────────────────────────────────
+   * One system. Every <section> carries exactly one .section* class
+   * and one .surface--* class, and never hand-rolls its own padding.
+   * Filled surfaces get the full rhythm so the fill has room to
+   * breathe; transparent paper sections get half, because their
+   * whitespace already reads as separation. */
+  .section { padding-block: var(--rhythm-half); }
+
+  .section.surface--band,
+  .section.surface--inset,
+  .section.surface--wash-signal,
+  .section.surface--wash-data,
+  .section.surface--outline { padding-block: var(--rhythm); }
+
+  .section--hero {
+    padding-block-start: var(--rhythm-hero);
+    padding-block-end: var(--rhythm);
+  }
+
+  /* ── surfaces ──────────────────────────────────────────────────
+   * The tone class sits on the <section> element itself, which is a
+   * block child of <main> and therefore already spans the viewport —
+   * no w-screen / margin-inline hacks, which break under the
+   * overflow-x: clip on html/body.
+   *
+   * Tinted and inked surfaces re-declare the colour tokens locally,
+   * so every descendant re-tones for free: Tailwind utilities read
+   * the *-lch triplets, arbitrary values read the ready var(--color-*),
+   * and both are remapped below. */
+  .surface { position: relative; }
+  .surface--paper { background: transparent; }
+
+  .surface--inset {
+    background: var(--color-paper-3);
+    border-block: var(--rule-thin) solid var(--color-rule-2);
+  }
+
+  .surface--wash-signal {
+    background: var(--color-signal-soft);
+    border-block: var(--rule-thin) solid var(--color-rule);
+  }
+
+  .surface--wash-data {
+    background: var(--color-data-soft);
+    border-block: var(--rule-thin) solid var(--color-rule);
+  }
+
+  .surface--outline {
+    background: transparent;
+    border-block: var(--rule-strong) solid var(--color-ink);
+  }
+
+  /* The band is mode-invariant: it stays dark in dark mode too, so the
+   * page rhythm survives the theme toggle. */
+  .surface--band,
+  .panel[data-tone='band'] {
+    --color-paper-lch: var(--color-band-lch);
+    --color-paper-2-lch: var(--color-band-2-lch);
+    --color-paper-3-lch: var(--color-band-2-lch);
+    --color-ink-lch: var(--color-band-ink-lch);
+    --color-ink-2-lch: var(--color-band-ink-2-lch);
+    --color-muted-lch: var(--color-band-muted-lch);
+    --color-neutral-lch: var(--color-band-muted-lch);
+    --color-rule-lch: var(--color-band-rule-lch);
+    --color-rule-2-lch: var(--color-band-rule-lch);
+    --color-rule-strong-lch: var(--color-band-muted-lch);
+    --color-control-rule-lch: var(--color-band-muted-lch);
+    --color-accent-lch: var(--color-band-signal-lch);
+    --color-signal-lch: var(--color-band-signal-lch);
+    --color-signal-strong-lch: var(--color-band-signal-lch);
+    --color-data-lch: var(--color-band-data-lch);
+    --color-focus-lch: var(--color-band-signal-lch);
+
+    --color-paper: var(--color-band);
+    --color-paper-2: var(--color-band-2);
+    --color-paper-3: var(--color-band-2);
+    --color-ink: var(--color-band-ink);
+    --color-ink-2: var(--color-band-ink-2);
+    --color-muted: var(--color-band-muted);
+    --color-neutral: var(--color-band-muted);
+    --color-rule: var(--color-band-rule);
+    --color-rule-2: var(--color-band-rule);
+    --color-rule-strong: var(--color-band-muted);
+    --color-control-rule: var(--color-band-muted);
+    --color-accent: var(--color-band-signal);
+    --color-signal: var(--color-band-signal);
+    --color-signal-strong: var(--color-band-signal);
+    --color-data: var(--color-band-data);
+    --color-focus: var(--color-band-signal);
+
+    --shadow-color-lch: 4% 0.01 58;
+    --elev-hairline: inset 0 1px 0 0 oklch(var(--color-band-ink-lch) / 0.07);
+
+    background: var(--color-band);
+    color: var(--color-band-ink);
+    border-color: var(--color-band-rule);
+  }
+
+  /* ── panel ─────────────────────────────────────────────────────
+   * One container primitive with a tone axis, replacing the single
+   * .observatory-panel that appeared in ten of eleven sections. */
+  .panel {
+    position: relative;
+    border-radius: var(--radius-card);
+    transition:
+      border-color var(--dur-short) var(--ease-out),
+      box-shadow var(--dur-short) var(--ease-out),
+      transform var(--dur-short) var(--ease-out);
+  }
+
+  .panel[data-tone='raised'] {
+    background: var(--color-paper-2);
+    color: var(--color-ink);
+    border: var(--rule-thin) solid var(--color-rule);
+    box-shadow: var(--shadow-2), var(--elev-hairline);
+  }
+
+  .panel[data-tone='inset'] {
+    background: var(--color-paper-3);
+    color: var(--color-ink);
+    border: var(--rule-thin) solid transparent;
+  }
+
+  .panel[data-tone='outline'] {
+    background: transparent;
+    border: var(--rule-thin) solid var(--color-rule);
+  }
+
+  .panel[data-tone='band'] {
+    border: var(--rule-thin) solid var(--color-band-rule);
+    box-shadow: var(--shadow-3);
+  }
+
+  .panel[data-tone='signal'] {
+    background: var(--color-signal-soft);
+    border: var(--rule-thin) solid var(--color-signal);
+  }
+
+  .panel[data-tone='data'] {
+    background: var(--color-data-soft);
+    border: var(--rule-thin) solid var(--color-data);
+  }
+
+  .panel[data-tone='flush'] {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .panel[data-elev='0'] { box-shadow: none; }
+  .panel[data-elev='1'] { box-shadow: var(--shadow-1), var(--elev-hairline); }
+  .panel[data-elev='2'] { box-shadow: var(--shadow-2), var(--elev-hairline); }
+  .panel[data-elev='3'] { box-shadow: var(--shadow-3), var(--elev-hairline); }
+  .panel[data-elev='4'] { box-shadow: var(--shadow-4), var(--elev-hairline); }
+
+  .panel[data-pad='sm'] { padding: var(--space-lg); }
+  .panel[data-pad='md'] { padding: clamp(1.5rem, 3vw, 2rem); }
+  .panel[data-pad='lg'] { padding: clamp(1.5rem, 4vw, 3rem); }
+  .panel[data-clip='true'] { overflow: hidden; }
+
+  @media (hover: hover) and (pointer: fine) {
+    .panel[data-interactive='true']:hover {
+      border-color: var(--color-control-rule);
+      box-shadow: var(--shadow-lift), var(--elev-hairline);
+      transform: translateY(-2px);
+    }
+    .panel[data-tone='flush'][data-interactive='true']:hover {
+      box-shadow: none;
+      transform: none;
+    }
+  }
+
+  .panel[data-interactive='true']:focus-within {
+    border-color: var(--color-control-rule);
+  }
+
   /* The wordmark is a cut of the display face, not a third family:
    * maximum optical size gives Fraunces its highest-contrast display
    * drawing, which reads as a distinct voice at wordmark scale. */
@@ -141,20 +316,30 @@
   .tnum { font-variant-numeric: tabular-nums; }
   .surface-night { background: var(--color-night); color: var(--color-night-ink); }
 
+  /* Deprecated — migrating to <Panel tone="raised">. Kept as an alias
+   * for one pass so sections can move over incrementally. */
   .observatory-panel {
     background: var(--color-paper-2);
     color: var(--color-ink);
-    border: 1px solid var(--color-rule);
+    border: var(--rule-thin) solid var(--color-rule);
     border-radius: var(--radius-card);
-    box-shadow: var(--shadow-card);
-    transition: border-color var(--dur-short) var(--ease-out);
+    box-shadow: var(--shadow-2), var(--elev-hairline);
+    transition:
+      border-color var(--dur-short) var(--ease-out),
+      box-shadow var(--dur-short) var(--ease-out),
+      transform var(--dur-short) var(--ease-out);
   }
 
   @media (hover: hover) and (pointer: fine) {
     .observatory-panel[data-interactive='true']:hover {
-      border-color: var(--color-muted);
+      border-color: var(--color-control-rule);
+      box-shadow: var(--shadow-lift), var(--elev-hairline);
+      transform: translateY(-2px);
     }
   }
+
+  /* Deprecated — replaced by .section + .surface--*. */
+  .section-pad { padding-block: var(--rhythm); }
 
   .signal-label {
     font-family: var(--font-body);
@@ -228,13 +413,20 @@
     isolation: isolate;
   }
 
+  /* A soft vignette, not a wipe. The old 0.58-opacity horizontal paper
+   * gradient hid most of the scene; the surface bands now supply the
+   * occlusion, so this only needs to settle the outer edges. */
   .data-world::after {
     content: '';
     position: absolute;
     inset: 0;
     z-index: 2;
-    background: linear-gradient(90deg, var(--color-paper) 0%, transparent 32%, transparent 80%, var(--color-paper) 100%);
-    opacity: 0.58;
+    background: radial-gradient(
+      120% 90% at 58% 42%,
+      transparent 0%,
+      transparent 48%,
+      oklch(var(--color-paper-lch) / 0.55) 100%
+    );
   }
 
   .data-world__canvas,

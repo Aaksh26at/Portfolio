@@ -2,7 +2,7 @@ import { portfolio } from '@/data/portfolio'
 
 export function DataPipeline() {
   return (
-    <section data-world="3" aria-label="How I work" className="pb-16 sm:pb-24 lg:pb-32">
+    <section data-world="3" data-header-tone="band" aria-label="How I work" className="section surface surface--band">
       <div className="container-page">
         <div className="observatory-panel overflow-hidden px-6 py-10 sm:px-9 sm:py-12 lg:px-12">
           <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">

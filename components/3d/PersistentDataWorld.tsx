@@ -151,7 +151,10 @@ function DataWorldScene({
   }, [])
   const linePositions = useMemo(() => new Float32Array(Math.floor(POINT_COUNT / 3) * 6), [])
   const palette = {
-    accent: readSceneColor('--world-color-accent'),
+    // Cobalt: the world is evidence, so it reads in the data channel.
+    data: readSceneColor('--world-color-data'),
+    // Amber: exactly one warm note, on the inner ring.
+    signal: readSceneColor('--world-color-signal'),
     ink: readSceneColor('--world-color-ink'),
     muted: readSceneColor('--world-color-muted'),
     pointSize: readNumberToken('--world-point-size'),
@@ -188,7 +191,9 @@ function DataWorldScene({
     const group = groupRef.current
     if (!group) return
     const wide = viewport.width > 8
-    const offsets = [1.65, 1.75, 0.7, -1.1, 1.2, 0]
+    // Pulled toward centre: sections now occlude the world themselves,
+    // so it no longer has to hide in the right margin to stay legible.
+    const offsets = [0.9, 1.2, 0.4, -0.8, 0.8, 0]
     const targetX = wide ? offsets[stage] : 0
     const targetScale = wide ? [1, 0.94, 0.94, 1.06, 0.98, 1.04][stage] : 0.78
     group.position.x = THREE.MathUtils.damp(group.position.x, targetX, 3.5, delta)
@@ -220,7 +225,7 @@ function DataWorldScene({
           <bufferAttribute attach="attributes-position" args={[currentPositions, 3]} />
         </bufferGeometry>
         <pointsMaterial
-          color={palette.accent}
+          color={palette.data}
           size={palette.pointSize}
           sizeAttenuation
           transparent
@@ -253,7 +258,7 @@ function DataWorldScene({
         </mesh>
         <mesh rotation={[1.05, 0.35, -0.2]}>
           <torusGeometry args={[1.72, 0.01, 3, 80]} />
-          <meshBasicMaterial color={palette.accent} transparent opacity={0.24} depthWrite={false} />
+          <meshBasicMaterial color={palette.signal} transparent opacity={0.3} depthWrite={false} />
         </mesh>
       </group>
     </group>
@@ -279,10 +284,11 @@ export function PersistentDataWorld() {
     const hasWebGL = Boolean(canvas.getContext('webgl2') || canvas.getContext('webgl'))
     setCanRender(hasWebGL && !reducedMotion.matches)
 
-    const chapterMotion = window.matchMedia('(min-width: 40rem)')
-    const chapters = chapterMotion.matches
-      ? Array.from(document.querySelectorAll<HTMLElement>('[data-world]'))
-      : []
+    // Observed at every width. The narrow-viewport adaptation lives in
+    // useFrame (targetX collapses to 0, scale to 0.78) — gating the
+    // observer as well only froze the world on stage 0 for the whole
+    // page on mobile.
+    const chapters = Array.from(document.querySelectorAll<HTMLElement>('[data-world]'))
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {

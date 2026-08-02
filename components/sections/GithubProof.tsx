@@ -7,7 +7,7 @@ export function GithubProof() {
   const { github } = portfolio
 
   return (
-    <section data-world="4" aria-label="Code and proof of work" className="section-pad pt-0">
+    <section data-world="2" aria-label="Code and proof of work" className="section surface surface--paper">
       <div className="container-page grid gap-8 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16">
         <div className="self-start lg:sticky lg:top-32">
           <span className="mb-6 block h-1 w-9 rounded-full bg-accent" aria-hidden="true" />

@@ -26,7 +26,7 @@ export function SocialLinks({ className }: { className?: string }) {
               href={social.href}
               aria-label={social.label}
               onClick={() => ev && track(ev)}
-              className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-control)] border border-[var(--color-rule-strong)] text-ink-muted transition-colors duration-150 hover:border-ink hover:text-ink"
+              className="flex h-11 w-11 items-center justify-center rounded-[var(--radius-control)] border border-[var(--color-rule-strong)] text-ink-muted transition-colors duration-150 hover:border-ink hover:text-ink"
               {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
             >
               <Icon className="h-[18px] w-[18px]" aria-hidden="true" />

@@ -212,7 +212,6 @@
   --world-color-ink: 0.149 0.129 0.114;
   --world-color-muted: 0.48 0.45 0.42;
   --world-color-paper: 0.969 0.957 0.926;
-  --world-color-accent: var(--world-color-data);
 
   --z-base: 1;
   --z-raised: 10;

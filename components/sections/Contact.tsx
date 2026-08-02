@@ -73,7 +73,7 @@ export function Contact() {
   ]
 
   return (
-    <section id="contact" data-world="5" className="section-pad pt-4">
+    <section id="contact" data-world="5" data-header-tone="band" className="section surface surface--band">
       <div className="container-page grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-start lg:gap-16 xl:gap-24">
         <div className="lg:sticky lg:top-32">
           <span className="mb-6 block h-1 w-9 rounded-full bg-accent" aria-hidden="true" />

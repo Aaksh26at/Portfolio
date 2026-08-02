@@ -11,7 +11,7 @@ export function RecruiterSnapshot() {
   ]
 
   return (
-    <section data-world="1" aria-label="Recruiter snapshot" className="pb-12 sm:pb-20">
+    <section data-world="1" data-header-tone="band" aria-label="Recruiter snapshot" className="section surface surface--band">
       <div className="container-page">
         <div className="observatory-panel overflow-hidden">
           <div className="flex flex-col gap-5 px-6 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-8">

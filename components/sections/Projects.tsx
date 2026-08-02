@@ -82,7 +82,7 @@ export function Projects() {
   }
 
   return (
-    <section id="projects" data-world="2" className="section-pad">
+    <section id="projects" data-world="2" className="section surface surface--wash-data">
       <div className="container-page grid gap-12 lg:grid-cols-[minmax(18rem,0.55fr)_minmax(0,1.45fr)] lg:gap-14 xl:gap-20">
         <div className="self-start lg:sticky lg:top-32">
           <span className="mb-6 block h-1 w-9 rounded-full bg-accent" aria-hidden="true" />
