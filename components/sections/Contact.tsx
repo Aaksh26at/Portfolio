@@ -1,10 +1,8 @@
 'use client'
 
 import { useState, type FormEvent } from 'react'
-import { Mail, MapPin, Phone, Github, Linkedin, Copy, Check, Send, Loader2 } from 'lucide-react'
+import { Check, Copy, Github, Linkedin, Loader2, Mail, MapPin, Phone, Send } from 'lucide-react'
 import { portfolio } from '@/data/portfolio'
-import { SectionHeading } from '@/components/ui/SectionHeading'
-import { Reveal } from '@/components/ui/Reveal'
 import { isValidEmail } from '@/lib/utils'
 import { track } from '@/lib/analytics'
 
@@ -17,58 +15,54 @@ export function Contact() {
   const [copied, setCopied] = useState(false)
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '', company: '' })
 
-  const mailtoHref = `mailto:${contact.email}?subject=${encodeURIComponent(
-    form.subject || 'Hello from your portfolio',
-  )}&body=${encodeURIComponent(`${form.message}\n\n— ${form.name}`)}`
+  const mailtoHref = `mailto:${contact.email}?subject=${encodeURIComponent(form.subject || 'Hello from your portfolio')}&body=${encodeURIComponent(`${form.message}\n\n— ${form.name}`)}`
 
   const copyEmail = async () => {
     try {
       await navigator.clipboard.writeText(contact.email)
       setCopied(true)
       track('email_click')
-      setTimeout(() => setCopied(false), 2000)
+      setTimeout(() => setCopied(false), 2500)
     } catch {
       setCopied(false)
     }
   }
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault()
     setError('')
-
-    // Honeypot: if filled, silently treat as success (likely a bot).
     if (form.company) {
       setStatus('success')
       return
     }
     if (!form.name.trim() || !form.subject.trim() || !form.message.trim()) {
-      setError('Please fill in your name, subject and message.')
+      setError('Name, subject and message are required. Add the missing detail, then send again.')
       return
     }
     if (!isValidEmail(form.email)) {
-      setError('Please enter a valid email address.')
+      setError('That email address is incomplete. Enter a valid address, then send again.')
       return
     }
 
     setStatus('submitting')
     try {
-      const res = await fetch('/api/contact', {
+      const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       })
-      const data = (await res.json()) as { ok: boolean; delivered?: boolean; error?: string }
-      if (!res.ok || !data.ok) throw new Error(data.error ?? 'Something went wrong.')
+      const data = (await response.json()) as { ok: boolean; delivered?: boolean; error?: string }
+      if (!response.ok || !data.ok) throw new Error(data.error ?? 'The message could not be sent. Try email instead.')
       track('contact_submit')
       setStatus(data.delivered ? 'success' : 'fallback')
-    } catch (err) {
+    } catch (caught) {
       setStatus('error')
-      setError(err instanceof Error ? err.message : 'Something went wrong.')
+      setError(caught instanceof Error ? caught.message : 'The message could not be sent. Try email instead.')
     }
   }
 
   const inputBase =
-    'w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-ink placeholder:text-ink-faint transition focus:border-accent-violet/60 focus:outline-none focus:ring-1 focus:ring-accent-violet/40'
+    'w-full min-h-12 rounded-[var(--radius-control)] border border-[var(--color-rule)] bg-[var(--color-paper-2)] px-4 py-3 text-sm text-ink placeholder:text-ink-faint transition-colors duration-200 hover:bg-[var(--color-paper-3)] focus:border-[var(--color-muted)]'
 
   const methods = [
     { icon: Mail, label: 'Email', value: contact.email, href: `mailto:${contact.email}` },
@@ -79,196 +73,100 @@ export function Contact() {
   ]
 
   return (
-    <section id="contact" className="section-pad border-t border-white/[0.06]">
-      <div className="container-page">
-        <SectionHeading
-          eyebrow="Contact"
-          title="Let's build something valuable with"
-          accent="data & technology."
-          description="I'm open to data, AI/ML, Python, backend and analytics opportunities, as well as relevant collaborations and professional conversations."
-        />
+    <section id="contact" data-world="5" className="section-pad pt-4">
+      <div className="container-page grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-start lg:gap-16 xl:gap-24">
+        <div className="lg:sticky lg:top-32">
+          <span className="mb-6 block h-1 w-9 rounded-full bg-accent" aria-hidden="true" />
+          <h2 className="font-display text-[clamp(3rem,7vw,6.3rem)] font-bold leading-[0.9] tracking-[-0.065em] text-ink">
+            Bring a hard data problem.
+          </h2>
+          <p className="mt-7 max-w-xl text-base leading-relaxed text-ink-muted sm:text-lg">
+            Open to data, AI/ML, Python, backend and analytics opportunities—and conversations where analytical thinking needs to become a useful product.
+          </p>
 
-        <div className="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12">
-          {/* Contact methods */}
-          <Reveal>
-            <div className="glass h-full rounded-3xl p-6 sm:p-8">
-              <ul className="space-y-4">
-                {methods.map((m) => {
-                  const Icon = m.icon
-                  const inner = (
-                    <>
-                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/[0.04] text-accent-violet">
-                        <Icon className="h-5 w-5" aria-hidden="true" />
-                      </span>
-                      <span className="min-w-0">
-                        <span className="block text-xs text-ink-faint">{m.label}</span>
-                        <span className="block truncate text-sm text-ink">{m.value}</span>
-                      </span>
-                    </>
-                  )
-                  return (
-                    <li key={m.label}>
-                      {m.href ? (
-                        <a
-                          href={m.href}
-                          {...(m.href.startsWith('http')
-                            ? { target: '_blank', rel: 'noopener noreferrer' }
-                            : {})}
-                          className="flex items-center gap-3 rounded-xl p-2 transition hover:bg-white/[0.03]"
-                        >
-                          {inner}
-                        </a>
-                      ) : (
-                        <div className="flex items-center gap-3 p-2">{inner}</div>
-                      )}
-                    </li>
-                  )
-                })}
-              </ul>
+          <ul className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+            {methods.map((method) => {
+              const Icon = method.icon
+              const body = (
+                <>
+                  <span className="flex items-center gap-2 text-xs text-ink-muted">
+                    <Icon className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
+                    {method.label}
+                  </span>
+                  <span className="mt-1.5 block break-all text-sm text-ink">{method.value}</span>
+                </>
+              )
+              return (
+                <li key={method.label} className="rounded-[var(--radius-control)] bg-[var(--color-paper-2)] p-4">
+                  {method.href ? (
+                    <a href={method.href} {...(method.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})} className="block min-h-11">{body}</a>
+                  ) : <div>{body}</div>}
+                </li>
+              )
+            })}
+          </ul>
 
-              <button
-                type="button"
-                onClick={copyEmail}
-                className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-ink transition hover:border-accent-violet/50"
-              >
-                {copied ? (
-                  <>
-                    <Check className="h-4 w-4 text-emerald-400" aria-hidden="true" /> Email copied
-                  </>
-                ) : (
-                  <>
-                    <Copy className="h-4 w-4" aria-hidden="true" /> Copy email address
-                  </>
-                )}
-              </button>
-            </div>
-          </Reveal>
-
-          {/* Form */}
-          <Reveal delay={0.1}>
-            <form onSubmit={handleSubmit} className="glass rounded-3xl p-6 sm:p-8" noValidate>
-              {/* Honeypot (hidden from users, catches bots) */}
-              <div className="absolute -left-[9999px]" aria-hidden="true">
-                <label htmlFor="company">Company</label>
-                <input
-                  id="company"
-                  name="company"
-                  type="text"
-                  tabIndex={-1}
-                  autoComplete="off"
-                  value={form.company}
-                  onChange={(e) => setForm({ ...form, company: e.target.value })}
-                />
-              </div>
-
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                  <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-ink">
-                    Name
-                  </label>
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    required
-                    autoComplete="name"
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    className={inputBase}
-                    placeholder="Your name"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-ink">
-                    Email
-                  </label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    autoComplete="email"
-                    value={form.email}
-                    onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    className={inputBase}
-                    placeholder="you@example.com"
-                  />
-                </div>
-              </div>
-
-              <div className="mt-4">
-                <label htmlFor="subject" className="mb-1.5 block text-sm font-medium text-ink">
-                  Subject
-                </label>
-                <input
-                  id="subject"
-                  name="subject"
-                  type="text"
-                  required
-                  value={form.subject}
-                  onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                  className={inputBase}
-                  placeholder="What's this about?"
-                />
-              </div>
-
-              <div className="mt-4">
-                <label htmlFor="message" className="mb-1.5 block text-sm font-medium text-ink">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  required
-                  rows={5}
-                  value={form.message}
-                  onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  className={`${inputBase} resize-none`}
-                  placeholder="Tell me a little about the role, project or idea…"
-                />
-              </div>
-
-              {error && (
-                <p role="alert" className="mt-3 text-sm text-accent-coral">
-                  {error}
-                </p>
-              )}
-
-              {status === 'success' && (
-                <p role="status" className="mt-3 text-sm text-emerald-400">
-                  Thanks — your message has been sent. I&apos;ll get back to you soon.
-                </p>
-              )}
-
-              {status === 'fallback' && (
-                <p role="status" className="mt-3 text-sm text-ink-muted">
-                  Email delivery isn&apos;t configured on this deployment yet, but your message is
-                  ready to send —{' '}
-                  <a href={mailtoHref} className="font-semibold text-accent-violet underline">
-                    open it in your email app
-                  </a>
-                  .
-                </p>
-              )}
-
-              <button
-                type="submit"
-                disabled={status === 'submitting'}
-                className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-violet px-6 py-3 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
-              >
-                {status === 'submitting' ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> Sending…
-                  </>
-                ) : (
-                  <>
-                    <Send className="h-4 w-4" aria-hidden="true" /> Send message
-                  </>
-                )}
-              </button>
-            </form>
-          </Reveal>
+          <button
+            type="button"
+            onClick={copyEmail}
+            className="mt-5 inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-[var(--radius-pill)] border border-[var(--color-rule)] px-4 text-sm font-medium text-ink"
+          >
+            {copied ? <Check className="h-4 w-4 text-accent" aria-hidden="true" /> : <Copy className="h-4 w-4" aria-hidden="true" />}
+            {copied ? 'Email copied' : 'Copy email'}
+          </button>
         </div>
+
+        <form onSubmit={handleSubmit} noValidate className="observatory-panel p-6 sm:p-9 lg:p-10">
+          <div className="absolute -left-[9999px]" aria-hidden="true">
+            <label htmlFor="company">Company</label>
+            <input id="company" name="company" type="text" tabIndex={-1} autoComplete="off" value={form.company} onChange={(event) => setForm({ ...form, company: event.target.value })} />
+          </div>
+
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="signal-label">Direct channel</p>
+              <h3 className="mt-2 font-display text-3xl font-bold tracking-[-0.04em] text-ink">Start the conversation.</h3>
+            </div>
+            <Send className="h-7 w-7 text-accent" aria-hidden="true" />
+          </div>
+
+          <div className="mt-9 grid gap-5 sm:grid-cols-2">
+            <div>
+              <label htmlFor="name" className="mb-2 block text-sm font-medium text-ink">Name</label>
+              <input id="name" name="name" type="text" required aria-required="true" autoComplete="name" value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} className={inputBase} placeholder="Aarav Mehta" />
+            </div>
+            <div>
+              <label htmlFor="email" className="mb-2 block text-sm font-medium text-ink">Email address</label>
+              <input id="email" name="email" type="email" required aria-required="true" aria-invalid={Boolean(error) && !isValidEmail(form.email)} autoComplete="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} className={inputBase} placeholder="aarav@company.com" />
+            </div>
+          </div>
+
+          <div className="mt-5">
+            <label htmlFor="subject" className="mb-2 block text-sm font-medium text-ink">Subject</label>
+            <input id="subject" name="subject" type="text" required aria-required="true" value={form.subject} onChange={(event) => setForm({ ...form, subject: event.target.value })} className={inputBase} placeholder="Data analyst role in Jaipur" />
+          </div>
+
+          <div className="mt-5">
+            <label htmlFor="message" className="mb-2 block text-sm font-medium text-ink">Message</label>
+            <textarea id="message" name="message" required aria-required="true" rows={7} value={form.message} onChange={(event) => setForm({ ...form, message: event.target.value })} className={`${inputBase} min-h-40 resize-y`} placeholder="Share the role, problem or project context." />
+          </div>
+
+          <div className="min-h-7" id="contact-status">
+            {error ? <p role="alert" className="mt-3 text-sm text-[var(--color-error)]">{error}</p> : null}
+            {status === 'success' ? <p role="status" className="mt-3 text-sm text-[var(--color-success)]">Your message was sent. I’ll reply as soon as I can.</p> : null}
+            {status === 'fallback' ? (
+              <p role="status" className="mt-3 text-sm text-ink-muted">Delivery is not configured on this deployment. <a href={mailtoHref} className="font-semibold text-accent underline">Open this message in your email app</a>.</p>
+            ) : null}
+          </div>
+
+          <button
+            type="submit"
+            disabled={status === 'submitting'}
+            className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 whitespace-nowrap rounded-[var(--radius-control)] bg-[var(--color-ink)] px-6 text-sm font-semibold text-[var(--color-paper)] sm:w-auto"
+          >
+            {status === 'submitting' ? <><Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />Sending…</> : <><Send className="h-4 w-4" aria-hidden="true" />Send message</>}
+          </button>
+        </form>
       </div>
     </section>
   )

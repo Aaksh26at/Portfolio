@@ -2,89 +2,68 @@
 
 import { useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
-import { ArrowUpRight, Github, ExternalLink, Hammer } from 'lucide-react'
+import { ArrowUpRight, ExternalLink, Github } from 'lucide-react'
 import { portfolio } from '@/data/portfolio'
 import type { Project } from '@/types'
-import { SectionHeading } from '@/components/ui/SectionHeading'
-import { Reveal } from '@/components/ui/Reveal'
 import { Tag } from '@/components/ui/Badge'
 import { ProjectVisual } from '@/components/ui/ProjectVisual'
 import { ProjectModal } from '@/components/ui/ProjectModal'
 import { track } from '@/lib/analytics'
-import { cn } from '@/lib/utils'
 
-// Asymmetric bento spans keyed by position — never three identical cards.
-const spanFor = (index: number): string => {
-  const spans = ['lg:col-span-7', 'lg:col-span-5', 'lg:col-span-5', 'lg:col-span-7']
-  return spans[index % spans.length]
-}
-
-function ProjectCard({ project, onOpen }: { project: Project; onOpen: (p: Project) => void }) {
-  const isBuilding = project.status === 'building'
-
+function ProjectPlate({ project, index, onOpen }: { project: Project; index: number; onOpen: (project: Project) => void }) {
   return (
-    <article className="glass card-hover group flex h-full flex-col overflow-hidden rounded-3xl">
-      <div className="relative h-48 overflow-hidden sm:h-56">
-        <div className="h-full w-full transition-transform duration-500 group-hover:scale-105">
-          <ProjectVisual project={project} />
-        </div>
-        {isBuilding && (
-          <span className="absolute left-4 top-4 z-10 inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-xs font-medium text-amber-200">
-            <Hammer className="h-3 w-3" aria-hidden="true" /> Currently Building
-          </span>
-        )}
+    <article className="observatory-panel min-h-[36rem] overflow-hidden lg:min-h-[72dvh]" data-interactive="true">
+      <div className="aspect-[16/10] min-h-[18rem] overflow-hidden border-b border-[var(--color-rule-2)] lg:h-[46dvh] lg:aspect-auto">
+        <ProjectVisual project={project} />
       </div>
 
-      <div className="flex flex-1 flex-col p-6">
-        <div className="flex items-center gap-3">
-          <span className="text-xs font-medium text-accent-violet">{project.year}</span>
-          <span className="text-xs text-ink-faint">·</span>
-          <span className="text-xs text-ink-faint">{project.keyResult}</span>
-        </div>
-        <h3 className="mt-2 font-display text-xl font-bold text-ink">{project.title}</h3>
-        <p className="mt-2 text-sm leading-relaxed text-ink-muted">{project.tagline}</p>
-
-        <div className="mt-4 flex flex-wrap gap-2">
-          {project.technologies.slice(0, 5).map((t) => (
-            <Tag key={t}>{t}</Tag>
-          ))}
+      <div className="p-6 sm:p-8 lg:p-9">
+        <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-ink-muted">
+          <span className="tnum">System {String(index + 1).padStart(2, '0')} · {project.year}</span>
+          <span className="rounded-full border border-[var(--color-rule)] px-3 py-1">{project.status}</span>
         </div>
 
-        <div className="mt-6 flex flex-wrap items-center gap-3 pt-2">
-          {!isBuilding ? (
-            <button
-              type="button"
-              onClick={() => onOpen(project)}
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink transition-colors hover:text-accent-violet"
-            >
-              Case study
-              <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-            </button>
-          ) : (
-            <span className="text-sm font-medium text-ink-faint">Case study coming soon</span>
-          )}
+        <div className="mt-6 grid gap-7 xl:grid-cols-[minmax(0,1fr)_auto] xl:items-end">
+          <div>
+            <h3 className="max-w-2xl font-display text-3xl font-bold leading-[1.02] tracking-[-0.045em] text-ink sm:text-4xl">
+              {project.title}
+            </h3>
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-muted">{project.tagline}</p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {project.technologies.slice(0, 5).map((technology) => <Tag key={technology}>{technology}</Tag>)}
+            </div>
+          </div>
 
+          <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4 xl:w-[25rem]">
+            {project.metrics.slice(0, 4).map((metric) => (
+              <div key={metric.label} className="rounded-[var(--radius-control)] bg-[var(--color-paper-3)] p-3">
+                <dd className="tnum font-display text-lg font-bold text-ink">{metric.value}</dd>
+                <dt className="mt-1 text-[0.68rem] leading-tight text-ink-muted">{metric.label}</dt>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
+          <button
+            type="button"
+            onClick={() => onOpen(project)}
+            className="inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-[var(--radius-control)] bg-[var(--color-ink)] px-5 text-sm font-semibold text-[var(--color-paper)]"
+          >
+            Quick study
+            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+          </button>
+          <a href={`/projects/${project.slug}`} className="inline-flex min-h-11 items-center gap-2 whitespace-nowrap text-sm font-semibold text-ink-muted hover:text-ink">
+            Read full case
+            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+          </a>
           {project.links.github ? (
-            <a
-              href={project.links.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => track('github_click')}
-              className="inline-flex items-center gap-1.5 text-sm text-ink-muted transition-colors hover:text-ink"
-              aria-label={`${project.title} — GitHub repository`}
-            >
+            <a href={project.links.github} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 whitespace-nowrap text-sm text-ink-muted">
               <Github className="h-4 w-4" aria-hidden="true" /> Code
             </a>
           ) : null}
-
           {project.links.demo ? (
-            <a
-              href={project.links.demo}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm text-ink-muted transition-colors hover:text-ink"
-              aria-label={`${project.title} — live demo`}
-            >
+            <a href={project.links.demo} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 whitespace-nowrap text-sm text-ink-muted">
               <ExternalLink className="h-4 w-4" aria-hidden="true" /> Demo
             </a>
           ) : null}
@@ -97,32 +76,38 @@ function ProjectCard({ project, onOpen }: { project: Project; onOpen: (p: Projec
 export function Projects() {
   const [selected, setSelected] = useState<Project | null>(null)
 
-  const openProject = (p: Project) => {
-    setSelected(p)
-    track('project_view', { project: p.slug })
+  const openProject = (project: Project) => {
+    setSelected(project)
+    track('project_view', { project: project.slug })
   }
 
   return (
-    <section id="projects" className="section-pad">
-      <div className="container-page">
-        <SectionHeading
-          eyebrow="Selected Work"
-          title="Practical projects across ML, data &"
-          accent="applications."
-          description="Practical projects combining machine learning, data analysis, APIs and interactive applications."
-        />
+    <section id="projects" data-world="2" className="section-pad">
+      <div className="container-page grid gap-12 lg:grid-cols-[minmax(18rem,0.55fr)_minmax(0,1.45fr)] lg:gap-14 xl:gap-20">
+        <div className="self-start lg:sticky lg:top-32">
+          <span className="mb-6 block h-1 w-9 rounded-full bg-accent" aria-hidden="true" />
+          <p className="signal-label">Selected systems</p>
+          <h2 className="mt-4 font-display text-[clamp(3rem,6vw,5.8rem)] font-bold leading-[0.92] tracking-[-0.06em] text-ink">
+            Four systems. Four kinds of signal.
+          </h2>
+          <p className="mt-6 max-w-md text-base leading-relaxed text-ink-muted">
+            Each chapter moves from an unreliable input to a decision someone can use—classification, forecasting, retention or document matching.
+          </p>
+          <div className="mt-9 flex items-center gap-5">
+            <span className="tnum font-display text-4xl font-bold text-ink">04</span>
+            <span className="max-w-[10rem] text-xs leading-relaxed text-ink-muted">end-to-end project narratives</span>
+          </div>
+        </div>
 
-        <div className="mt-12 grid grid-cols-1 gap-4 lg:grid-cols-12">
-          {portfolio.projects.map((project, i) => (
-            <Reveal key={project.slug} className={cn('flex', spanFor(i))} y={24} delay={i * 0.05}>
-              <ProjectCard project={project} onOpen={openProject} />
-            </Reveal>
+        <div className="min-w-0 space-y-8 sm:space-y-12">
+          {portfolio.projects.map((project, index) => (
+            <ProjectPlate key={project.slug} project={project} index={index} onOpen={openProject} />
           ))}
         </div>
       </div>
 
       <AnimatePresence>
-        {selected && <ProjectModal project={selected} onClose={() => setSelected(null)} />}
+        {selected ? <ProjectModal project={selected} onClose={() => setSelected(null)} /> : null}
       </AnimatePresence>
     </section>
   )

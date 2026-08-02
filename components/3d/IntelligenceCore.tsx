@@ -4,8 +4,8 @@ import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 import { SceneFallback } from './SceneFallback'
 
-// Lazy-load the WebGL scene on the client only. The heavy three.js bundle is
-// never part of the initial payload and never blocks page content.
+// Lazy-load the WebGL scene on the client only. The Three.js bundle never
+// blocks page content and always has a token-driven static fallback.
 const IntelligenceScene = dynamic(() => import('./IntelligenceScene'), {
   ssr: false,
   loading: () => <SceneFallback />,
@@ -23,8 +23,7 @@ function supportsWebGL(): boolean {
   }
 }
 
-/** Decides whether to render the interactive 3D scene or the CSS fallback.
- *  Uses the fallback for reduced-motion preference or missing WebGL support. */
+/** Uses the fallback for reduced-motion preferences or missing WebGL support. */
 export function IntelligenceCore({ className }: { className?: string }) {
   const [render3D, setRender3D] = useState<boolean | null>(null)
 
@@ -37,9 +36,8 @@ export function IntelligenceCore({ className }: { className?: string }) {
     <div
       className={className}
       role="img"
-      aria-label="Interactive 3D visualisation of a data intelligence core with connected nodes labelled Python, SQL, AI, ML and Analytics"
+      aria-label="Interactive 3D data lattice connecting source signals to an analysis core"
     >
-      {/* Before hydration decision, and in the fallback case, show the static art. */}
       {render3D === null ? <SceneFallback /> : render3D ? <IntelligenceScene /> : <SceneFallback />}
     </div>
   )

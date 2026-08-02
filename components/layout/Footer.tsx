@@ -1,43 +1,43 @@
-import { ArrowUp } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import { portfolio } from '@/data/portfolio'
-import { SocialLinks } from '@/components/ui/SocialLinks'
 
 export function Footer() {
   const year = new Date().getFullYear()
+  const links = portfolio.person.socials.filter((item) =>
+    ['GitHub', 'LinkedIn', 'Email'].includes(item.label),
+  )
 
   return (
-    <footer className="border-t border-white/[0.06] bg-base-900">
-      <div className="container-page py-12">
-        <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
-          <div>
-            <a href="#home" className="flex items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-accent to-accent-violet text-sm font-bold text-white">
-                {portfolio.person.initials}
-              </span>
-              <span className="font-display text-sm font-semibold text-ink">
-                {portfolio.person.name}
-              </span>
+    <footer className="pb-8 pt-20 sm:pb-10 sm:pt-28">
+      <div className="container-page">
+        <div className="flex flex-col gap-6 border-t border-[var(--color-rule)] py-7 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
+            <a href="/#home" className="font-outlier whitespace-nowrap text-base font-bold tracking-[-0.055em] text-ink">
+              {portfolio.person.initials}
             </a>
-            <p className="mt-3 max-w-sm text-sm text-ink-muted">
-              Data Analyst, AI/ML enthusiast and Python developer based in Jaipur, India — open to
-              data, AI/ML, backend and analytics opportunities.
-            </p>
+            <span className="hidden h-4 w-px bg-[var(--color-rule)] sm:block" aria-hidden="true" />
+            <p className="text-sm text-ink-muted">{portfolio.person.name} · Data, ML and Python systems</p>
           </div>
 
-          <div className="flex flex-col items-start gap-5 md:items-end">
-            <SocialLinks />
-            <a
-              href="#home"
-              className="link-underline inline-flex items-center gap-2 text-sm text-ink-muted hover:text-ink"
-            >
-              Back to top <ArrowUp className="h-4 w-4" aria-hidden="true" />
-            </a>
-          </div>
-        </div>
-
-        <div className="mt-10 flex flex-col gap-2 border-t border-white/[0.06] pt-6 text-xs text-ink-faint sm:flex-row sm:items-center sm:justify-between">
-          <p>© {year} {portfolio.person.name}. All rights reserved.</p>
-          <p>Built with Next.js, Tailwind CSS, Framer Motion &amp; React Three Fiber.</p>
+          <nav aria-label="Footer" className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
+            <ul className="flex flex-wrap gap-x-5 gap-y-3">
+              {links.map((item) => (
+                <li key={item.label}>
+                  <a
+                    href={item.href}
+                    {...(item.href.startsWith('http')
+                      ? { target: '_blank', rel: 'noopener noreferrer' }
+                      : {})}
+                    className="link-underline inline-flex min-h-11 items-center gap-1 whitespace-nowrap text-sm text-ink-muted"
+                  >
+                    {item.label}
+                    <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <p className="whitespace-nowrap text-xs text-ink-faint">© {year} · Jaipur, India</p>
+          </nav>
         </div>
       </div>
     </footer>

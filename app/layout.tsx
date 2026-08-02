@@ -1,29 +1,30 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Space_Grotesk } from 'next/font/google'
+import '@fontsource-variable/syne'
+import '@fontsource-variable/space-grotesk'
+import '@fontsource-variable/ibm-plex-sans'
 import './globals.css'
 import { siteConfig } from '@/lib/site'
 import { portfolio } from '@/data/portfolio'
 import { Analytics } from '@/components/Analytics'
-import { CustomCursor } from '@/components/CustomCursor'
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-})
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  weight: ['500', '600', '700'],
-  variable: '--font-space-grotesk',
-  display: 'swap',
-})
+import { ScrollDepth } from '@/components/motion/ScrollDepth'
 
 export const viewport: Viewport = {
-  themeColor: '#0F172A',
   width: 'device-width',
   initialScale: 1,
 }
+
+const themeBootScript = `
+(() => {
+  const storageKey = 'aakshat-portfolio-theme';
+  let saved = null;
+  try { saved = window.localStorage.getItem(storageKey); } catch {}
+  const theme = saved === 'light' || saved === 'dark'
+    ? saved
+    : window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  document.documentElement.dataset.theme = theme;
+  document.documentElement.style.colorScheme = theme;
+})();
+`
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -108,16 +109,19 @@ function StructuredData() {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
+      </head>
       <body className="font-sans antialiased">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-accent-violet focus:px-4 focus:py-2 focus:text-white"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-base-900 focus:px-4 focus:py-2 focus:text-[var(--color-night-ink)]"
         >
           Skip to content
         </a>
         <StructuredData />
-        <CustomCursor />
+        <ScrollDepth />
         {children}
         <Analytics />
       </body>

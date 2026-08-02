@@ -2,32 +2,20 @@
 
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
+import { ArrowUpRight, Menu, X } from 'lucide-react'
 import { portfolio } from '@/data/portfolio'
 import { useScrollSpy } from '@/hooks/useScrollSpy'
-import { ResumeButton } from '@/components/ui/ResumeButton'
 import { cn } from '@/lib/utils'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
 
-const sectionIds = portfolio.nav.map((n) => n.href.replace('#', ''))
-
+const sectionIds = portfolio.nav.map((item) => item.href.replace('#', ''))
 export function Header() {
-  const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const active = useScrollSpy(sectionIds)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  // Lock body scroll and enable Escape-to-close while the mobile menu is open.
-  useEffect(() => {
     if (!open) return
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false)
-    }
+    const onKey = (event: KeyboardEvent) => event.key === 'Escape' && setOpen(false)
     document.body.style.overflow = 'hidden'
     window.addEventListener('keydown', onKey)
     return () => {
@@ -37,117 +25,90 @@ export function Header() {
   }, [open])
 
   return (
-    <header
-      className={cn(
-        'fixed inset-x-0 top-0 z-[70] transition-all duration-300',
-        scrolled ? 'py-2' : 'py-4',
-      )}
-    >
-      <div className="container-page">
-        <nav
-          aria-label="Primary"
-          className={cn(
-            'flex items-center justify-between rounded-2xl px-4 py-2.5 transition-all duration-300',
-            scrolled ? 'glass-strong shadow-lg shadow-black/20' : 'bg-transparent',
-          )}
+    <header className="fixed inset-x-0 top-0 z-[200] px-5 pt-5 sm:px-8 lg:px-12 xl:px-16">
+      <nav
+        aria-label="Primary"
+        className="mx-auto flex min-h-12 w-full max-w-[1440px] items-center justify-between gap-4"
+      >
+        <a
+          href="/#home"
+          className="group flex min-h-11 items-center gap-3 whitespace-nowrap"
+          aria-label={`${portfolio.person.name} — home`}
         >
+          <span className="font-outlier text-lg font-bold tracking-[-0.08em] text-ink">
+            {portfolio.person.initials}
+          </span>
+          <span className="h-5 w-px bg-[var(--color-rule)]" aria-hidden="true" />
+          <span className="hidden text-xs font-medium text-ink-muted sm:block">Data systems · Jaipur</span>
+        </a>
+
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+
           <a
-            href="#home"
-            className="group flex items-center gap-2.5"
-            aria-label={`${portfolio.person.name} — home`}
+            href={`mailto:${portfolio.person.email}?subject=${encodeURIComponent('Opportunity for Aakshat Agarwal')}`}
+            className="hidden min-h-11 items-center gap-1.5 whitespace-nowrap border-b border-[var(--color-ink)] text-xs font-semibold text-ink md:inline-flex"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-accent to-accent-violet text-sm font-bold text-white">
-              {portfolio.person.initials}
-            </span>
-            <span className="hidden font-display text-sm font-semibold text-ink sm:block">
-              Aakshat Agarwal
-            </span>
+            Contact
+            <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
           </a>
 
-          {/* Desktop nav */}
-          <ul className="hidden items-center gap-1 lg:flex">
-            {portfolio.nav.map((item) => {
-              const id = item.href.replace('#', '')
-              const isActive = active === id
-              return (
-                <li key={item.href}>
-                  <a
-                    href={item.href}
-                    aria-current={isActive ? 'true' : undefined}
-                    className={cn(
-                      'relative rounded-full px-3.5 py-2 text-sm font-medium transition-colors',
-                      isActive ? 'text-ink' : 'text-ink-muted hover:text-ink',
-                    )}
-                  >
-                    {isActive && (
-                      <motion.span
-                        layoutId="nav-pill"
-                        className="absolute inset-0 -z-10 rounded-full bg-white/[0.07]"
-                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                      />
-                    )}
-                    {item.label}
-                  </a>
-                </li>
-              )
-            })}
-          </ul>
+          <button
+            type="button"
+            onClick={() => setOpen((value) => !value)}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            className="grid h-11 w-11 place-items-center rounded-[var(--radius-control)] border border-[var(--color-rule)] bg-[var(--color-paper)] text-ink md:hidden"
+          >
+            {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
+        </div>
+      </nav>
 
-          <div className="flex items-center gap-2">
-            <div className="hidden sm:block">
-              <ResumeButton variant="soft" className="px-4 py-2 text-xs" />
-            </div>
-            <button
-              type="button"
-              onClick={() => setOpen((v) => !v)}
-              aria-expanded={open}
-              aria-controls="mobile-menu"
-              aria-label={open ? 'Close menu' : 'Open menu'}
-              className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] text-ink lg:hidden"
-            >
-              {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
-          </div>
-        </nav>
-      </div>
-
-      {/* Mobile menu */}
       <AnimatePresence>
-        {open && (
+        {open ? (
           <motion.div
             id="mobile-menu"
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.2 }}
-            className="container-page lg:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="ml-auto mt-3 max-h-[calc(100dvh-6rem)] w-full max-w-[28rem] overflow-y-auto rounded-[var(--radius-card)] border border-[var(--color-rule)] bg-[var(--color-paper)] p-3 shadow-[var(--shadow-card)] md:hidden"
           >
-            <ul className="glass-strong mt-2 flex flex-col gap-1 rounded-2xl p-3">
-              {portfolio.nav.map((item) => {
+            <ul>
+              {portfolio.nav.map((item, index) => {
                 const id = item.href.replace('#', '')
                 const isActive = active === id
                 return (
                   <li key={item.href}>
                     <a
-                      href={item.href}
+                      href={`/${item.href}`}
                       onClick={() => setOpen(false)}
-                      aria-current={isActive ? 'true' : undefined}
+                      aria-current={isActive ? 'page' : undefined}
                       className={cn(
-                        'block rounded-xl px-4 py-3 text-base font-medium transition-colors',
-                        isActive ? 'bg-white/[0.06] text-ink' : 'text-ink-muted hover:bg-white/[0.04] hover:text-ink',
+                        'flex min-h-12 items-center justify-between whitespace-nowrap rounded-[var(--radius-control)] px-4 text-sm',
+                        isActive ? 'bg-[var(--color-accent-soft)] text-ink' : 'text-ink-muted',
                       )}
                     >
                       {item.label}
+                      <span className="tnum text-[0.65rem] text-ink-faint">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
                     </a>
                   </li>
                 )
               })}
-              <li className="px-1 pt-2">
-                <ResumeButton variant="primary" className="w-full" />
-              </li>
             </ul>
+            <a
+              href={`mailto:${portfolio.person.email}?subject=${encodeURIComponent('Opportunity for Aakshat Agarwal')}`}
+              className="mt-3 flex min-h-12 items-center justify-center gap-2 whitespace-nowrap rounded-[var(--radius-control)] bg-[var(--color-ink)] px-4 text-sm font-semibold text-[var(--color-paper)]"
+            >
+              Start a conversation
+              <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            </a>
           </motion.div>
-        )}
+        ) : null}
       </AnimatePresence>
     </header>
   )

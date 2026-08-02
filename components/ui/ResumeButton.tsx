@@ -1,6 +1,6 @@
 'use client'
 
-import { Download } from 'lucide-react'
+import { FileText } from 'lucide-react'
 import { MagneticButton } from './MagneticButton'
 import { portfolio } from '@/data/portfolio'
 import { track } from '@/lib/analytics'
@@ -11,17 +11,16 @@ interface ResumeButtonProps {
   label?: string
 }
 
-export function ResumeButton({ variant = 'ghost', className, label = 'Download Resume' }: ResumeButtonProps) {
+export function ResumeButton({ variant = 'ghost', className, label = 'Request Résumé' }: ResumeButtonProps) {
   return (
     <MagneticButton
-      href={portfolio.resumePath}
-      download="Aakshat-Agarwal-Resume.pdf"
+      href={`mailto:${portfolio.person.email}?subject=${encodeURIComponent('Request for Aakshat Agarwal’s résumé')}`}
       variant={variant}
       className={className}
-      onClick={() => track('resume_download')}
-      ariaLabel="Download Aakshat Agarwal's resume as a PDF"
+      onClick={() => track('email_click')}
+      ariaLabel="Request Aakshat Agarwal's résumé by email"
     >
-      <Download className="h-4 w-4" aria-hidden="true" />
+      <FileText className="h-4 w-4" aria-hidden="true" />
       {label}
     </MagneticButton>
   )

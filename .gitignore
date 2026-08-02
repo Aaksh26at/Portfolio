@@ -32,3 +32,6 @@ next-env.d.ts
 
 # logs
 *.log
+
+# local visual QA artifacts
+/output/playwright/

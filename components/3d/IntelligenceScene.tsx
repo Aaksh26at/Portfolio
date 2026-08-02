@@ -1,73 +1,108 @@
 'use client'
 
-import { Suspense, useMemo, useRef, useState, useEffect } from 'react'
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
+import { AdaptiveDpr, Line } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Float, Html, Line, AdaptiveDpr, Icosahedron } from '@react-three/drei'
 import * as THREE from 'three'
+import { SceneFallback } from './SceneFallback'
 
-const ACCENTS = ['#22D3EE', '#06B6D4', '#0EA5E9', '#3B82F6']
+interface ScenePalette {
+  accent: THREE.Color
+  ink: THREE.Color
+  muted: THREE.Color
+  surface: THREE.Color
+  rule: THREE.Color
+}
 
 interface NodeDef {
   position: [number, number, number]
   size: number
-  color: string
-  label?: string
 }
 
-/** Deterministic-enough node layout on a sphere (client-only, no SSR). */
+const TOKEN_NAMES: Record<keyof ScenePalette, string> = {
+  accent: '--color-accent',
+  ink: '--color-ink',
+  muted: '--color-muted',
+  surface: '--color-paper-3',
+  rule: '--color-rule',
+}
+
+function resolveCssColor(token: string): THREE.Color {
+  const value = getComputedStyle(document.documentElement).getPropertyValue(token).trim()
+  const canvas = document.createElement('canvas')
+  canvas.width = 1
+  canvas.height = 1
+  const context = canvas.getContext('2d', { willReadFrequently: true })
+
+  if (!context || !value) return new THREE.Color()
+  context.clearRect(0, 0, 1, 1)
+  context.fillStyle = value
+  context.fillRect(0, 0, 1, 1)
+  const [red, green, blue] = context.getImageData(0, 0, 1, 1).data
+  return new THREE.Color().setRGB(
+    red / 255,
+    green / 255,
+    blue / 255,
+    THREE.SRGBColorSpace,
+  )
+}
+
+function useScenePalette() {
+  const [palette, setPalette] = useState<ScenePalette | null>(null)
+
+  useEffect(() => {
+    setPalette(
+      Object.fromEntries(
+        Object.entries(TOKEN_NAMES).map(([name, token]) => [name, resolveCssColor(token)]),
+      ) as unknown as ScenePalette,
+    )
+  }, [])
+
+  return palette
+}
+
 function buildNodes(count: number): NodeDef[] {
-  const nodes: NodeDef[] = []
-  const labels = ['Python', 'SQL', 'AI', 'ML', 'Analytics']
-  for (let i = 0; i < count; i++) {
-    // Fibonacci sphere distribution for even spacing
-    const phi = Math.acos(1 - (2 * (i + 0.5)) / count)
-    const theta = Math.PI * (1 + Math.sqrt(5)) * i
-    const r = 2.4
-    const x = r * Math.sin(phi) * Math.cos(theta)
-    const y = r * Math.sin(phi) * Math.sin(theta)
-    const z = r * Math.cos(phi)
-    nodes.push({
-      position: [x, y, z],
-      size: 0.05 + (i % 3) * 0.02,
-      color: ACCENTS[i % ACCENTS.length],
-      label: i < labels.length ? labels[i] : undefined,
-    })
-  }
-  return nodes
-}
-
-function ParticleField({ count }: { count: number }) {
-  const points = useRef<THREE.Points>(null)
-
-  const positions = useMemo(() => {
-    const arr = new Float32Array(count * 3)
-    for (let i = 0; i < count; i++) {
-      const radius = 3.2 + Math.random() * 2.4
-      const t = Math.random() * Math.PI * 2
-      const p = Math.acos(2 * Math.random() - 1)
-      arr[i * 3] = radius * Math.sin(p) * Math.cos(t)
-      arr[i * 3 + 1] = radius * Math.sin(p) * Math.sin(t)
-      arr[i * 3 + 2] = radius * Math.cos(p)
-    }
-    return arr
-  }, [count])
-
-  useFrame((_, delta) => {
-    if (points.current) {
-      points.current.rotation.y += delta * 0.02
+  return Array.from({ length: count }, (_, index) => {
+    const phi = Math.acos(1 - (2 * (index + 0.5)) / count)
+    const theta = Math.PI * (1 + Math.sqrt(5)) * index
+    const radius = 2.28
+    return {
+      position: [
+        radius * Math.sin(phi) * Math.cos(theta),
+        radius * Math.sin(phi) * Math.sin(theta),
+        radius * Math.cos(phi),
+      ],
+      size: 0.045 + (index % 3) * 0.018,
     }
   })
+}
+
+function buildParticlePositions(count: number) {
+  const positions = new Float32Array(count * 3)
+  for (let index = 0; index < count; index++) {
+    const radius = 3.1 + ((index * 17) % 29) / 16
+    const theta = index * 2.399963
+    const phi = Math.acos(1 - (2 * (index + 0.5)) / count)
+    positions[index * 3] = radius * Math.sin(phi) * Math.cos(theta)
+    positions[index * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta)
+    positions[index * 3 + 2] = radius * Math.cos(phi)
+  }
+  return positions
+}
+
+function ParticleField({ count, color }: { count: number; color: THREE.Color }) {
+  const positions = useMemo(() => buildParticlePositions(count), [count])
 
   return (
-    <points ref={points}>
+    <points>
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
       <pointsMaterial
-        size={0.02}
-        color="#22D3EE"
+        size={0.018}
+        color={color}
         transparent
-        opacity={0.55}
+        opacity={0.32}
         sizeAttenuation
         depthWrite={false}
       />
@@ -75,153 +110,136 @@ function ParticleField({ count }: { count: number }) {
   )
 }
 
-function DataPulse({ from, to, color, offset }: { from: THREE.Vector3; to: THREE.Vector3; color: string; offset: number }) {
-  const ref = useRef<THREE.Mesh>(null)
-  useFrame((state) => {
-    if (!ref.current) return
-    const t = (state.clock.elapsedTime * 0.35 + offset) % 1
-    ref.current.position.lerpVectors(from, to, t)
-  })
-  return (
-    <mesh ref={ref}>
-      <sphereGeometry args={[0.035, 8, 8]} />
-      <meshBasicMaterial color={color} toneMapped={false} />
-    </mesh>
+function IntelligenceLattice({
+  nodes,
+  palette,
+}: {
+  nodes: NodeDef[]
+  palette: ScenePalette
+}) {
+  const groupRef = useRef<THREE.Group>(null)
+  const connections = useMemo(
+    () =>
+      nodes.map((node, index) => ({
+        start: node.position,
+        end: nodes[(index + 3) % nodes.length].position,
+      })),
+    [nodes],
   )
-}
-
-function Core({ nodes, isMobile }: { nodes: NodeDef[]; isMobile: boolean }) {
-  const group = useRef<THREE.Group>(null)
-
-  // Connect each node to its 2 nearest neighbours (kept sparse for clarity).
-  const connections = useMemo(() => {
-    const vecs = nodes.map((n) => new THREE.Vector3(...n.position))
-    const conns: { a: THREE.Vector3; b: THREE.Vector3; color: string; offset: number }[] = []
-    for (let i = 0; i < vecs.length; i++) {
-      const dists = vecs
-        .map((v, j) => ({ j, d: vecs[i].distanceTo(v) }))
-        .filter((x) => x.j !== i)
-        .sort((a, b) => a.d - b.d)
-        .slice(0, 2)
-      for (const { j } of dists) {
-        if (j > i) {
-          conns.push({ a: vecs[i], b: vecs[j], color: nodes[i].color, offset: (i + j) * 0.13 })
-        }
-      }
-    }
-    return conns
-  }, [nodes])
 
   useFrame((state, delta) => {
-    if (!group.current) return
-    group.current.rotation.y += delta * 0.08
-    // subtle cursor parallax
-    const px = state.pointer.x * 0.25
-    const py = state.pointer.y * 0.25
-    group.current.rotation.x += (py - group.current.rotation.x) * 0.05
-    group.current.position.x += (px - group.current.position.x) * 0.05
+    if (!groupRef.current) return
+    groupRef.current.rotation.x = THREE.MathUtils.damp(
+      groupRef.current.rotation.x,
+      -state.pointer.y * 0.28,
+      5,
+      delta,
+    )
+    groupRef.current.rotation.y = THREE.MathUtils.damp(
+      groupRef.current.rotation.y,
+      state.pointer.x * 0.42,
+      5,
+      delta,
+    )
+    groupRef.current.position.x = THREE.MathUtils.damp(
+      groupRef.current.position.x,
+      state.pointer.x * 0.16,
+      5,
+      delta,
+    )
   })
 
   return (
-    <group ref={group}>
-      {/* translucent glass-like core */}
-      <Float speed={1.4} rotationIntensity={0.35} floatIntensity={0.5}>
-        <Icosahedron args={[1.35, 1]}>
-          <meshStandardMaterial
-            color="#0EA5E9"
-            transparent
-            opacity={0.16}
-            roughness={0.1}
-            metalness={0.4}
-            emissive="#0C4A6E"
-            emissiveIntensity={0.4}
-          />
-        </Icosahedron>
-        <Icosahedron args={[1.36, 1]}>
-          <meshBasicMaterial color="#22D3EE" wireframe transparent opacity={0.35} />
-        </Icosahedron>
-      </Float>
+    <group ref={groupRef} rotation={[0.12, -0.22, 0.04]}>
+      <mesh>
+        <icosahedronGeometry args={[1.2, 2]} />
+        <meshStandardMaterial
+          color={palette.surface}
+          roughness={0.58}
+          metalness={0.18}
+          transparent
+          opacity={0.62}
+        />
+      </mesh>
+      <mesh>
+        <icosahedronGeometry args={[1.215, 2]} />
+        <meshBasicMaterial color={palette.accent} wireframe transparent opacity={0.58} />
+      </mesh>
 
-      {/* connection lines */}
-      {connections.map((c, i) => (
+      <mesh rotation={[Math.PI / 2, 0.18, 0]}>
+        <torusGeometry args={[1.68, 0.012, 8, 96]} />
+        <meshBasicMaterial color={palette.rule} transparent opacity={0.7} />
+      </mesh>
+      <mesh rotation={[0.35, Math.PI / 2, 0.42]}>
+        <torusGeometry args={[1.93, 0.009, 8, 96]} />
+        <meshBasicMaterial color={palette.muted} transparent opacity={0.36} />
+      </mesh>
+
+      {connections.map((connection, index) => (
         <Line
-          key={`line-${i}`}
-          points={[c.a, c.b]}
-          color={c.color}
+          key={`connection-${index}`}
+          points={[connection.start, connection.end]}
+          color={index % 4 === 0 ? palette.accent : palette.rule}
           lineWidth={0.6}
           transparent
-          opacity={0.18}
+          opacity={index % 4 === 0 ? 0.62 : 0.36}
         />
       ))}
 
-      {/* data pulses (fewer on mobile) */}
-      {connections.slice(0, isMobile ? 4 : connections.length).map((c, i) => (
-        <DataPulse key={`pulse-${i}`} from={c.a} to={c.b} color={c.color} offset={c.offset} />
-      ))}
-
-      {/* nodes */}
-      {nodes.map((n, i) => (
-        <mesh key={`node-${i}`} position={n.position}>
-          <sphereGeometry args={[n.size, 12, 12]} />
+      {nodes.map((node, index) => (
+        <mesh key={`node-${index}`} position={node.position}>
+          <sphereGeometry args={[node.size, 12, 12]} />
           <meshStandardMaterial
-            color={n.color}
-            emissive={n.color}
-            emissiveIntensity={0.8}
-            toneMapped={false}
+            color={index % 4 === 0 ? palette.accent : palette.ink}
+            emissive={index % 4 === 0 ? palette.accent : palette.surface}
+            emissiveIntensity={index % 4 === 0 ? 0.42 : 0.08}
+            roughness={0.4}
           />
         </mesh>
       ))}
-
-      {/* skill labels */}
-      {nodes
-        .filter((n) => n.label)
-        .map((n, i) => (
-          <Html
-            key={`label-${i}`}
-            position={n.position}
-            center
-            distanceFactor={9}
-            zIndexRange={[10, 0]}
-            wrapperClass="pointer-events-none"
-          >
-            <span className="whitespace-nowrap rounded-full border border-white/10 bg-base-800/80 px-2 py-0.5 text-[10px] font-medium text-ink-muted backdrop-blur">
-              {n.label}
-            </span>
-          </Html>
-        ))}
     </group>
   )
 }
 
 export default function IntelligenceScene() {
+  const palette = useScenePalette()
   const [isMobile, setIsMobile] = useState(false)
   const [frameloop, setFrameloop] = useState<'always' | 'never'>('always')
 
   useEffect(() => {
-    setIsMobile(window.matchMedia('(max-width: 768px)').matches)
-    // Pause rendering while the tab is hidden to save GPU/battery.
-    const onVisibility = () => setFrameloop(document.hidden ? 'never' : 'always')
-    document.addEventListener('visibilitychange', onVisibility)
-    return () => document.removeEventListener('visibilitychange', onVisibility)
+    const mobileQuery = window.matchMedia('(max-width: 48rem)')
+    const syncMobile = () => setIsMobile(mobileQuery.matches)
+    const syncVisibility = () => setFrameloop(document.hidden ? 'never' : 'always')
+
+    syncMobile()
+    mobileQuery.addEventListener('change', syncMobile)
+    document.addEventListener('visibilitychange', syncVisibility)
+
+    return () => {
+      mobileQuery.removeEventListener('change', syncMobile)
+      document.removeEventListener('visibilitychange', syncVisibility)
+    }
   }, [])
 
-  const nodes = useMemo(() => buildNodes(isMobile ? 7 : 11), [isMobile])
-  const particleCount = isMobile ? 120 : 320
+  const nodes = useMemo(() => buildNodes(isMobile ? 8 : 12), [isMobile])
+
+  if (!palette) return <SceneFallback />
 
   return (
     <Canvas
+      aria-hidden="true"
       frameloop={frameloop}
-      dpr={[1, isMobile ? 1.5 : 2]}
-      camera={{ position: [0, 0, 6], fov: 45 }}
+      dpr={[1, isMobile ? 1.15 : 1.5]}
+      camera={{ position: [0, 0, 6.3], fov: 43 }}
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-      style={{ background: 'transparent' }}
+      style={{ background: 'transparent', touchAction: 'pan-y' }}
     >
       <Suspense fallback={null}>
-        <ambientLight intensity={0.6} />
-        <pointLight position={[5, 5, 5]} intensity={40} color="#22D3EE" />
-        <pointLight position={[-5, -3, 2]} intensity={30} color="#3B82F6" />
-        <Core nodes={nodes} isMobile={isMobile} />
-        <ParticleField count={particleCount} />
+        <ambientLight intensity={1.25} color={palette.ink} />
+        <directionalLight position={[4, 5, 5]} intensity={2.1} color={palette.accent} />
+        <directionalLight position={[-4, -2, 3]} intensity={0.8} color={palette.muted} />
+        <IntelligenceLattice nodes={nodes} palette={palette} />
+        <ParticleField count={isMobile ? 48 : 84} color={palette.muted} />
       </Suspense>
       <AdaptiveDpr pixelated={false} />
     </Canvas>

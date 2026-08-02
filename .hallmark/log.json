@@ -1,0 +1,50 @@
+[
+  {
+    "date": "2026-07-26",
+    "scope": "app",
+    "macrostructure": "Narrative Workflow / Long Document",
+    "theme": "studied-DNA",
+    "theme_axes": "light / grotesk-sans / cool",
+    "vibe": "luminous 3D data universe, pearl, technical",
+    "enrichment": "Tier-D persistent WebGL data world with six semantic formations",
+    "nav": "N9 Edge-aligned minimal",
+    "footer": "Ft2 Inline single line",
+    "brief": "Aakshat Agarwal portfolio — site-wide 3D studied-DNA redesign"
+  },
+  {
+    "date": "2026-07-24",
+    "scope": "motion system",
+    "macrostructure": "Feature Stack / Long Document",
+    "theme": "custom",
+    "theme_axes": "dark / geometric-sans / warm",
+    "vibe": "cinematic data observatory, spatial, direct-manipulation",
+    "enrichment": "Tier-D interactive WebGL lattice + CSS perspective",
+    "nav": "N5 Floating pill",
+    "footer": "Ft5 Statement",
+    "brief": "Site-wide 3D motion pass with reduced-motion fallback"
+  },
+  {
+    "date": "2026-07-21",
+    "scope": "app",
+    "macrostructure": "Feature Stack / Long Document",
+    "theme": "custom",
+    "theme_axes": "dark / geometric-sans / warm",
+    "vibe": "cinematic data observatory, signal-lit, technical",
+    "enrichment": "E5 Tier-B hand-built SVG intelligence map",
+    "nav": "N5 Floating pill",
+    "footer": "Ft5 Statement",
+    "brief": "Aakshat Agarwal Data Observatory redesign"
+  },
+  {
+    "date": "2026-07-19",
+    "scope": "app",
+    "macrostructure": "Index-First / Long Document",
+    "theme": "custom",
+    "theme_axes": "light / geometric-sans / cool",
+    "vibe": "austere editorial data, warm paper",
+    "enrichment": "none",
+    "nav": "N3 Side rail",
+    "footer": "Ft1 Mast-headed",
+    "brief": "Aakshat Agarwal portfolio redesign"
+  }
+]

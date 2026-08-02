@@ -8,8 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
       'Portfolio of Aakshat Agarwal — Data Analyst, AI/ML and Python Developer based in Jaipur, India.',
     start_url: '/',
     display: 'standalone',
-    background_color: '#0F172A',
-    theme_color: '#0F172A',
+    background_color: '#F7F8FF',
+    theme_color: '#F7F8FF',
     icons: [
       {
         src: '/favicon.svg',

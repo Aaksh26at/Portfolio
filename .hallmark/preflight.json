@@ -1,0 +1,14 @@
+{
+  "date": "2026-07-26",
+  "framework": "Next.js 14 App Router",
+  "styling": "Tailwind CSS 3 with global CSS tokens",
+  "fonts_before": ["Inter", "Space Grotesk"],
+  "fonts_after": ["Space Grotesk Variable", "IBM Plex Sans Variable"],
+  "palette_before": "dark graphite, warm orange signal, cinematic surfaces",
+  "palette_after": "pearl light mode and graphite dark mode with one electric-cobalt signal",
+  "motion": "Persistent React Three Fiber data world with six scroll-linked formations, restrained pointer response, and static reduced-motion fallback",
+  "spacing": "4-point named scale",
+  "scope": "site-wide studied-DNA 3D portfolio redesign",
+  "slop_test": "pass — 58/58 gates reviewed after desktop and 320/375/414/768 responsive browser validation",
+  "contrast": "pass — light and dark paper, ink, cobalt, control boundary, focus, and form states checked in rendered output"
+}

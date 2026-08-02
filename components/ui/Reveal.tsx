@@ -1,7 +1,4 @@
-'use client'
-
-import { motion, useReducedMotion } from 'framer-motion'
-import type { ReactNode } from 'react'
+import { createElement, type ReactNode } from 'react'
 
 interface RevealProps {
   children: ReactNode
@@ -11,26 +8,7 @@ interface RevealProps {
   as?: 'div' | 'li' | 'section' | 'article'
 }
 
-/** Scroll-triggered fade/slide reveal. Collapses to a static block when the
- *  user prefers reduced motion. */
-export function Reveal({ children, delay = 0, y = 20, className, as = 'div' }: RevealProps) {
-  const reduce = useReducedMotion()
-  const MotionTag = motion[as]
-
-  if (reduce) {
-    const Tag = as
-    return <Tag className={className}>{children}</Tag>
-  }
-
-  return (
-    <MotionTag
-      className={className}
-      initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-80px' }}
-      transition={{ duration: 0.6, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
-    >
-      {children}
-    </MotionTag>
-  )
+/** Static content wrapper retained for API compatibility across sections. */
+export function Reveal({ children, className, as = 'div' }: RevealProps) {
+  return createElement(as, { className }, children)
 }

@@ -1,40 +1,35 @@
-import { Compass } from 'lucide-react'
 import { portfolio } from '@/data/portfolio'
-import { Reveal } from '@/components/ui/Reveal'
 
 export function CurrentlyLearning() {
   return (
-    <section aria-label="Currently learning" className="section-pad !pt-0">
+    <section data-world="4" aria-label="Currently learning" className="pb-16 sm:pb-24 lg:pb-32">
       <div className="container-page">
-        <Reveal>
-          <div className="glass-strong overflow-hidden rounded-3xl p-8 sm:p-10">
-            <div className="flex items-center gap-2">
-              <Compass className="h-4 w-4 text-accent-cyan" aria-hidden="true" />
-              <span className="text-xs font-medium uppercase tracking-[0.2em] text-ink-muted">
-                Now — currently learning
-              </span>
-            </div>
-            <h3 className="mt-3 max-w-2xl font-display text-2xl font-bold text-ink sm:text-3xl">
-              Deepening AI/ML systems, Python, SQL, data engineering and{' '}
-              <span className="text-gradient">production-ready ML workflows.</span>
-            </h3>
-
-            <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              {portfolio.currentlyLearning.map((item, i) => (
-                <div
-                  key={item.title}
-                  className="relative rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5"
-                >
-                  <span className="font-display text-xs font-bold text-accent-violet">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <h4 className="mt-2 text-sm font-semibold text-ink">{item.title}</h4>
-                  <p className="mt-1 text-xs leading-relaxed text-ink-muted">{item.detail}</p>
-                </div>
-              ))}
-            </div>
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="signal-label">Live learning queue</p>
+            <h2 className="mt-4 max-w-4xl font-display text-[clamp(2.7rem,6vw,5.3rem)] font-bold leading-[0.94] tracking-[-0.055em] text-ink">
+              What is being sharpened now.
+            </h2>
           </div>
-        </Reveal>
+          <span className="flex items-center gap-2 text-sm text-ink-muted">
+            <span className="h-2 w-2 rounded-full bg-accent" aria-hidden="true" />
+            active curriculum
+          </span>
+        </div>
+
+        <ol className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-12">
+          {portfolio.currentlyLearning.map((item, index) => (
+            <li
+              key={item.title}
+              className={`observatory-panel p-6 sm:p-7 xl:col-span-6 ${index % 3 === 0 ? 'min-h-72' : 'min-h-56'} ${index === 0 || index === 3 ? 'xl:col-span-5' : ''} ${index === 1 || index === 2 ? 'xl:col-span-7' : ''}`}
+              data-interactive="true"
+            >
+              <span className="tnum font-display text-4xl font-bold text-accent">0{index + 1}</span>
+              <h3 className="mt-14 font-display text-xl font-bold tracking-[-0.03em] text-ink">{item.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-ink-muted">{item.detail}</p>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   )

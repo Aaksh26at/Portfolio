@@ -1,7 +1,5 @@
-import { Reveal } from './Reveal'
-
 interface SectionHeadingProps {
-  eyebrow: string
+  eyebrow?: string
   title: string
   accent?: string
   description?: string
@@ -9,39 +7,22 @@ interface SectionHeadingProps {
 }
 
 export function SectionHeading({
-  eyebrow,
   title,
   accent,
   description,
   align = 'left',
 }: SectionHeadingProps) {
   return (
-    <Reveal
-      className={
-        align === 'center'
-          ? 'mx-auto max-w-2xl text-center'
-          : 'max-w-2xl'
-      }
-    >
-      <div
-        className={
-          align === 'center'
-            ? 'mb-3 flex items-center justify-center gap-2'
-            : 'mb-3 flex items-center gap-2'
-        }
-      >
-        <span className="h-px w-8 bg-gradient-to-r from-accent-violet to-accent-cyan" />
-        <span className="text-xs font-medium uppercase tracking-[0.2em] text-accent-violet">
-          {eyebrow}
-        </span>
-      </div>
-      <h2 className="font-display text-3xl font-bold leading-tight text-ink sm:text-4xl md:text-[2.75rem]">
-        {title}
-        {accent ? <span className="text-gradient"> {accent}</span> : null}
+    <div className={align === 'center' ? 'mx-auto max-w-3xl text-center' : 'max-w-3xl'}>
+      <span className="mb-5 block h-1 w-9 rounded-full bg-accent" aria-hidden="true" />
+      <h2 className="font-display text-[clamp(2.35rem,5vw,4.9rem)] font-bold leading-[0.98] tracking-[-0.05em] text-ink">
+        {title}{accent ? ` ${accent}` : null}
       </h2>
       {description ? (
-        <p className="mt-4 text-base leading-relaxed text-ink-muted sm:text-lg">{description}</p>
+        <p className="mt-6 max-w-2xl text-base leading-relaxed text-ink-muted sm:text-lg">
+          {description}
+        </p>
       ) : null}
-    </Reveal>
+    </div>
   )
 }

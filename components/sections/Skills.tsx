@@ -1,102 +1,56 @@
 import { portfolio } from '@/data/portfolio'
-import { skillIcons } from '@/lib/icons'
-import type { Proficiency } from '@/types'
-import { SectionHeading } from '@/components/ui/SectionHeading'
-import { Reveal } from '@/components/ui/Reveal'
-import { cn } from '@/lib/utils'
-
-const levelSegments: Record<Proficiency, number> = {
-  Strong: 4,
-  'Working knowledge': 3,
-  Familiar: 2,
-  'Currently learning': 1,
-}
-
-const levelColor: Record<Proficiency, string> = {
-  Strong: 'bg-accent-cyan',
-  'Working knowledge': 'bg-accent-violet',
-  Familiar: 'bg-accent-blue',
-  'Currently learning': 'bg-accent-coral',
-}
-
-/** Honest 4-segment proficiency indicator (not a fake percentage bar). */
-function LevelDots({ level }: { level: Proficiency }) {
-  const filled = levelSegments[level]
-  return (
-    <span className="flex items-center gap-1" aria-hidden="true">
-      {[1, 2, 3, 4].map((i) => (
-        <span
-          key={i}
-          className={cn('h-1.5 w-4 rounded-full', i <= filled ? levelColor[level] : 'bg-white/10')}
-        />
-      ))}
-    </span>
-  )
-}
-
-// Larger tiles for the first two categories create an asymmetric bento.
-const tileSpan = (index: number) =>
-  index === 0 || index === 3 ? 'lg:col-span-4' : 'lg:col-span-4'
 
 export function Skills() {
   return (
-    <section id="skills" className="section-pad border-t border-white/[0.06] bg-base-900/30">
+    <section id="skills" data-world="3" className="section-pad">
       <div className="container-page">
-        <SectionHeading
-          eyebrow="Technical Capabilities"
-          title="A working toolkit for"
-          accent="data & intelligent systems."
-          description="Grouped by how they're used day-to-day. Proficiency is shown honestly — from strong, hands-on skills to areas I'm actively learning."
-        />
+        <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-end lg:gap-16">
+          <div>
+            <span className="mb-6 block h-1 w-9 rounded-full bg-accent" aria-hidden="true" />
+            <h2 className="font-display text-[clamp(2.8rem,6vw,5.5rem)] font-bold leading-[0.94] tracking-[-0.055em] text-ink">
+              The capability matrix.
+            </h2>
+          </div>
+          <p className="max-w-2xl text-base leading-relaxed text-ink-muted sm:text-lg">
+            A practical inventory of tools used to inspect data, build models, expose results and keep the delivery path reliable.
+          </p>
+        </div>
 
-        <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12">
-          {portfolio.skills.map((group, i) => {
-            const Icon = skillIcons[group.icon]
+        <div className="observatory-panel mt-12 overflow-hidden" role="table" aria-label="Technical capability matrix">
+          <div className="hidden grid-cols-[minmax(14rem,0.7fr)_5rem_minmax(0,1.3fr)] gap-6 border-b border-[var(--color-rule)] px-7 py-4 text-xs text-ink-muted md:grid" role="row">
+            <span role="columnheader">Domain</span>
+            <span role="columnheader">Tools</span>
+            <span role="columnheader">Operating range</span>
+          </div>
+          {portfolio.skills.map((group) => {
+            const strongCount = group.skills.filter((skill) => skill.level === 'Strong').length
             return (
-              <Reveal
+              <div
                 key={group.title}
-                className={cn('lg:col-span-4', tileSpan(i))}
-                y={20}
-                delay={(i % 3) * 0.05}
+                className="grid gap-5 border-b border-[var(--color-rule-2)] px-6 py-7 last:border-b-0 md:grid-cols-[minmax(14rem,0.7fr)_5rem_minmax(0,1.3fr)] md:items-start md:gap-6 md:px-7"
+                role="row"
               >
-                <div className="glass card-hover h-full rounded-3xl p-6">
-                  <div className="flex items-center gap-3">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-accent/20 to-accent-violet/10 text-accent-violet">
-                      <Icon className="h-5 w-5" aria-hidden="true" />
-                    </span>
-                    <h3 className="font-display text-base font-semibold text-ink">{group.title}</h3>
-                  </div>
-
-                  <ul className="mt-5 space-y-3">
-                    {group.skills.map((skill) => (
-                      <li key={skill.name} className="flex items-center justify-between gap-3">
-                        <span className="text-sm text-ink">{skill.name}</span>
-                        <span className="flex items-center gap-2">
-                          <span className="hidden text-[10px] text-ink-faint sm:inline">
-                            {skill.level}
-                          </span>
-                          <LevelDots level={skill.level} />
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+                <div role="cell">
+                  <h3 className="font-display text-xl font-bold tracking-[-0.03em] text-ink">{group.title}</h3>
+                  <p className="mt-2 text-xs text-ink-muted">{strongCount > 0 ? `${strongCount} strong-use tools` : 'Developing range'}</p>
                 </div>
-              </Reveal>
+                <span className="tnum font-display text-3xl font-bold text-accent" role="cell">{String(group.skills.length).padStart(2, '0')}</span>
+                <ul className="flex flex-wrap gap-2" role="cell">
+                  {group.skills.map((skill) => (
+                    <li
+                      key={skill.name}
+                      className="group rounded-[var(--radius-pill)] border border-[var(--color-rule)] bg-[var(--color-paper-3)] px-3 py-2 text-sm text-ink-muted"
+                      title={skill.level}
+                    >
+                      <span className="text-ink">{skill.name}</span>
+                      <span className="ml-2 text-[0.68rem] text-ink-faint">{skill.level}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             )
           })}
         </div>
-
-        {/* Legend */}
-        <Reveal className="mt-6" delay={0.1}>
-          <ul className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-ink-muted">
-            {(Object.keys(levelSegments) as Proficiency[]).map((lvl) => (
-              <li key={lvl} className="flex items-center gap-2">
-                <span className={cn('h-1.5 w-4 rounded-full', levelColor[lvl])} />
-                {lvl}
-              </li>
-            ))}
-          </ul>
-        </Reveal>
       </div>
     </section>
   )

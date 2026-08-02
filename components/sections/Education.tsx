@@ -1,61 +1,56 @@
-import { GraduationCap, MapPin } from 'lucide-react'
+import { MapPin } from 'lucide-react'
 import { portfolio } from '@/data/portfolio'
-import { SectionHeading } from '@/components/ui/SectionHeading'
-import { Reveal } from '@/components/ui/Reveal'
 
 export function Education() {
   return (
-    <section id="education" className="section-pad">
+    <section id="education" data-world="4" className="section-pad">
       <div className="container-page">
-        <SectionHeading eyebrow="Education" title="Academic" accent="foundation." />
+        <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-end lg:gap-16">
+          <div>
+            <span className="mb-6 block h-1 w-9 rounded-full bg-accent" aria-hidden="true" />
+            <h2 className="font-display text-[clamp(2.8rem,6vw,5.4rem)] font-bold leading-[0.94] tracking-[-0.055em] text-ink">
+              Evidence has a history.
+            </h2>
+          </div>
+          <p className="max-w-xl text-base leading-relaxed text-ink-muted sm:text-lg">
+            Formal computer-science study, strengthened through project work that moves from analysis into shipped interfaces and APIs.
+          </p>
+        </div>
 
-        <div className="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
-          {/* Timeline */}
-          <div className="relative">
-            <div
-              className="absolute left-[19px] top-2 h-[calc(100%-1rem)] w-px bg-gradient-to-b from-accent-violet/50 via-white/10 to-transparent"
-              aria-hidden="true"
-            />
-            <ol className="space-y-8">
-              {portfolio.education.map((edu, i) => (
-                <Reveal as="li" key={edu.degree} className="relative pl-14" delay={i * 0.08}>
-                  <span className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-full border border-accent-violet/30 bg-base-800">
-                    <GraduationCap className="h-5 w-5 text-accent-violet" aria-hidden="true" />
-                  </span>
-                  <div className="glass rounded-2xl p-5">
-                    <span className="text-xs font-semibold text-accent-cyan">{edu.period}</span>
-                    <h3 className="mt-1 font-display text-lg font-semibold text-ink">{edu.degree}</h3>
-                    <p className="mt-1 text-sm text-ink-muted">{edu.institution}</p>
-                    <p className="mt-1 flex items-center gap-1 text-xs text-ink-faint">
-                      <MapPin className="h-3 w-3" aria-hidden="true" /> {edu.location}
-                    </p>
-                  </div>
-                </Reveal>
-              ))}
-            </ol>
+        <div className="mt-12 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="grid gap-4">
+            {portfolio.education.map((education, index) => (
+              <article key={education.degree} className="observatory-panel p-6 sm:p-8" data-interactive="true">
+                <div className="flex items-start justify-between gap-4">
+                  <span className="tnum font-display text-4xl font-bold text-accent">0{index + 1}</span>
+                  <span className="tnum whitespace-nowrap text-xs text-ink-muted">{education.period}</span>
+                </div>
+                <h3 className="mt-8 font-display text-2xl font-bold leading-tight tracking-[-0.035em] text-ink">
+                  {education.degree}
+                </h3>
+                <p className="mt-3 text-sm text-ink-muted">{education.institution}</p>
+                <p className="mt-5 flex items-center gap-2 text-xs text-ink-faint">
+                  <MapPin className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
+                  {education.location}
+                </p>
+              </article>
+            ))}
           </div>
 
-          {/* Learning journey */}
-          <Reveal delay={0.1}>
-            <div className="glass h-full rounded-3xl p-6 sm:p-8">
-              <h3 className="font-display text-lg font-semibold text-ink">Practical Learning Journey</h3>
-              <p className="mt-2 text-sm text-ink-muted">
-                Beyond coursework, most of my growth comes from building — presented honestly as
-                project-based learning and professional development, not employment.
-              </p>
-              <ul className="mt-6 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-                {portfolio.learningJourney.map((item) => (
-                  <li
-                    key={item}
-                    className="flex items-start gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3.5 py-3 text-sm text-ink"
-                  >
-                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-violet" aria-hidden="true" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
+          <div className="observatory-panel p-6 sm:p-8 lg:p-10">
+            <p className="signal-label">Parallel learning track</p>
+            <h3 className="mt-4 font-display text-3xl font-bold tracking-[-0.04em] text-ink">
+              The curriculum outside the curriculum.
+            </h3>
+            <ul className="mt-8 grid gap-3 sm:grid-cols-2">
+              {portfolio.learningJourney.map((item) => (
+                <li key={item} className="rounded-[var(--radius-control)] bg-[var(--color-paper-3)] p-4 text-sm leading-relaxed text-ink-muted">
+                  <span className="mb-3 block h-1 w-5 rounded-full bg-accent" aria-hidden="true" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </section>

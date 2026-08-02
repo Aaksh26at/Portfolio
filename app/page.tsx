@@ -1,5 +1,3 @@
-import { Loader } from '@/components/Loader'
-import { ScrollProgress } from '@/components/ScrollProgress'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Hero } from '@/components/sections/Hero'
@@ -17,8 +15,6 @@ import { Contact } from '@/components/sections/Contact'
 export default function HomePage() {
   return (
     <>
-      <Loader />
-      <ScrollProgress />
       <Header />
       <main id="main">
         <Hero />
