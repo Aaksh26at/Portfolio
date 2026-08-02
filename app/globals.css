@@ -1,11 +1,11 @@
-/* Hallmark · macrostructure: Narrative Workflow / Long Document · genre: atmospheric
- * theme: studied-DNA · tone: luminous technical world · anchor: electric cobalt
+/* Hallmark · macrostructure: Narrative Workflow / Long Document
+ * genre: editorial-atmospheric · theme: warm editorial contrast
+ * tone: warm bone canvas · signal: amber · data: cobalt
  * source: joseph-san.com (structural reference only) · studied: yes
  * enrichment: Tier-D persistent WebGL data world · hero: H1 · nav: N9 · footer: Ft2
- * contrast: pass (40–41) · slop: pass (42–45) · honest: pass (46)
- * chrome: pass (47) · tokens: pass (48) · responsive: pass (49)
- * mobile: pass (34, 49, 50–57) · design-system: design.md · designed-as-app
- * modes: pearl light + graphite dark · toggle: 44px native control
+ * design-system: design.md · designed-as-app
+ * modes: bone light + warm graphite dark · band: mode-invariant ink
+ * surfaces: paper · inset · wash-signal · wash-data · band · outline
  */
 @import '../tokens.css';
 @tailwind base;
@@ -100,6 +100,10 @@
     overflow-wrap: anywhere;
     font-family: var(--font-display);
     font-style: normal;
+    /* Fraunces carries an optical-size axis; let the browser pick the
+     * display cut from the rendered size rather than pinning it. */
+    font-optical-sizing: auto;
+    letter-spacing: var(--track-display);
   }
 
   input,
@@ -125,7 +129,15 @@
   .container-page { @apply mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12 xl:px-16; }
 
   .section-pad { padding-block: var(--space-section); }
-  .font-outlier { font-family: var(--font-outlier); }
+  /* The wordmark is a cut of the display face, not a third family:
+   * maximum optical size gives Fraunces its highest-contrast display
+   * drawing, which reads as a distinct voice at wordmark scale. */
+  .font-outlier {
+    font-family: var(--font-outlier);
+    font-variation-settings: var(--font-outlier-variation);
+    font-optical-sizing: none;
+    letter-spacing: var(--track-display-tight);
+  }
   .tnum { font-variant-numeric: tabular-nums; }
   .surface-night { background: var(--color-night); color: var(--color-night-ink); }
 

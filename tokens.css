@@ -1,67 +1,137 @@
-/* Hallmark · pre-emit critique: P5 H5 E5 S5 R4 V5
- * genre: atmospheric · macrostructure: Narrative Workflow / Long Document
+/* Hallmark · warm editorial contrast
+ * genre: editorial-atmospheric · macrostructure: Narrative Workflow / Long Document
  * design-system: design.md · designed-as-app · studied: yes
- * theme: studied-DNA (source: joseph-san.com structural reference)
- * paper: oklch(97.5% 0.012 255) · accent: oklch(54% 0.24 260)
- * fonts: Space Grotesk Variable + IBM Plex Sans Variable
+ * theme: warm-editorial (source: joseph-san.com structural reference)
+ * paper: oklch(97% 0.010 85) · signal: oklch(68% 0.185 55) · data: oklch(52% 0.170 255)
+ * fonts: Fraunces Variable (opsz) + IBM Plex Sans Variable + IBM Plex Mono
  * hero: H1 Marquee · nav: N9 · footer: Ft2 · enrichment: Tier-D persistent WebGL
- * modes: pearl light + graphite dark · toggle: native persisted preference
+ * modes: bone light + warm graphite dark · band: mode-invariant ink
  */
 :root {
-  --color-paper-lch: 97.5% 0.012 255;
-  --color-paper-2-lch: 95.5% 0.018 255;
-  --color-paper-3-lch: 92% 0.025 255;
-  --color-ink-lch: 20% 0.028 260;
-  --color-ink-2-lch: 36% 0.026 260;
-  --color-muted-lch: 49% 0.022 260;
-  --color-neutral-lch: 39% 0.024 260;
-  --color-rule-lch: 82% 0.032 255;
-  --color-rule-2-lch: 88% 0.026 255;
-  --color-control-rule-lch: 52% 0.03 260;
-  --color-accent-lch: 54% 0.24 260;
-  --color-accent-soft-lch: 91% 0.065 260;
-  --color-accent-ink-lch: 98% 0.01 255;
-  --color-focus-lch: 48% 0.26 260;
-  --color-error-lch: 54% 0.2 28;
-  --color-success-lch: 46% 0.14 150;
-  --color-warning-lch: 60% 0.17 70;
-  --color-warning-rule-lch: 72% 0.08 70;
-  --color-overlay-lch: 16% 0.025 260;
+  /* ── warm paper ─────────────────────────────────────────────── */
+  --color-paper-lch: 97% 0.010 85;
+  --color-paper-2-lch: 94.5% 0.014 82;
+  --color-paper-3-lch: 91% 0.018 80;
 
+  /* ── warm ink ───────────────────────────────────────────────── */
+  --color-ink-lch: 17% 0.012 60;
+  --color-ink-2-lch: 34% 0.014 62;
+  --color-neutral-lch: 41% 0.014 63;
+  --color-muted-lch: 46% 0.014 65;
+
+  /* ── rules ──────────────────────────────────────────────────── */
+  --color-rule-lch: 84% 0.016 80;
+  --color-rule-2-lch: 90% 0.012 82;
+  --color-rule-strong-lch: 64% 0.02 75;
+  --color-control-rule-lch: 46% 0.016 65;
+
+  /* ── SIGNAL family · amber · CTAs, marks, emphasis ──────────────
+   * `signal` is a FILL and mark colour, held at the lightest value
+   * that still clears 3:1 on paper. It is never small body text —
+   * use `signal-strong` there. All chroma values sit on the sRGB
+   * gamut boundary for their lightness; raising them gets clipped. */
+  --color-signal-lch: 66% 0.163 55;
+  --color-signal-strong-lch: 45% 0.12 48;
+  --color-signal-soft-lch: 93% 0.045 72;
+  --color-signal-ink-lch: 22% 0.03 55;
+
+  /* ── DATA family · cobalt · evidence, charts, WebGL ─────────── */
+  --color-data-lch: 52% 0.168 255;
+  --color-data-2-lch: 64% 0.14 250;
+  --color-data-soft-lch: 93% 0.03 250;
+  --color-data-ink-lch: 97% 0.008 250;
+
+  /* ── legacy accent bridge · maps onto the signal family ─────── */
+  --color-accent-lch: 45% 0.12 48;
+  --color-accent-soft-lch: 93% 0.045 72;
+  --color-accent-ink-lch: 22% 0.03 55;
+  --color-focus-lch: 48% 0.132 250;
+
+  /* ── status ─────────────────────────────────────────────────── */
+  --color-error-lch: 52% 0.176 28;
+  --color-success-lch: 46% 0.12 150;
+  --color-warning-lch: 60% 0.122 78;
+  --color-warning-rule-lch: 74% 0.07 78;
+  --color-overlay-lch: 18% 0.02 58;
+
+  /* ── mode-invariant ink band · stays dark in both themes ────── */
+  --color-band-lch: 19% 0.02 58;
+  --color-band-2-lch: 24% 0.022 58;
+  --color-band-ink-lch: 96% 0.012 80;
+  --color-band-ink-2-lch: 80% 0.014 78;
+  --color-band-muted-lch: 66% 0.014 75;
+  --color-band-rule-lch: 34% 0.02 58;
+  --color-band-signal-lch: 76% 0.15 62;
+  --color-band-data-lch: 70% 0.14 250;
+
+  --shadow-color-lch: 30% 0.035 60;
+
+  /* ── ready values ───────────────────────────────────────────── */
   --color-paper: oklch(var(--color-paper-lch));
   --color-paper-2: oklch(var(--color-paper-2-lch));
   --color-paper-3: oklch(var(--color-paper-3-lch));
   --color-ink: oklch(var(--color-ink-lch));
   --color-ink-2: oklch(var(--color-ink-2-lch));
-  --color-muted: oklch(var(--color-muted-lch));
   --color-neutral: oklch(var(--color-neutral-lch));
+  --color-muted: oklch(var(--color-muted-lch));
   --color-rule: oklch(var(--color-rule-lch));
   --color-rule-2: oklch(var(--color-rule-2-lch));
+  --color-rule-strong: oklch(var(--color-rule-strong-lch));
   --color-control-rule: oklch(var(--color-control-rule-lch));
+
+  --color-signal: oklch(var(--color-signal-lch));
+  --color-signal-strong: oklch(var(--color-signal-strong-lch));
+  --color-signal-soft: oklch(var(--color-signal-soft-lch));
+  --color-signal-ink: oklch(var(--color-signal-ink-lch));
+
+  --color-data: oklch(var(--color-data-lch));
+  --color-data-2: oklch(var(--color-data-2-lch));
+  --color-data-soft: oklch(var(--color-data-soft-lch));
+  --color-data-ink: oklch(var(--color-data-ink-lch));
+
   --color-accent: oklch(var(--color-accent-lch));
   --color-accent-soft: oklch(var(--color-accent-soft-lch));
   --color-accent-ink: oklch(var(--color-accent-ink-lch));
   --color-focus: oklch(var(--color-focus-lch));
+
   --color-error: oklch(var(--color-error-lch));
   --color-success: oklch(var(--color-success-lch));
   --color-warning: oklch(var(--color-warning-lch));
   --color-warning-rule: oklch(var(--color-warning-rule-lch));
   --color-overlay: oklch(var(--color-overlay-lch) / 0.82);
 
-  /* Compatibility aliases for existing component APIs. */
-  --color-night: var(--color-ink);
-  --color-night-2: var(--color-ink-2);
-  --color-night-ink: var(--color-paper);
-  --color-night-muted: var(--color-rule);
-  --color-night-accent: var(--color-accent);
-  --color-night-rule: var(--color-muted);
-  --color-night-lch: var(--color-ink-lch);
-  --color-night-2-lch: var(--color-ink-2-lch);
+  --color-band: oklch(var(--color-band-lch));
+  --color-band-2: oklch(var(--color-band-2-lch));
+  --color-band-ink: oklch(var(--color-band-ink-lch));
+  --color-band-ink-2: oklch(var(--color-band-ink-2-lch));
+  --color-band-muted: oklch(var(--color-band-muted-lch));
+  --color-band-rule: oklch(var(--color-band-rule-lch));
+  --color-band-signal: oklch(var(--color-band-signal-lch));
+  --color-band-data: oklch(var(--color-band-data-lch));
 
-  --font-display: "Space Grotesk Variable", ui-sans-serif, sans-serif;
-  --font-body: "IBM Plex Sans Variable", ui-sans-serif, sans-serif;
-  --font-outlier: "Syne Variable", ui-sans-serif, sans-serif;
-  --font-body-weight: 375;
+  /* ── compatibility aliases · point at the mode-invariant band ─
+   * These must NOT invert with the theme: a dark band has to stay
+   * dark in dark mode or the page rhythm collapses. Deprecated —
+   * migrate call sites to --color-band-*. */
+  --color-night: var(--color-band);
+  --color-night-2: var(--color-band-2);
+  --color-night-ink: var(--color-band-ink);
+  --color-night-muted: var(--color-band-muted);
+  --color-night-accent: var(--color-band-signal);
+  --color-night-rule: var(--color-band-rule);
+  --color-night-lch: var(--color-band-lch);
+  --color-night-2-lch: var(--color-band-2-lch);
+
+  /* ── type ───────────────────────────────────────────────────── */
+  --font-display: 'Fraunces Variable', ui-serif, Georgia, 'Times New Roman', serif;
+  --font-body: 'IBM Plex Sans Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-outlier: var(--font-display);
+  --font-body-weight: 380;
+  --font-display-variation: 'opsz' 144;
+  --font-outlier-variation: 'opsz' 144;
+  --track-display: -0.028em;
+  --track-display-tight: -0.038em;
 
   --space-3xs: 0.125rem;
   --space-2xs: 0.25rem;
@@ -86,6 +156,7 @@
   --text-display: clamp(3rem, 6.4vw, 5.5rem);
   --text-marquee: clamp(3rem, 9.4vw, 7rem);
 
+  /* ── motion ─────────────────────────────────────────────────── */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
@@ -93,24 +164,55 @@
   --dur-short: 220ms;
   --dur-long: 420ms;
 
+  /* ── shape ──────────────────────────────────────────────────── */
   --rule-thin: 1px;
   --rule-strong: 2px;
   --radius-card: 0.85rem;
   --radius-control: 0.65rem;
   --radius-pill: 999px;
-  --shadow-card: 0 24px 60px -46px oklch(var(--color-overlay-lch) / 0.34);
+
+  /* ── elevation ladder ───────────────────────────────────────── */
+  --shadow-0: none;
+  --shadow-1:
+    0 1px 2px -1px oklch(var(--shadow-color-lch) / 0.1),
+    0 1px 1px oklch(var(--shadow-color-lch) / 0.05);
+  --shadow-2:
+    0 2px 4px -2px oklch(var(--shadow-color-lch) / 0.1),
+    0 6px 12px -6px oklch(var(--shadow-color-lch) / 0.13);
+  --shadow-3:
+    0 4px 8px -4px oklch(var(--shadow-color-lch) / 0.1),
+    0 14px 28px -12px oklch(var(--shadow-color-lch) / 0.17);
+  --shadow-4:
+    0 8px 16px -8px oklch(var(--shadow-color-lch) / 0.12),
+    0 30px 60px -24px oklch(var(--shadow-color-lch) / 0.22);
+  --shadow-lift:
+    0 4px 8px -4px oklch(var(--shadow-color-lch) / 0.12),
+    0 18px 34px -14px oklch(var(--shadow-color-lch) / 0.2);
+  --elev-hairline: none;
+  --shadow-card: var(--shadow-2);
+
+  /* ── section rhythm ─────────────────────────────────────────── */
+  --rhythm: clamp(5.5rem, 9vw, 9.5rem);
+  --rhythm-half: clamp(2.75rem, 4.5vw, 4.75rem);
+  --rhythm-hero: clamp(7rem, 12vh, 10rem);
 
   --depth-perspective: 1100px;
   --depth-near: 18px;
   --depth-mid: 10px;
   --depth-far: -36px;
 
+  /* ── WebGL palette · sRGB 0–1 triplets ──────────────────────────
+   * Consumed by THREE.Color().setRGB(r, g, b, THREE.SRGBColorSpace),
+   * which declares these as sRGB *input* and converts to linear
+   * internally. Do not substitute linear-light values here. */
   --world-point-size: 0.038;
   --world-line-opacity: 0.16;
-  --world-color-accent: 0.12 0.22 0.88;
-  --world-color-ink: 0.08 0.11 0.18;
-  --world-color-muted: 0.38 0.46 0.62;
-  --world-color-paper: 0.96 0.97 1;
+  --world-color-signal: 0.878 0.518 0.129;
+  --world-color-data: 0.12 0.37 0.82;
+  --world-color-ink: 0.149 0.129 0.114;
+  --world-color-muted: 0.48 0.45 0.42;
+  --world-color-paper: 0.969 0.957 0.926;
+  --world-color-accent: var(--world-color-data);
 
   --z-base: 1;
   --z-raised: 10;
@@ -122,40 +224,69 @@
 }
 
 :root[data-theme='dark'] {
-  --color-paper-lch: 15% 0.022 260;
-  --color-paper-2-lch: 18.5% 0.025 260;
-  --color-paper-3-lch: 22% 0.028 260;
-  --color-ink-lch: 94% 0.014 255;
-  --color-ink-2-lch: 82% 0.022 255;
-  --color-muted-lch: 70% 0.022 255;
-  --color-neutral-lch: 78% 0.026 255;
-  --color-rule-lch: 34% 0.035 260;
-  --color-rule-2-lch: 27% 0.03 260;
-  --color-control-rule-lch: 63% 0.04 255;
-  --color-accent-lch: 65% 0.21 260;
-  --color-accent-soft-lch: 27% 0.075 260;
-  --color-accent-ink-lch: 14% 0.025 260;
-  --color-focus-lch: 76% 0.16 260;
-  --color-error-lch: 70% 0.16 28;
-  --color-success-lch: 70% 0.12 150;
-  --color-warning-lch: 74% 0.14 70;
-  --color-warning-rule-lch: 58% 0.08 70;
-  --color-overlay-lch: 7% 0.018 260;
+  --color-paper-lch: 15% 0.012 60;
+  --color-paper-2-lch: 19% 0.014 58;
+  --color-paper-3-lch: 24% 0.016 58;
 
-  --color-night: var(--color-paper-2);
-  --color-night-2: var(--color-paper-3);
-  --color-night-ink: var(--color-ink);
-  --color-night-muted: var(--color-muted);
-  --color-night-accent: var(--color-accent);
-  --color-night-rule: var(--color-rule);
-  --color-night-lch: var(--color-paper-2-lch);
-  --color-night-2-lch: var(--color-paper-3-lch);
+  --color-ink-lch: 95% 0.01 85;
+  --color-ink-2-lch: 81% 0.012 80;
+  --color-neutral-lch: 73% 0.014 78;
+  --color-muted-lch: 66% 0.012 76;
+
+  --color-rule-lch: 31% 0.016 58;
+  --color-rule-2-lch: 25% 0.014 58;
+  --color-rule-strong-lch: 50% 0.02 62;
+  --color-control-rule-lch: 60% 0.018 70;
+
+  --color-signal-lch: 76% 0.15 62;
+  --color-signal-strong-lch: 84% 0.118 68;
+  --color-signal-soft-lch: 28% 0.055 58;
+  --color-signal-ink-lch: 16% 0.03 55;
+
+  --color-data-lch: 68% 0.145 250;
+  --color-data-2-lch: 78% 0.11 245;
+  --color-data-soft-lch: 28% 0.055 255;
+  --color-data-ink-lch: 14% 0.02 255;
+
+  --color-accent-lch: 76% 0.15 62;
+  --color-accent-soft-lch: 28% 0.055 58;
+  --color-accent-ink-lch: 16% 0.03 55;
+  --color-focus-lch: 78% 0.112 250;
+
+  --color-error-lch: 70% 0.16 28;
+  --color-success-lch: 74% 0.12 150;
+  --color-warning-lch: 80% 0.14 80;
+  --color-warning-rule-lch: 56% 0.08 78;
+  --color-overlay-lch: 6% 0.01 58;
+
+  /* the band lifts one step so it still separates from the page,
+   * and its rule lifts with it to stay a visible divider */
+  --color-band-lch: 24% 0.022 58;
+  --color-band-2-lch: 29% 0.024 58;
+  --color-band-rule-lch: 38% 0.02 58;
+
+  --shadow-color-lch: 4% 0.01 58;
+  --shadow-1: 0 1px 2px -1px oklch(var(--shadow-color-lch) / 0.45);
+  --shadow-2:
+    0 2px 4px -2px oklch(var(--shadow-color-lch) / 0.5),
+    0 8px 16px -8px oklch(var(--shadow-color-lch) / 0.55);
+  --shadow-3:
+    0 4px 8px -4px oklch(var(--shadow-color-lch) / 0.55),
+    0 16px 32px -12px oklch(var(--shadow-color-lch) / 0.62);
+  --shadow-4:
+    0 8px 16px -8px oklch(var(--shadow-color-lch) / 0.6),
+    0 34px 64px -22px oklch(var(--shadow-color-lch) / 0.72);
+  --shadow-lift:
+    0 4px 8px -4px oklch(var(--shadow-color-lch) / 0.55),
+    0 20px 38px -14px oklch(var(--shadow-color-lch) / 0.66);
+  --elev-hairline: inset 0 1px 0 0 oklch(var(--color-ink-lch) / 0.07);
 
   --font-body-weight: 350;
-  --shadow-card: 0 24px 60px -46px oklch(var(--color-overlay-lch) / 0.72);
-  --world-line-opacity: 0.22;
-  --world-color-accent: 0.32 0.46 1;
-  --world-color-ink: 0.78 0.84 0.96;
-  --world-color-muted: 0.42 0.54 0.78;
-  --world-color-paper: 0.07 0.09 0.14;
+
+  --world-line-opacity: 0.24;
+  --world-color-signal: 0.98 0.68 0.3;
+  --world-color-data: 0.42 0.62 1;
+  --world-color-ink: 0.86 0.84 0.8;
+  --world-color-muted: 0.5 0.48 0.45;
+  --world-color-paper: 0.09 0.085 0.08;
 }

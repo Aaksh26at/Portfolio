@@ -1,7 +1,13 @@
 import type { Metadata, Viewport } from 'next'
-import '@fontsource-variable/syne'
-import '@fontsource-variable/space-grotesk'
+// Fraunces via the `opsz` subset: same 'Fraunces Variable' family name as
+// index.css, but carries the optical-size axis (65.7 KB latin vs 35.8 KB)
+// so `font-optical-sizing: auto` gives real display cuts at marquee sizes.
+import '@fontsource-variable/fraunces/opsz.css'
 import '@fontsource-variable/ibm-plex-sans'
+// No variable build of IBM Plex Mono exists on Fontsource — two static
+// weights only, and never the italics.
+import '@fontsource/ibm-plex-mono/400.css'
+import '@fontsource/ibm-plex-mono/600.css'
 import './globals.css'
 import { siteConfig } from '@/lib/site'
 import { portfolio } from '@/data/portfolio'
