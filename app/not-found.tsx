@@ -1,29 +1,26 @@
-import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
+import { MagneticButton } from '@/components/ui/MagneticButton'
 
 export default function NotFound() {
   return (
-    <main className="surface-night flex min-h-screen items-center">
+    // The band surface re-declares the colour tokens, so everything below
+    // re-tones to ink automatically — no hand-written dark-mode variables.
+    <main className="surface surface--band flex min-h-screen items-center">
       <div className="container-page py-24">
-        <p className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-[var(--color-night-accent)]">
-          Error / 404
-        </p>
-        <p className="mt-8 font-display text-7xl font-semibold tracking-[-0.06em] text-[var(--color-night-ink)] sm:text-9xl">
+        <p className="signal-label">Error / 404</p>
+        <p className="tnum mt-8 font-display text-7xl font-bold tracking-[var(--track-display-tight)] text-ink sm:text-9xl">
           404
         </p>
-        <h1 className="mt-5 font-display text-2xl font-semibold text-[var(--color-night-ink)]">
-          Page not found
-        </h1>
-        <p className="mt-3 max-w-md text-[var(--color-night-muted)]">
+        <h1 className="mt-5 font-display text-2xl font-bold text-ink">Page not found</h1>
+        <p className="mt-3 max-w-md text-ink-muted">
           The page you’re looking for does not exist or may have moved.
         </p>
-        <Link
-          href="/"
-          className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-control)] border border-[var(--color-night-rule)] px-5 py-2.5 text-sm font-semibold text-[var(--color-night-ink)] hover:border-[var(--color-night-ink)]"
-        >
-          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-          Back to home
-        </Link>
+        <div className="mt-8">
+          <MagneticButton href="/" variant="ghost" iconTrail={false}>
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+            Back to home
+          </MagneticButton>
+        </div>
       </div>
     </main>
   )

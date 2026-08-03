@@ -41,10 +41,6 @@
   --color-data-soft-lch: 93% 0.03 250;
   --color-data-ink-lch: 97% 0.008 250;
 
-  /* ── legacy accent bridge · maps onto the signal family ─────── */
-  --color-accent-lch: 45% 0.12 48;
-  --color-accent-soft-lch: 93% 0.045 72;
-  --color-accent-ink-lch: 22% 0.03 55;
   --color-focus-lch: 48% 0.132 250;
 
   /* ── status ─────────────────────────────────────────────────── */
@@ -89,9 +85,6 @@
   --color-data-soft: oklch(var(--color-data-soft-lch));
   --color-data-ink: oklch(var(--color-data-ink-lch));
 
-  --color-accent: oklch(var(--color-accent-lch));
-  --color-accent-soft: oklch(var(--color-accent-soft-lch));
-  --color-accent-ink: oklch(var(--color-accent-ink-lch));
   --color-focus: oklch(var(--color-focus-lch));
 
   --color-error: oklch(var(--color-error-lch));
@@ -108,19 +101,6 @@
   --color-band-rule: oklch(var(--color-band-rule-lch));
   --color-band-signal: oklch(var(--color-band-signal-lch));
   --color-band-data: oklch(var(--color-band-data-lch));
-
-  /* ── compatibility aliases · point at the mode-invariant band ─
-   * These must NOT invert with the theme: a dark band has to stay
-   * dark in dark mode or the page rhythm collapses. Deprecated —
-   * migrate call sites to --color-band-*. */
-  --color-night: var(--color-band);
-  --color-night-2: var(--color-band-2);
-  --color-night-ink: var(--color-band-ink);
-  --color-night-muted: var(--color-band-muted);
-  --color-night-accent: var(--color-band-signal);
-  --color-night-rule: var(--color-band-rule);
-  --color-night-lch: var(--color-band-lch);
-  --color-night-2-lch: var(--color-band-2-lch);
 
   /* ── type ───────────────────────────────────────────────────── */
   --font-display: 'Fraunces Variable', ui-serif, Georgia, 'Times New Roman', serif;
@@ -247,9 +227,6 @@
   --color-data-soft-lch: 28% 0.055 255;
   --color-data-ink-lch: 14% 0.02 255;
 
-  --color-accent-lch: 76% 0.15 62;
-  --color-accent-soft-lch: 28% 0.055 58;
-  --color-accent-ink-lch: 16% 0.03 55;
   --color-focus-lch: 78% 0.112 250;
 
   --color-error-lch: 70% 0.16 28;

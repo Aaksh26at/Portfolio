@@ -2,77 +2,86 @@
 
 A locked design system for this app. Every route reads this file before emitting code. Extend it when the system needs to grow; do not invent local themes.
 
+`tokens.css` is the single source of truth for values. This document explains the intent behind them; where the two disagree, `tokens.css` wins and this file is the bug.
+
 ## Provenance
 
-Studied-DNA direction approved after reviewing Joseph Santamaria’s scroll-driven 3D portfolio and contrasting it with more game-led portfolio experiences. The build borrows the persistent-world structure and chapter transitions, not the source’s artwork, copy, models, or visual identity.
+Structural direction studied from Joseph Santamaria's scroll-driven 3D portfolio: the persistent-world layer and chapter transitions. None of the source's artwork, copy, models, palette or visual identity is borrowed — the warm editorial treatment is this project's own.
 
 ## Genre
 
-Atmospheric — luminous scientific space with technical clarity, a pearl canvas and one electric-cobalt signal.
+Editorial-atmospheric — a warm bone reading surface, one persistent data world behind it, and technical clarity in the foreground.
 
 ## Macrostructure family
 
-- Marketing / homepage: **Narrative Workflow** — one continuous 3D data world changes formation across the existing content chapters.
+- Marketing / homepage: **Narrative Workflow** — one continuous 3D data world changes formation across the content chapters.
 - App views: **Workbench** — functional light surfaces, compact controls and no independent decorative scenes.
-- Content / case studies: **Long Document** — linear reading surface with the persistent data world held behind project evidence.
+- Content / case studies: **Long Document** — one calm reading column; only the evidence plate takes a tinted surface.
 
 ## Component voice
 
 - Hero: **H1 Marquee** — the statement owns the first view; supporting copy and actions sit in the handoff below it.
-- Navigation: **N9 Edge-aligned minimal** — AA wordmark hard-left, compact theme control and contact action hard-right, mobile disclosure only when required.
-- Footer: **Ft2 Inline single line** — one rule, identity, three proof links and copyright.
+- Navigation: **N9 Edge-aligned minimal** — AA wordmark hard-left, compact theme control hard-right, mobile disclosure only when required.
+- Footer: **Ft2 Inline single line** — one rule, identity, tracked proof links and copyright, continuing the band that Contact opens.
 
-## Theme
+## Colour
 
-- `--color-paper`: `oklch(97.5% 0.012 255)`
-- `--color-paper-2`: `oklch(95.5% 0.018 255)`
-- `--color-paper-3`: `oklch(92% 0.025 255)`
-- `--color-ink`: `oklch(20% 0.028 260)`
-- `--color-ink-2`: `oklch(36% 0.026 260)`
-- `--color-muted`: `oklch(49% 0.022 260)`
-- `--color-rule`: `oklch(82% 0.032 255)`
-- `--color-control-rule`: `oklch(52% 0.03 260)`
-- `--color-accent`: `oklch(54% 0.24 260)`
-- `--color-accent-ink`: `oklch(98% 0.01 255)`
-- `--color-focus`: `oklch(48% 0.26 260)`
+Two families carry meaning, and they are not interchangeable.
 
-Accent use stays below roughly 3% of any viewport. The WebGL world uses cobalt points, cool graphite structure and pearl negative space. Gradient text, aurora blobs, glass blur and decorative floating orbs are prohibited.
+- **Signal · amber** — CTAs, marks, emphasis, chapter numbers. `--color-signal` is a *fill* colour held at the lightest value that still clears 3:1 on paper; it is never small body text. Use `--color-signal-strong` for text.
+- **Data · cobalt** — evidence only: charts, project plates, metrics, the WebGL world. If it represents a measurement, it is cobalt.
+
+Amber fills always carry ink labels, never paper: amber at L66 is ~2.4:1 against white but ~5.3:1 against warm ink. Combined accent use stays below roughly 3% of any viewport. Gradient text, aurora blobs, glass blur and decorative floating orbs are prohibited.
+
+Chroma values sit on the sRGB gamut boundary for their lightness — raising them gets clipped, not saturated.
+
+### The band
+
+`--color-band-*` is a mode-invariant ink surface: it stays dark in dark mode too, so the page rhythm survives the theme toggle. It is not "dark mode" and must never be aliased to the paper scale.
 
 ### Dark mode
 
-- `--color-paper`: `oklch(15% 0.022 260)`
-- `--color-paper-2`: `oklch(18.5% 0.025 260)`
-- `--color-paper-3`: `oklch(22% 0.028 260)`
-- `--color-ink`: `oklch(94% 0.014 255)`
-- `--color-ink-2`: `oklch(82% 0.022 255)`
-- `--color-muted`: `oklch(70% 0.022 255)`
-- `--color-rule`: `oklch(34% 0.035 260)`
-- `--color-control-rule`: `oklch(63% 0.04 255)`
-- `--color-accent`: `oklch(65% 0.21 260)`
-- `--color-accent-ink`: `oklch(14% 0.025 260)`
-- `--color-focus`: `oklch(76% 0.16 260)`
-
-The toggle follows the operating-system preference until the visitor chooses a mode, then persists that choice locally. Dark mode keeps the same cobalt hue, lifts elevated surfaces through lightness, reduces body weight, and refreshes the WebGL material palette without rebuilding the scene.
+The toggle follows the operating-system preference until the visitor chooses a mode, then persists that choice locally. Dark mode keeps both hues, lifts elevated surfaces through lightness, reduces body weight to 350, lifts the band one step so it still separates from the page, and refreshes the WebGL material palette without rebuilding the scene.
 
 ## Typography
 
-- Display: **Space Grotesk Variable**, weight 700, roman.
-- Body: **IBM Plex Sans Variable**, weight 350–600.
-- Outlier: **Syne Variable**, weight 700, used only for the AA wordmark.
-- Display tracking: `-0.04em` to `-0.055em`.
-- Type-scale anchor: `clamp(3rem, 6.4vw, 5.5rem)`; the short hero statement may reach `7rem` on wide screens.
+- Display: **Fraunces Variable**, weight 700, `opsz 144`.
+- Body: **IBM Plex Sans Variable**, weight 350–600 (`--font-body-weight`, 380 light / 350 dark).
+- Mono: **IBM Plex Mono** 400/600 — measurements, chapter indices, tabular figures. Always paired with `.tnum`.
+- Outlier: the AA wordmark is a *cut* of the display face at maximum optical size with optical sizing disabled, not a third family.
+- Display tracking: `--track-display` (-0.028em) and `--track-display-tight` (-0.038em). Do not hand-roll tracking values.
+- Type-scale anchor: `--text-display`; the short hero statement uses `--text-marquee`.
+
+## Surfaces and rhythm
+
+One system. Every `<section>` carries exactly one `.section*` class and one `.surface--*` class, and never hand-rolls its own block padding.
+
+- `.surface--paper` transparent · `--inset` paper-3 · `--wash-signal` amber tint · `--wash-data` cobalt tint · `--outline` ink rules · `--band` mode-invariant ink.
+- Filled surfaces get the full `--rhythm`; transparent paper sections get `--rhythm-half`, because their whitespace already reads as separation.
+- Tinted and inked surfaces re-declare the colour tokens locally, so every descendant re-tones for free. Never hand-write a dark variant of a component that sits on the band.
 
 ## Spacing
 
 4-point named scale in `tokens.css`. Pages use named tokens or fluid `clamp()` values; raw values are limited to WebGL geometry, SVG coordinates and content-driven breakpoints.
 
+## Primitives
+
+These are the vocabulary. A section that needs a container, a chip, a heading, a measurement or an entrance uses one of these — it does not hand-roll a local copy.
+
+- **Panel** — the one container. Tone axis: `raised · inset · outline · band · signal · data · flush`, plus `pad`, `elevation`, `interactive`, `clip`.
+- **SectionHeading** — the one heading vocabulary. `scale · align · mark · eyebrow · index · measure · reveal`.
+- **Badge** — chips, on a `tone × variant` matrix. `dot="live"` is the status form.
+- **Stat** — a measurement over its label; mono and tabular by default.
+- **MagneticButton** — the action primitive. `primary · signal · ghost · soft` × `sm · md · lg`. Pointer-follow writes `--mx/--my` as custom properties so the transform stays in CSS.
+- **Reveal** — the scroll entrance. `fade-rise · stagger · rule-draw · mask-wipe · lift · none`.
+
 ## Motion
 
 - Easings: exponential `--ease-out`, accelerating `--ease-in`, symmetric `--ease-in-out`.
 - Page reveal: one assembly of raw points into the hero data sculpture.
-- Motion primitives: pointer response, IntersectionObserver-driven chapter transitions and one-time hero assembly. No panel tilt or universal content reveal.
+- Sections are assigned distinct Reveal variants so the page never reads as one animation repeated eleven times.
 - The persistent WebGL scene never auto-spins. It responds to direct pointer input and changes formation only when a real content chapter becomes active.
-- Reduced motion: WebGL is replaced with a static structural fallback and all spatial transitions collapse to still states.
+- Reduced motion is checked **in JS** via `useReducedMotion`, not left to the CSS media block: framer-motion drives inline styles and WAAPI, which `@media (prefers-reduced-motion)` cannot reach. WebGL is replaced with a static structural fallback and all spatial transitions collapse to still states.
 
 ## Microinteractions stance
 
@@ -84,7 +93,7 @@ The toggle follows the operating-system preference until the visitor chooses a m
 
 ## CTA voice
 
-- Primary: near-black or cobalt outline, compact radius, specific action copy.
+- Primary: ink fill that inverts to amber on hover, compact radius, specific action copy.
 - Secondary: quiet paper surface with a visible rule.
 - Clickable labels never wrap.
 
@@ -97,8 +106,8 @@ The toggle follows the operating-system preference until the visitor chooses a m
 ## What pages MUST share
 
 - AA wordmark, N9 navigation with persisted theme control and Ft2 footer.
-- Pearl / graphite / cobalt palette and Space Grotesk / IBM Plex pairing.
-- CTA voice, focus treatment, project data-plate grammar and the persistent world layer.
+- The signal/data colour split, the Fraunces / IBM Plex pairing, and the surface-and-rhythm system.
+- CTA voice, focus treatment, the primitives above, and the persistent world layer.
 
 ## What pages MAY differ on
 
@@ -107,172 +116,6 @@ The toggle follows the operating-system preference until the visitor chooses a m
 
 ## Exports
 
-### tokens.css
+`tokens.css` holds the authoritative declarations for both modes — light under `:root`, dark under `:root[data-theme='dark']` — including the colour scales, the band, type, spacing, motion, shape, the elevation ladder, section rhythm and the WebGL sRGB triplets.
 
-```css
-:root {
-  --color-paper: oklch(97.5% 0.012 255);
-  --color-paper-2: oklch(95.5% 0.018 255);
-  --color-paper-3: oklch(92% 0.025 255);
-  --color-ink: oklch(20% 0.028 260);
-  --color-ink-2: oklch(36% 0.026 260);
-  --color-muted: oklch(49% 0.022 260);
-  --color-rule: oklch(82% 0.032 255);
-  --color-control-rule: oklch(52% 0.03 260);
-  --color-accent: oklch(54% 0.24 260);
-  --color-accent-ink: oklch(98% 0.01 255);
-  --color-focus: oklch(48% 0.26 260);
-  --font-display: "Space Grotesk Variable", ui-sans-serif, sans-serif;
-  --font-body: "IBM Plex Sans Variable", ui-sans-serif, sans-serif;
-  --font-outlier: "Syne Variable", ui-sans-serif, sans-serif;
-  --space-xs: 0.5rem; --space-sm: 0.75rem; --space-md: 1rem;
-  --space-lg: 1.5rem; --space-xl: 2.5rem; --space-2xl: 4rem;
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --dur-short: 220ms; --dur-long: 420ms;
-  --radius-card: 0.85rem; --radius-pill: 999px; --radius-input: 0.65rem;
-  --world-point-size: 0.038; --world-line-opacity: 0.16;
-}
-
-:root[data-theme='dark'] {
-  --color-paper: oklch(15% 0.022 260);
-  --color-paper-2: oklch(18.5% 0.025 260);
-  --color-paper-3: oklch(22% 0.028 260);
-  --color-ink: oklch(94% 0.014 255);
-  --color-ink-2: oklch(82% 0.022 255);
-  --color-muted: oklch(70% 0.022 255);
-  --color-rule: oklch(34% 0.035 260);
-  --color-control-rule: oklch(63% 0.04 255);
-  --color-accent: oklch(65% 0.21 260);
-  --color-accent-ink: oklch(14% 0.025 260);
-  --color-focus: oklch(76% 0.16 260);
-  --world-line-opacity: 0.22;
-}
-```
-
-### Tailwind v4 `@theme`
-
-```css
-@theme {
-  --color-paper: oklch(97.5% 0.012 255);
-  --color-paper-2: oklch(95.5% 0.018 255);
-  --color-paper-3: oklch(92% 0.025 255);
-  --color-ink: oklch(20% 0.028 260);
-  --color-ink-2: oklch(36% 0.026 260);
-  --color-muted: oklch(49% 0.022 260);
-  --color-rule: oklch(82% 0.032 255);
-  --color-control-rule: oklch(52% 0.03 260);
-  --color-accent: oklch(54% 0.24 260);
-  --color-focus: oklch(48% 0.26 260);
-  --font-display: "Space Grotesk Variable", ui-sans-serif, sans-serif;
-  --font-body: "IBM Plex Sans Variable", ui-sans-serif, sans-serif;
-  --font-outlier: "Syne Variable", ui-sans-serif, sans-serif;
-  --spacing-sm: 0.75rem; --spacing-md: 1rem; --spacing-lg: 1.5rem;
-  --spacing-xl: 2.5rem; --spacing-2xl: 4rem;
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --radius-card: 0.85rem;
-}
-
-:root[data-theme='dark'] {
-  --color-paper: oklch(15% 0.022 260);
-  --color-paper-2: oklch(18.5% 0.025 260);
-  --color-paper-3: oklch(22% 0.028 260);
-  --color-ink: oklch(94% 0.014 255);
-  --color-ink-2: oklch(82% 0.022 255);
-  --color-muted: oklch(70% 0.022 255);
-  --color-rule: oklch(34% 0.035 260);
-  --color-control-rule: oklch(63% 0.04 255);
-  --color-accent: oklch(65% 0.21 260);
-  --color-focus: oklch(76% 0.16 260);
-}
-```
-
-### DTCG `tokens.json`
-
-```json
-{
-  "$schema": "https://design-tokens.github.io/community-group/format/",
-  "color": {
-    "paper": { "$value": "oklch(97.5% 0.012 255)", "$type": "color" },
-    "paper-2": { "$value": "oklch(95.5% 0.018 255)", "$type": "color" },
-    "paper-3": { "$value": "oklch(92% 0.025 255)", "$type": "color" },
-    "ink": { "$value": "oklch(20% 0.028 260)", "$type": "color" },
-    "ink-2": { "$value": "oklch(36% 0.026 260)", "$type": "color" },
-    "control-rule": { "$value": "oklch(52% 0.03 260)", "$type": "color" },
-    "accent": { "$value": "oklch(54% 0.24 260)", "$type": "color" },
-    "focus": { "$value": "oklch(48% 0.26 260)", "$type": "color" }
-  },
-  "color-dark": {
-    "paper": { "$value": "oklch(15% 0.022 260)", "$type": "color" },
-    "paper-2": { "$value": "oklch(18.5% 0.025 260)", "$type": "color" },
-    "paper-3": { "$value": "oklch(22% 0.028 260)", "$type": "color" },
-    "ink": { "$value": "oklch(94% 0.014 255)", "$type": "color" },
-    "ink-2": { "$value": "oklch(82% 0.022 255)", "$type": "color" },
-    "control-rule": { "$value": "oklch(63% 0.04 255)", "$type": "color" },
-    "accent": { "$value": "oklch(65% 0.21 260)", "$type": "color" },
-    "focus": { "$value": "oklch(76% 0.16 260)", "$type": "color" }
-  },
-  "font": {
-    "display": { "$value": "Space Grotesk Variable, ui-sans-serif, sans-serif", "$type": "fontFamily" },
-    "body": { "$value": "IBM Plex Sans Variable, ui-sans-serif, sans-serif", "$type": "fontFamily" },
-    "outlier": { "$value": "Syne Variable, ui-sans-serif, sans-serif", "$type": "fontFamily" }
-  },
-  "space": {
-    "md": { "$value": "1rem", "$type": "dimension" },
-    "xl": { "$value": "2.5rem", "$type": "dimension" }
-  },
-  "duration": {
-    "short": { "$value": "220ms", "$type": "duration" },
-    "long": { "$value": "420ms", "$type": "duration" }
-  },
-  "radius": {
-    "card": { "$value": "0.85rem", "$type": "dimension" },
-    "input": { "$value": "0.65rem", "$type": "dimension" }
-  }
-}
-```
-
-### shadcn/ui CSS variables
-
-```css
-:root {
-  --background: 97.5% 0.012 255;
-  --foreground: 20% 0.028 260;
-  --card: 95.5% 0.018 255;
-  --card-foreground: 20% 0.028 260;
-  --popover: 95.5% 0.018 255;
-  --popover-foreground: 20% 0.028 260;
-  --primary: 54% 0.24 260;
-  --primary-foreground: 98% 0.01 255;
-  --secondary: 92% 0.025 255;
-  --secondary-foreground: 20% 0.028 260;
-  --muted: 82% 0.032 255;
-  --muted-foreground: 49% 0.022 260;
-  --accent: 54% 0.24 260;
-  --accent-foreground: 98% 0.01 255;
-  --border: 82% 0.032 255;
-  --input: 82% 0.032 255;
-  --ring: 48% 0.26 260;
-  --radius: 0.85rem;
-}
-
-.dark,
-:root[data-theme='dark'] {
-  --background: 15% 0.022 260;
-  --foreground: 94% 0.014 255;
-  --card: 18.5% 0.025 260;
-  --card-foreground: 94% 0.014 255;
-  --popover: 18.5% 0.025 260;
-  --popover-foreground: 94% 0.014 255;
-  --primary: 65% 0.21 260;
-  --primary-foreground: 14% 0.025 260;
-  --secondary: 22% 0.028 260;
-  --secondary-foreground: 94% 0.014 255;
-  --muted: 34% 0.035 260;
-  --muted-foreground: 70% 0.022 255;
-  --accent: 65% 0.21 260;
-  --accent-foreground: 14% 0.025 260;
-  --border: 34% 0.035 260;
-  --input: 34% 0.035 260;
-  --ring: 76% 0.16 260;
-}
-```
+Tailwind reads the `*-lch` triplets through `tailwind.config.ts`, which exposes `base · ink · signal · data · band · rule` with `<alpha-value>` support. Arbitrary values read the ready `var(--color-*)` forms. Both are remapped by the tinted and inked surfaces, so a component written once works on every surface.

@@ -99,15 +99,3 @@ export function Badge({
     </span>
   )
 }
-
-/**
- * @deprecated Use `<Badge tone="neutral" variant="outline">`.
- * Retained so existing call sites keep compiling during migration.
- */
-export function Tag({ children, className }: { children: ReactNode; className?: string }) {
-  return (
-    <Badge tone="neutral" variant="outline" className={className}>
-      {children}
-    </Badge>
-  )
-}

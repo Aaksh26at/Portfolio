@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
+import { Badge } from './Badge'
+import { Panel } from './Panel'
 
 type SignalId = 'diagnose' | 'forecast' | 'retain' | 'match'
 
@@ -52,13 +54,14 @@ export function IntelligenceMap() {
   const signal = signals.find((item) => item.id === active) ?? signals[0]
 
   return (
-    <figure className="observatory-panel relative overflow-hidden p-4 sm:p-6" data-depth="static">
+    // The map is evidence, not emphasis, so it reads in the cobalt data
+    // family throughout — amber stays reserved for actions and marks.
+    <Panel as="figure" tone="raised" clip pad="sm" data-depth="static">
       <figcaption className="flex items-center justify-between gap-4">
         <span className="signal-label">Applied intelligence map</span>
-        <span className="flex items-center gap-2 text-xs text-ink-muted">
-          <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
+        <Badge tone="neutral" variant="ghost" dot="live">
           signal online
-        </span>
+        </Badge>
       </figcaption>
 
       <div className="relative mt-4 aspect-[5/4] min-h-[20rem] overflow-hidden rounded-[calc(var(--radius-card)-0.4rem)] bg-[var(--color-paper)]">
@@ -88,7 +91,7 @@ export function IntelligenceMap() {
                     : 'M72 408 C176 408 174 284 270 284'
             }
             fill="none"
-            stroke="var(--color-accent)"
+            stroke="var(--color-data)"
             strokeWidth="2"
             strokeLinecap="round"
             className="signal-path"
@@ -96,7 +99,7 @@ export function IntelligenceMap() {
           <path
             d={active === 'match' ? 'M370 254 C452 254 468 382 564 382' : 'M370 254 C452 254 468 128 564 128'}
             fill="none"
-            stroke="var(--color-accent)"
+            stroke="var(--color-data)"
             strokeWidth="2"
             strokeLinecap="round"
             className="signal-path"
@@ -110,7 +113,7 @@ export function IntelligenceMap() {
           ].map((node) => (
             <g key={node.id} opacity={active === node.id ? 1 : 0.48}>
               <circle cx="72" cy={node.y} r="11" fill="var(--color-paper-3)" stroke="var(--color-rule)" />
-              <circle cx="72" cy={node.y} r="3" fill={active === node.id ? 'var(--color-accent)' : 'var(--color-muted)'} />
+              <circle cx="72" cy={node.y} r="3" fill={active === node.id ? 'var(--color-data)' : 'var(--color-muted)'} />
               <text x="96" y={node.y + 5} fill="var(--color-ink-2)" fontSize="13" fontFamily="var(--font-body)">
                 {node.label}
               </text>
@@ -130,14 +133,14 @@ export function IntelligenceMap() {
 
           <g opacity={active === 'match' ? 0.42 : 1}>
             <circle cx="564" cy="128" r="11" fill="var(--color-paper-3)" stroke="var(--color-rule)" />
-            <circle cx="564" cy="128" r="3" fill="var(--color-accent)" />
+            <circle cx="564" cy="128" r="3" fill="var(--color-data)" />
             <text x="548" y="98" textAnchor="end" fill="var(--color-ink-2)" fontSize="13" fontFamily="var(--font-body)">
               Prediction
             </text>
           </g>
           <g opacity={active === 'match' ? 1 : 0.42}>
             <circle cx="564" cy="382" r="11" fill="var(--color-paper-3)" stroke="var(--color-rule)" />
-            <circle cx="564" cy="382" r="3" fill="var(--color-accent)" />
+            <circle cx="564" cy="382" r="3" fill="var(--color-data)" />
             <text x="548" y="418" textAnchor="end" fill="var(--color-ink-2)" fontSize="13" fontFamily="var(--font-body)">
               Explanation
             </text>
@@ -147,9 +150,9 @@ export function IntelligenceMap() {
         <div className="absolute bottom-4 left-4 right-4 z-[var(--z-raised)] flex items-end justify-between gap-4 rounded-[var(--radius-control)] bg-[var(--color-paper-2)] p-3 sm:bottom-5 sm:left-5 sm:right-5 sm:p-4">
           <div>
             <p className="text-xs text-ink-muted">{signal.source} → {signal.output}</p>
-            <p className="mt-1 font-display text-lg font-bold tracking-[-0.03em] text-ink">{signal.detail}</p>
+            <p className="mt-1 font-display text-lg font-bold tracking-[var(--track-display)] text-ink">{signal.detail}</p>
           </div>
-          <span className="tnum whitespace-nowrap font-display text-2xl font-bold text-accent">{signal.metric}</span>
+          <span className="tnum whitespace-nowrap font-mono text-2xl font-semibold text-data">{signal.metric}</span>
         </div>
       </div>
 
@@ -163,7 +166,7 @@ export function IntelligenceMap() {
             className={cn(
               'min-h-11 whitespace-nowrap rounded-[var(--radius-control)] border px-3 text-xs font-medium transition-colors duration-200',
               active === item.id
-                ? 'border-accent bg-[var(--color-accent-soft)] text-ink'
+                ? 'border-data bg-[var(--color-data-soft)] text-ink'
                 : 'border-[var(--color-rule-2)] text-ink-muted hover:border-[var(--color-rule)] hover:text-ink',
             )}
           >
@@ -171,6 +174,6 @@ export function IntelligenceMap() {
           </button>
         ))}
       </div>
-    </figure>
+    </Panel>
   )
 }

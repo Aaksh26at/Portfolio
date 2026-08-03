@@ -132,11 +132,26 @@ export function Reveal({
           shown: { transition: { staggerChildren: step, delayChildren: delay } },
         }}
       >
-        {items.map((child, index) => (
-          <motion.div key={child.key ?? index} variants={STAGGER_ITEM} data-reveal="">
-            {child}
-          </motion.div>
-        ))}
+        {items.map((child, index) => {
+          // A list may only contain <li>, so an <li> child is upgraded to
+          // motion.li in place rather than wrapped. Wrapping it would emit
+          // <ol><div><li>, which is invalid and drops the list role in AT.
+          if (child.type === 'li') {
+            const { children: liChildren, ...liProps } = child.props as {
+              children?: ReactNode
+            } & HTMLMotionProps<'li'>
+            return (
+              <motion.li key={child.key ?? index} {...liProps} variants={STAGGER_ITEM} data-reveal="">
+                {liChildren}
+              </motion.li>
+            )
+          }
+          return (
+            <motion.div key={child.key ?? index} variants={STAGGER_ITEM} data-reveal="">
+              {child}
+            </motion.div>
+          )
+        })}
       </MotionTag>
     )
   }

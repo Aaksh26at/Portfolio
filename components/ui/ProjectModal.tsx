@@ -4,7 +4,9 @@ import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { ExternalLink, Github, X } from 'lucide-react'
 import type { Project } from '@/types'
-import { Tag } from './Badge'
+import { Badge } from './Badge'
+import { MagneticButton } from './MagneticButton'
+import { Stat } from './Stat'
 import { ProjectVisual } from './ProjectVisual'
 
 interface ProjectModalProps {
@@ -70,7 +72,11 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.98 }}
         transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-10 my-2 max-h-[calc(100dvh-2rem)] w-full max-w-4xl overflow-y-auto rounded-[var(--radius-card)] border border-[var(--color-rule)] bg-[var(--color-paper-2)] shadow-[var(--shadow-card)]"
+        // Borrows the Panel primitive's raised tone via its data API —
+        // Panel itself can't be used here, the dialog must be a motion element.
+        className="panel relative z-10 my-2 max-h-[calc(100dvh-2rem)] w-full max-w-4xl overflow-y-auto"
+        data-tone="raised"
+        data-elev={2}
       >
         <div className="relative h-44 border-b border-[var(--color-rule-strong)] sm:h-56">
           <ProjectVisual project={project} />
@@ -86,30 +92,33 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
         </div>
 
         <div className="p-6 sm:p-8">
-          <p className="font-mono text-[0.66rem] uppercase tracking-[0.1em] text-accent">
-            {project.year} / Quick case study
-          </p>
+          <p className="signal-label">{project.year} / Quick case study</p>
           <h2
             id="project-modal-title"
-            className="mt-3 font-display text-3xl font-semibold tracking-[-0.035em] text-ink"
+            className="mt-3 font-display text-3xl font-bold tracking-[var(--track-display)] text-ink"
           >
             {project.title}
           </h2>
           <p className="mt-4 max-w-2xl leading-relaxed text-ink-muted">{project.description}</p>
 
-          <div className="mt-5 flex flex-wrap gap-2">
-            {project.technologies.map((technology) => <Tag key={technology}>{technology}</Tag>)}
-          </div>
+          <ul className="mt-5 flex flex-wrap gap-2">
+            {project.technologies.map((technology) => (
+              <li key={technology}>
+                <Badge tone="neutral" variant="outline">
+                  {technology}
+                </Badge>
+              </li>
+            ))}
+          </ul>
 
           {project.metrics.length > 0 ? (
-            <dl className="mt-7 grid border-t border-[var(--color-rule-strong)] sm:grid-cols-4">
+            <dl className="mt-7 grid gap-x-6 gap-y-5 sm:grid-cols-4">
               {project.metrics.map((metric) => (
-                <div
-                  key={metric.label}
-                  className="border-b border-[var(--color-rule)] py-4 sm:border-r sm:px-4 sm:first:pl-0 sm:last:border-r-0"
-                >
-                  <dd className="font-display text-xl font-semibold text-accent">{metric.value}</dd>
-                  <dt className="mt-1 text-[0.68rem] text-ink-muted">{metric.label}</dt>
+                <div key={metric.label}>
+                  <dd>
+                    <Stat value={metric.value} label={metric.label} tone="data" size="sm" />
+                  </dd>
+                  <dt className="sr-only">{metric.label}</dt>
                 </div>
               ))}
             </dl>
@@ -121,7 +130,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                 key={section.heading}
                 className="grid grid-cols-[2.25rem_1fr] gap-3 border-b border-[var(--color-rule)] py-5"
               >
-                <span className="font-mono text-[0.63rem] text-accent">
+                <span className="tnum font-mono text-[0.63rem] text-signal-strong">
                   {String(index + 1).padStart(2, '0')}
                 </span>
                 <div>
@@ -134,39 +143,26 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
 
           <div className="mt-8 flex flex-wrap gap-3">
             {project.links.github ? (
-              <a
-                href={project.links.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-control)] border border-[var(--color-rule-strong)] px-5 py-2.5 text-sm font-semibold text-ink hover:border-ink"
-              >
-                <Github className="h-4 w-4" />
+              <MagneticButton href={project.links.github} variant="ghost" external iconTrail={false}>
+                <Github className="h-4 w-4" aria-hidden="true" />
                 View code
-              </a>
+              </MagneticButton>
             ) : (
               <span className="inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-control)] border border-[var(--color-rule)] px-5 py-2.5 text-sm text-ink-muted">
-                <Github className="h-4 w-4" />
+                <Github className="h-4 w-4" aria-hidden="true" />
                 Repository coming soon
               </span>
             )}
             {project.links.demo ? (
-              <a
-                href={project.links.demo}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-control)] bg-base-900 px-5 py-2.5 text-sm font-semibold text-[var(--color-night-ink)]"
-              >
-                <ExternalLink className="h-4 w-4" />
+              <MagneticButton href={project.links.demo} variant="primary" external iconTrail={false}>
+                <ExternalLink className="h-4 w-4" aria-hidden="true" />
                 Live demo
-              </a>
+              </MagneticButton>
             ) : null}
-            <a
-              href={`/projects/${project.slug}`}
-              className="inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-control)] border border-[var(--color-rule-strong)] px-5 py-2.5 text-sm font-semibold text-ink hover:border-ink"
-            >
+            <MagneticButton href={`/projects/${project.slug}`} variant="ghost">
               Full case study
-              <ExternalLink className="h-4 w-4" />
-            </a>
+              <ExternalLink className="h-4 w-4" aria-hidden="true" />
+            </MagneticButton>
           </div>
         </div>
       </motion.div>

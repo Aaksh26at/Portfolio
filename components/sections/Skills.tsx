@@ -1,56 +1,82 @@
 import { portfolio } from '@/data/portfolio'
+import { Badge } from '@/components/ui/Badge'
+import { Panel } from '@/components/ui/Panel'
+import { Reveal } from '@/components/ui/Reveal'
+import { SectionHeading } from '@/components/ui/SectionHeading'
 
 export function Skills() {
   return (
+    // The one section that keeps the 0.72/1.28 split-head — a matrix
+    // genuinely wants a wide right column.
     <section id="skills" data-world="3" className="section surface surface--paper">
       <div className="container-page">
         <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-end lg:gap-16">
-          <div>
-            <span className="mb-6 block h-1 w-9 rounded-full bg-accent" aria-hidden="true" />
-            <h2 className="font-display text-[clamp(2.8rem,6vw,5.5rem)] font-bold leading-[0.94] tracking-[-0.055em] text-ink">
-              The capability matrix.
-            </h2>
-          </div>
+          <SectionHeading
+            title="The capability matrix."
+            index={3}
+            scale="lg"
+            mark="line"
+            measure="wide"
+          />
           <p className="max-w-2xl text-base leading-relaxed text-ink-muted sm:text-lg">
-            A practical inventory of tools used to inspect data, build models, expose results and keep the delivery path reliable.
+            A practical inventory of tools used to inspect data, build models, expose results and
+            keep the delivery path reliable.
           </p>
         </div>
 
-        <div className="observatory-panel mt-12 overflow-hidden" role="table" aria-label="Technical capability matrix">
-          <div className="hidden grid-cols-[minmax(14rem,0.7fr)_5rem_minmax(0,1.3fr)] gap-6 border-b border-[var(--color-rule)] px-7 py-4 text-xs text-ink-muted md:grid" role="row">
+        <Panel
+          tone="outline"
+          clip
+          className="mt-12"
+          role="table"
+          aria-label="Technical capability matrix"
+        >
+          <div
+            className="hidden grid-cols-[minmax(14rem,0.7fr)_5rem_minmax(0,1.3fr)] gap-6 border-b border-[var(--color-rule)] px-7 py-4 text-xs text-ink-muted md:grid"
+            role="row"
+          >
             <span role="columnheader">Domain</span>
             <span role="columnheader">Tools</span>
             <span role="columnheader">Operating range</span>
           </div>
-          {portfolio.skills.map((group) => {
-            const strongCount = group.skills.filter((skill) => skill.level === 'Strong').length
-            return (
-              <div
-                key={group.title}
-                className="grid gap-5 border-b border-[var(--color-rule-2)] px-6 py-7 last:border-b-0 md:grid-cols-[minmax(14rem,0.7fr)_5rem_minmax(0,1.3fr)] md:items-start md:gap-6 md:px-7"
-                role="row"
-              >
-                <div role="cell">
-                  <h3 className="font-display text-xl font-bold tracking-[-0.03em] text-ink">{group.title}</h3>
-                  <p className="mt-2 text-xs text-ink-muted">{strongCount > 0 ? `${strongCount} strong-use tools` : 'Developing range'}</p>
+
+          <Reveal variant="stagger" step={0.05} amount={0.1}>
+            {portfolio.skills.map((group) => {
+              const strongCount = group.skills.filter((skill) => skill.level === 'Strong').length
+              return (
+                <div
+                  key={group.title}
+                  className="grid gap-5 border-b border-[var(--color-rule-2)] px-6 py-7 last:border-b-0 md:grid-cols-[minmax(14rem,0.7fr)_5rem_minmax(0,1.3fr)] md:items-start md:gap-6 md:px-7"
+                  role="row"
+                >
+                  <div role="cell">
+                    <h3 className="font-display text-xl font-bold text-ink">{group.title}</h3>
+                    <p className="mt-2 text-xs text-ink-muted">
+                      {strongCount > 0 ? `${strongCount} strong-use tools` : 'Developing range'}
+                    </p>
+                  </div>
+                  <span className="tnum font-mono text-2xl font-semibold text-signal-strong" role="cell">
+                    {String(group.skills.length).padStart(2, '0')}
+                  </span>
+                  <ul className="flex flex-wrap gap-2" role="cell">
+                    {group.skills.map((skill) => (
+                      <li key={skill.name}>
+                        <Badge
+                          tone={skill.level === 'Strong' ? 'signal' : 'neutral'}
+                          variant={skill.level === 'Strong' ? 'soft' : 'outline'}
+                          size="md"
+                          title={skill.level}
+                        >
+                          {skill.name}
+                        </Badge>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <span className="tnum font-display text-3xl font-bold text-accent" role="cell">{String(group.skills.length).padStart(2, '0')}</span>
-                <ul className="flex flex-wrap gap-2" role="cell">
-                  {group.skills.map((skill) => (
-                    <li
-                      key={skill.name}
-                      className="group rounded-[var(--radius-pill)] border border-[var(--color-rule)] bg-[var(--color-paper-3)] px-3 py-2 text-sm text-ink-muted"
-                      title={skill.level}
-                    >
-                      <span className="text-ink">{skill.name}</span>
-                      <span className="ml-2 text-[0.68rem] text-ink-faint">{skill.level}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )
-          })}
-        </div>
+              )
+            })}
+          </Reveal>
+        </Panel>
       </div>
     </section>
   )

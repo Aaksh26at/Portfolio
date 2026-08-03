@@ -1,57 +1,63 @@
 import { MapPin } from 'lucide-react'
 import { portfolio } from '@/data/portfolio'
+import { Panel } from '@/components/ui/Panel'
+import { Reveal } from '@/components/ui/Reveal'
+import { SectionHeading } from '@/components/ui/SectionHeading'
 
 export function Education() {
   return (
+    // Ledger: a rule-separated timeline with the year at the left edge,
+    // replacing two cards in a grid. Nothing here needed a box.
     <section id="education" data-world="4" className="section surface surface--paper">
       <div className="container-page">
-        <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-end lg:gap-16">
-          <div>
-            <span className="mb-6 block h-1 w-9 rounded-full bg-accent" aria-hidden="true" />
-            <h2 className="font-display text-[clamp(2.8rem,6vw,5.4rem)] font-bold leading-[0.94] tracking-[-0.055em] text-ink">
-              Evidence has a history.
-            </h2>
-          </div>
-          <p className="max-w-xl text-base leading-relaxed text-ink-muted sm:text-lg">
-            Formal computer-science study, strengthened through project work that moves from analysis into shipped interfaces and APIs.
-          </p>
-        </div>
+        <SectionHeading
+          title="Evidence has a history."
+          index={4}
+          scale="lg"
+          measure="wide"
+          description="Formal computer-science study, strengthened through project work that moves from analysis into shipped interfaces and APIs."
+        />
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="grid gap-4">
-            {portfolio.education.map((education, index) => (
-              <article key={education.degree} className="observatory-panel p-6 sm:p-8" data-interactive="true">
-                <div className="flex items-start justify-between gap-4">
-                  <span className="tnum font-display text-4xl font-bold text-accent">0{index + 1}</span>
-                  <span className="tnum whitespace-nowrap text-xs text-ink-muted">{education.period}</span>
-                </div>
-                <h3 className="mt-8 font-display text-2xl font-bold leading-tight tracking-[-0.035em] text-ink">
+        <ol className="mt-14 border-t border-[var(--color-rule)]">
+          {portfolio.education.map((education, index) => (
+            <Reveal
+              key={education.degree}
+              variant="fade-rise"
+              delay={index * 0.06}
+              as="li"
+              className="grid gap-4 border-b border-[var(--color-rule)] py-8 md:grid-cols-[10rem_minmax(0,1fr)] md:gap-10"
+            >
+              <span className="tnum font-mono text-sm text-signal-strong">{education.period}</span>
+              <div>
+                <h3 className="font-display text-2xl font-bold leading-tight text-ink sm:text-3xl">
                   {education.degree}
                 </h3>
                 <p className="mt-3 text-sm text-ink-muted">{education.institution}</p>
-                <p className="mt-5 flex items-center gap-2 text-xs text-ink-faint">
-                  <MapPin className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
+                <p className="mt-4 flex items-center gap-2 text-xs text-ink-faint">
+                  <MapPin className="h-3.5 w-3.5 text-signal-strong" aria-hidden="true" />
                   {education.location}
                 </p>
-              </article>
-            ))}
-          </div>
+              </div>
+            </Reveal>
+          ))}
+        </ol>
 
-          <div className="observatory-panel p-6 sm:p-8 lg:p-10">
-            <p className="signal-label">Parallel learning track</p>
-            <h3 className="mt-4 font-display text-3xl font-bold tracking-[-0.04em] text-ink">
-              The curriculum outside the curriculum.
-            </h3>
-            <ul className="mt-8 grid gap-3 sm:grid-cols-2">
-              {portfolio.learningJourney.map((item) => (
-                <li key={item} className="rounded-[var(--radius-control)] bg-[var(--color-paper-3)] p-4 text-sm leading-relaxed text-ink-muted">
-                  <span className="mb-3 block h-1 w-5 rounded-full bg-accent" aria-hidden="true" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        <Panel tone="inset" pad="lg" className="mt-14">
+          <p className="signal-label">Parallel learning track</p>
+          <h3 className="mt-4 max-w-2xl font-display text-3xl font-bold text-ink">
+            The curriculum outside the curriculum.
+          </h3>
+          <Reveal variant="stagger" step={0.05} as="ul" className="mt-8 grid gap-5 sm:grid-cols-2">
+            {portfolio.learningJourney.map((item) => (
+              <li
+                key={item}
+                className="border-t border-[var(--color-rule)] pt-4 text-sm leading-relaxed text-ink-muted"
+              >
+                {item}
+              </li>
+            ))}
+          </Reveal>
+        </Panel>
       </div>
     </section>
   )

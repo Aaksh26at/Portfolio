@@ -45,12 +45,6 @@ const config: Config = {
           2: 'oklch(var(--color-rule-2-lch) / <alpha-value>)',
           strong: 'oklch(var(--color-rule-strong-lch) / <alpha-value>)',
         },
-        // Legacy bridge onto the signal family. Prefer `signal.*`.
-        accent: {
-          DEFAULT: 'oklch(var(--color-accent-lch) / <alpha-value>)',
-          blue: 'oklch(var(--color-data-lch) / <alpha-value>)',
-          coral: 'oklch(var(--color-error-lch) / <alpha-value>)',
-        },
       },
       fontFamily: {
         sans: ['var(--font-body)'],

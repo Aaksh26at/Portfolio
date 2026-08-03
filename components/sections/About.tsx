@@ -1,45 +1,65 @@
 import { ArrowDownRight } from 'lucide-react'
 import { portfolio } from '@/data/portfolio'
+import { Badge } from '@/components/ui/Badge'
+import { Reveal } from '@/components/ui/Reveal'
+import { SectionHeading } from '@/components/ui/SectionHeading'
 
 export function About() {
   const { about } = portfolio
 
   return (
+    // Manifesto: no sticky rail, no card. The statement runs full width
+    // and the prose sits beneath it in two columns, so this reads as a
+    // page rather than another boxed panel.
     <section id="about" data-world="1" className="section surface surface--paper">
       <div className="container-page">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:items-start lg:gap-16">
-          <div className="lg:sticky lg:top-32">
-            <span className="mb-6 block h-1 w-9 rounded-full bg-accent" aria-hidden="true" />
-            <h2 className="max-w-xl font-display text-[clamp(2.8rem,6vw,5.6rem)] font-bold leading-[0.94] tracking-[-0.055em] text-ink">
-              Analysis is the start. The product is the finish.
-            </h2>
-            <a href="#projects" className="mt-8 inline-flex min-h-11 items-center gap-2 whitespace-nowrap text-sm font-semibold text-ink-muted">
-              Follow the evidence
-              <ArrowDownRight className="h-4 w-4 text-accent" aria-hidden="true" />
-            </a>
-          </div>
+        <SectionHeading
+          title="Analysis is the start. The product is the finish."
+          eyebrow="Working principle"
+          index={1}
+          scale="xl"
+          measure="wide"
+          reveal="mask-wipe"
+          titleClassName="max-w-[18ch]"
+        />
 
-          <div className="observatory-panel p-6 sm:p-9 lg:p-12">
-            <p className="signal-label">Working principle</p>
-            <p className="mt-5 font-display text-2xl font-bold leading-tight tracking-[-0.035em] text-ink sm:text-3xl">
-              Start with the decision. Trace the evidence. Build only what makes the result easier to use.
+        <Reveal variant="fade-rise" delay={0.08}>
+          <p className="mt-12 max-w-4xl font-display text-2xl font-bold leading-tight text-ink sm:text-3xl">
+            Start with the decision. Trace the evidence. Build only what makes the result easier to
+            use.
+          </p>
+        </Reveal>
+
+        <Reveal
+          variant="stagger"
+          step={0.08}
+          className="mt-12 grid gap-x-16 gap-y-6 border-t border-[var(--color-rule)] pt-10 md:grid-cols-2"
+        >
+          {about.paragraphs.map((paragraph) => (
+            <p key={paragraph} className="text-base leading-relaxed text-ink-muted sm:text-lg">
+              {paragraph}
             </p>
+          ))}
+        </Reveal>
 
-            <div className="mt-10 max-w-2xl space-y-6 text-base leading-relaxed text-ink-muted sm:text-lg">
-              {about.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-            </div>
-
-            <ul className="mt-10 flex flex-wrap gap-2.5">
-              {about.personalDetails.map((detail) => (
-                <li
-                  key={detail}
-                  className="rounded-[var(--radius-pill)] border border-[var(--color-rule)] bg-[var(--color-paper-3)] px-4 py-2 text-sm text-ink-muted"
-                >
+        <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4">
+          <ul className="flex flex-wrap gap-2.5">
+            {about.personalDetails.map((detail) => (
+              <li key={detail}>
+                <Badge tone="neutral" variant="outline" size="md">
                   {detail}
-                </li>
-              ))}
-            </ul>
-          </div>
+                </Badge>
+              </li>
+            ))}
+          </ul>
+
+          <a
+            href="#projects"
+            className="link-underline inline-flex min-h-11 items-center gap-2 whitespace-nowrap text-sm font-semibold text-ink"
+          >
+            Follow the evidence
+            <ArrowDownRight className="h-4 w-4 text-signal-strong" aria-hidden="true" />
+          </a>
         </div>
       </div>
     </section>
