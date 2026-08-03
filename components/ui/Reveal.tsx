@@ -1,6 +1,14 @@
 'use client'
 
-import { Children, createElement, isValidElement, type ReactNode } from 'react'
+import {
+  Children,
+  createElement,
+  isValidElement,
+  useEffect,
+  useLayoutEffect,
+  useState,
+  type ReactNode,
+} from 'react'
 import type { ComponentType } from 'react'
 import { motion, useReducedMotion, type HTMLMotionProps, type Variants } from 'framer-motion'
 import { cn } from '@/lib/utils'
@@ -88,13 +96,32 @@ const STAGGER_ITEM: Variants = {
   shown: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
 }
 
+// useReducedMotion reads a media query, so it is false during SSR and can be
+// true on the very first client render. Branching on it directly makes the
+// server and client markup disagree, and React responds by throwing out the
+// server HTML and client-rendering the whole root — for precisely the users
+// who asked for less motion. So the preference is applied one tick later,
+// in a layout effect, which commits before the browser paints and therefore
+// costs no flash of hidden content.
+const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect
+
+function useReducedAfterHydration() {
+  const reduced = useReducedMotion()
+  const [applied, setApplied] = useState(false)
+  useIsomorphicLayoutEffect(() => {
+    if (reduced) setApplied(true)
+  }, [reduced])
+  return reduced && applied
+}
+
 /**
  * Scroll-triggered entrance wrapper.
  *
  * Reduced motion is checked in JS, not CSS: framer-motion drives inline
  * styles and WAAPI, which the `prefers-reduced-motion` media block in
  * globals.css cannot reach. When reduced, this renders a plain element
- * with no motion props at all.
+ * with no motion props at all — see useReducedAfterHydration for why that
+ * decision waits for the first commit.
  *
  * Children pass through as a prop, so sections using this stay Server
  * Components — only the wrapper itself is client-side.
@@ -109,7 +136,7 @@ export function Reveal({
   as = 'div',
   className,
 }: RevealProps) {
-  const reduced = useReducedMotion()
+  const reduced = useReducedAfterHydration()
 
   if (reduced || variant === 'none') {
     return createElement(as, { className }, children)

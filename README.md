@@ -1,8 +1,8 @@
 # Aakshat Agarwal — Portfolio
 
-A premium, production-ready personal portfolio for **Aakshat Agarwal** — Data Analyst, AI/ML enthusiast and Python developer based in Jaipur, India.
+A production-ready personal portfolio for **Aakshat Agarwal** — Data Analyst, AI/ML enthusiast and Python developer based in Jaipur, India.
 
-Apple-inspired minimal-futuristic design, an interactive 3D "Intelligence Core", editorial typography, a bento project grid, accessible interactions and graceful fallbacks everywhere.
+Warm editorial design on a bone reading surface, one persistent WebGL data world behind the page, light and dark modes, and a locked design system that every component is built from.
 
 ---
 
@@ -10,7 +10,8 @@ Apple-inspired minimal-futuristic design, an interactive 3D "Intelligence Core",
 
 - Single-page experience (`/`) with smooth in-page navigation, plus dynamic project **case-study pages** (`/projects/[slug]`).
 - All content lives in **one typed file**: [`data/portfolio.ts`](data/portfolio.ts). Edit it to update text — no component changes needed.
-- Works **without WebGL** (CSS fallback for the 3D scene), **without JavaScript** for core content, and respects **reduced-motion**.
+- The design system is locked in [`design.md`](design.md), with [`tokens.css`](tokens.css) as the authoritative source of values.
+- Works **without WebGL** (static fallback), **without JavaScript** for core content, and respects **reduced-motion**.
 - The contact form works **with or without** an email service (graceful `mailto:` fallback).
 
 ## 2. Technology stack
@@ -19,23 +20,23 @@ Apple-inspired minimal-futuristic design, an interactive 3D "Intelligence Core",
 |-------------|------|
 | Framework   | Next.js 14 (App Router) |
 | Language    | TypeScript (strict) |
-| Styling     | Tailwind CSS |
+| Styling     | Tailwind CSS + `tokens.css` custom properties |
 | Animation   | Framer Motion |
 | 3D          | Three.js · React Three Fiber · @react-three/drei |
+| Type        | Fraunces Variable · IBM Plex Sans Variable · IBM Plex Mono |
 | Icons       | lucide-react |
 | Email (opt) | Resend (via REST, no SDK required) |
 
 ## 3. Main features
 
-- Short, elegant **loading screen** (skipped under reduced-motion).
-- Sticky, scroll-aware **navigation** with active-section highlighting + accessible mobile menu.
-- Asymmetric editorial **hero** with 3D core, profile portrait and floating metrics.
-- **Recruiter snapshot**, **About**, bento **Projects** with accessible case-study modal + full case-study pages.
+- **Persistent data world** — one WebGL scene behind the whole page that changes formation as you move between content chapters. It never auto-spins; it responds to pointer input only.
+- **Light / dark mode** — a 44 × 44 toggle in the header that follows the OS preference until you choose, then persists locally. The theme is applied by an inline boot script before first paint, so there is no flash.
+- Edge-aligned **navigation** with active-section highlighting, scroll-progress rule and an accessible mobile drawer.
+- **Hero** statement, **recruiter snapshot**, **About**, **Projects** with accessible case-study modal + full case-study pages.
 - **Skills** with honest proficiency labels (no fake percentages), animated **data-pipeline** visual.
 - **Education** timeline, **Certifications** (job simulations clearly labelled), **GitHub** proof-of-work, **Currently learning** roadmap.
 - **Contact** form with validation, loading/success/error/fallback states, honeypot spam protection and copy-email.
 - Full **SEO**: metadata, canonical, Open Graph (dynamically generated OG image), Twitter card, `robots`, `sitemap`, web manifest, JSON-LD Person + WebSite schema.
-- Custom cursor (desktop only), scroll-progress bar, magnetic buttons, custom **404** page.
 
 ## 4. Requirements
 
@@ -72,7 +73,7 @@ npm run typecheck  # TypeScript type-check (no emit)
 1. Push this folder to a GitHub repository.
 2. Go to **https://vercel.com/new** and import the repo.
 3. Framework preset: **Next.js** (auto-detected). Build command `next build`, output handled automatically.
-4. (Optional) add environment variables from the table in §9.
+4. (Optional) add environment variables from the table in §8.
 5. Deploy. Add your custom domain under **Project → Settings → Domains** and follow the DNS instructions.
 
 ### Other hosts
@@ -95,26 +96,25 @@ All optional — copy [`.env.example`](.env.example) to `.env.local` to use them
 
 > Secrets are **never** committed or exposed to the browser — only `NEXT_PUBLIC_*` values reach the client, by design.
 
-## 9. Replace the profile photo
+## 9. The design system
 
-1. Save your photo as `public/images/aakshat-profile.webp`.
-2. Recommended: WebP, portrait, ≥ 840×1050 px, clean background, face centred.
-3. Done — it appears automatically in the hero and About sections. Until added, a clean **"AA"** monogram shows instead of a broken image.
-4. To use a different path/name, edit `profileImage` in `data/portfolio.ts`. To adjust the crop, change the `objectPosition` prop on `<ProfilePortrait>` in the Hero/About sections.
+[`design.md`](design.md) is the contract; read it before adding anything visual. The short version:
 
-(See `public/images/PLACE-PROFILE-PHOTO-HERE.txt`.)
+- **Colour carries meaning.** Amber (`--color-signal`) is for actions, marks and emphasis. Cobalt (`--color-data`) is for evidence only — charts, plates, metrics, the WebGL world. They are not interchangeable, and combined accent use stays under ~3% of any viewport.
+- **The band** (`--color-band-*`) is mode-invariant: it stays dark in dark mode so the page rhythm survives the theme toggle.
+- **One surface system.** Every `<section>` carries exactly one `.section*` class and one `.surface--*` class, and never hand-rolls block padding.
+- **Primitives are the vocabulary** — `Panel`, `SectionHeading`, `Badge`, `Stat`, `MagneticButton`, `Reveal`. A section that needs a container, chip, heading, measurement or entrance uses one of these rather than a local copy.
+- **Values live in `tokens.css`**, exposed to Tailwind through [`tailwind.config.ts`](tailwind.config.ts) as `base · ink · signal · data · band · rule` with `<alpha-value>` support.
 
-## 10. Replace the resume
+## 10. Résumé
 
-1. Save your CV as `public/resume/Aakshat-Agarwal-Resume.pdf`.
-2. All "Download Resume" buttons point there automatically.
-3. To change the name/path, edit `resumePath` in `data/portfolio.ts`.
+There is no résumé PDF in the repo, by design. The résumé buttons (`components/ui/ResumeButton.tsx`) open a pre-addressed `mailto:` so a request arrives as a real conversation. To switch to a hosted file instead, point `ResumeButton` at a `href` of your choosing.
 
-(See `public/resume/PLACE-RESUME-HERE.txt`.)
+## 11. Project visuals
 
-## 11. Project screenshots (optional)
+Projects show hand-drawn **SVG data plates** — one per project slug in [`components/ui/ProjectVisual.tsx`](components/ui/ProjectVisual.tsx), drawn from the project's own domain (diagnostic clusters, a risk gauge, a retention curve, a similarity matrix). They are conceptual diagrams, not screenshots, and they re-tone automatically with the theme because they draw in `var(--color-*)`.
 
-Projects show a clearly-labelled **conceptual preview** (CSS, not a fake screenshot). To use real images, drop them in `public/projects/` and render them for the matching slug in `components/ui/ProjectVisual.tsx`.
+Adding a project means adding a case to that file alongside its entry in `data/portfolio.ts`.
 
 ## 12. Editing content
 
@@ -131,13 +131,14 @@ Update the MCA end date from `2024 – Present` to e.g. `2024 – 2026` in `educ
 
 ## 13. 3D performance configuration
 
-Tunable in `components/3d/IntelligenceScene.tsx`:
+The scene lives in [`components/3d/PersistentDataWorld.tsx`](components/3d/PersistentDataWorld.tsx) and is mounted once, in the root layout, via `components/motion/ScrollDepth.tsx`:
 
-- Particle count and node count scale down automatically on mobile.
-- `dpr` is capped (1.5 on mobile, 2 on desktop) and `AdaptiveDpr` reduces it further under load.
-- Rendering **pauses** when the browser tab is hidden.
-- The scene is lazy-loaded (`next/dynamic`, `ssr:false`) and never blocks page content.
-- Reduced-motion or missing WebGL → the CSS `SceneFallback` renders instead.
+- Loaded with `next/dynamic` (`ssr: false`) behind a static fallback, so it never blocks page content.
+- `dpr` is capped at `[1, 1.5]`, antialiasing is off and the geometry is deterministic — under 100 draw calls, no external model payload.
+- Formation is driven by `data-world="0…5"` attributes on the sections; an IntersectionObserver sets the stage as each chapter becomes active.
+- Pointer parallax is gated behind `(hover: hover) and (pointer: fine)`, and narrow viewports collapse the horizontal offset in `useFrame`.
+- Missing WebGL **or** `prefers-reduced-motion: reduce` → the canvas is never created and the CSS fallback renders instead.
+- The material palette refreshes on the `portfolio-theme-change` event without rebuilding the scene.
 
 ## 14. Contact-form configuration
 
@@ -149,8 +150,9 @@ Tunable in `components/3d/IntelligenceScene.tsx`:
 
 - Semantic landmarks, correct heading order, skip-to-content link.
 - Keyboard-navigable menu and modal (focus trap, Escape to close, focus restore).
-- Visible focus rings, descriptive alt text, `aria` only where needed.
-- Decorative 3D canvas is hidden from screen readers; full reduced-motion support.
+- Visible focus rings that meet the 3:1 boundary requirement; descriptive alt text; `aria` only where needed.
+- Touch targets are at least 44 × 44 CSS pixels.
+- Decorative 3D canvas is `aria-hidden`. Reduced motion is honoured **in JS** as well as CSS, because Framer Motion drives inline styles and WAAPI that a media query cannot reach.
 
 ## 16. Browser support
 
@@ -160,17 +162,16 @@ Modern evergreen browsers (Chrome, Edge, Firefox, Safari). WebGL is optional —
 
 | Symptom | Fix |
 |--------|-----|
-| Portrait shows "AA" instead of a photo | Add `public/images/aakshat-profile.webp` (see §9). |
-| Resume button 404s | Add `public/resume/Aakshat-Agarwal-Resume.pdf` (see §10). |
 | Contact form says "delivery isn't configured" | Set `RESEND_API_KEY` + `CONTACT_FROM_EMAIL`, or just use the offered mailto link. |
 | 3D scene not visible | Expected on reduced-motion / no-WebGL — the CSS fallback is intentional. |
+| Colours look wrong after an edit | A component is probably hard-coding a value instead of reading a token. `tokens.css` wins; see §9. |
 | Install is slow on Windows | First install fetches three.js + Next; antivirus can slow file writes. Let it finish. |
 
 ## 18. Project structure
 
 ```text
 app/
-  layout.tsx            # fonts, SEO metadata, JSON-LD, cursor, analytics
+  layout.tsx            # fonts, theme boot script, SEO metadata, JSON-LD, world, analytics
   page.tsx              # single-page composition
   globals.css           # design tokens + utilities
   not-found.tsx         # custom 404
@@ -178,20 +179,23 @@ app/
   api/contact/route.ts  # contact endpoint (+ fallback)
   projects/[slug]/page.tsx  # dynamic case-study pages
 components/
-  Analytics.tsx CustomCursor.tsx Loader.tsx ScrollProgress.tsx
+  Analytics.tsx
   layout/               # Header, Footer
-  3d/                   # IntelligenceCore (wrapper), IntelligenceScene, SceneFallback
+  motion/ScrollDepth.tsx    # mounts the persistent world
+  3d/PersistentDataWorld.tsx
   sections/             # Hero, RecruiterSnapshot, About, Projects, Skills,
                         # DataPipeline, Education, Certifications, GithubProof,
                         # CurrentlyLearning, Contact
-  ui/                   # SectionHeading, MagneticButton, ResumeButton, Badge,
-                        # MetricCard, SocialLinks, ProfilePortrait, ProjectVisual,
-                        # ProjectModal, Reveal
+  ui/                   # Panel, SectionHeading, Badge, Stat, MagneticButton,
+                        # Reveal, ThemeToggle, ResumeButton, SocialLinks,
+                        # ProjectVisual, ProjectModal, IntelligenceMap
 data/portfolio.ts       # ← single source of truth for all content
-hooks/useScrollSpy.ts
+design.md               # ← the locked design system
+tokens.css              # ← authoritative values for both modes
+hooks/                  # useScrollSpy, usePointerOffset
 lib/                    # utils, icons, site config, analytics
 types/index.ts          # typed content model
-public/                 # images, resume, projects, favicon
+public/                 # favicon
 ```
 
 ---

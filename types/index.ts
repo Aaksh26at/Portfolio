@@ -127,8 +127,6 @@ export interface PortfolioData {
     featuredRepos: { name: string; description: string; tech: string[]; url: string }[]
   }
   contact: ContactInfo
-  resumePath: string
-  profileImage: string
 }
 
 // LucideIcon re-export so consumers can type icon props without a second import.

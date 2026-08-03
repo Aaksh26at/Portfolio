@@ -55,7 +55,10 @@ export function Hero() {
           </Reveal>
 
           <Reveal variant="fade-rise" delay={0.08}>
-            <div className="flex flex-col items-start gap-3 min-[26rem]:flex-row min-[26rem]:flex-wrap">
+            {/* 416px, not 26rem: Tailwind compares an arbitrary breakpoint
+                against `screens`, which is in px, and silently emits nothing
+                when the units differ — the row never turned horizontal. */}
+            <div className="flex flex-col items-start gap-3 min-[416px]:flex-row min-[416px]:flex-wrap">
               <MagneticButton href="#projects" variant="signal">
                 Explore the systems
                 <ArrowDownRight className="h-4 w-4" aria-hidden="true" />

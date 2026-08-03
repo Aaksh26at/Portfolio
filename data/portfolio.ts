@@ -586,10 +586,6 @@ export const portfolio: PortfolioData = {
     linkedin: 'https://linkedin.com/in/aakshatagarwal',
     github: 'https://github.com/Aaksh26at',
   },
-
-  // Place your files at these public paths (see README for exact steps).
-  resumePath: '/resume/Aakshat-Agarwal-Resume.pdf',
-  profileImage: '/images/aakshat-profile.webp',
 }
 
 export default portfolio
