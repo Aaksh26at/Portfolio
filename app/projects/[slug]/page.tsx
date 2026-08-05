@@ -12,8 +12,10 @@ import { ProjectVisual } from '@/components/ui/ProjectVisual'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 
+// Next 15 made the dynamic segment async: params arrives as a promise so a
+// page can start rendering before the segment resolves.
 interface PageProps {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export function generateStaticParams() {
@@ -22,8 +24,9 @@ export function generateStaticParams() {
     .map((project) => ({ slug: project.slug }))
 }
 
-export function generateMetadata({ params }: PageProps): Metadata {
-  const project = portfolio.projects.find((item) => item.slug === params.slug)
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params
+  const project = portfolio.projects.find((item) => item.slug === slug)
   if (!project) return { title: 'Project not found' }
   return {
     title: project.title,
@@ -35,9 +38,10 @@ export function generateMetadata({ params }: PageProps): Metadata {
   }
 }
 
-export default function ProjectCaseStudyPage({ params }: PageProps) {
+export default async function ProjectCaseStudyPage({ params }: PageProps) {
+  const { slug } = await params
   const project = portfolio.projects.find(
-    (item) => item.slug === params.slug && item.status === 'shipped',
+    (item) => item.slug === slug && item.status === 'shipped',
   )
   if (!project) notFound()
 

@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { portfolio } from '@/data/portfolio'
 import { SocialLinks } from '@/components/ui/SocialLinks'
 
@@ -11,12 +12,12 @@ export function Footer() {
       <div className="container-page">
         <div className="flex flex-col gap-6 border-t border-[var(--color-rule)] pt-8 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
-            <a
+            <Link
               href="/#home"
               className="font-outlier whitespace-nowrap text-base font-bold text-ink"
             >
               {portfolio.person.initials}
-            </a>
+            </Link>
             <span className="hidden h-4 w-px bg-[var(--color-rule)] sm:block" aria-hidden="true" />
             <p className="text-sm text-ink-muted">{portfolio.person.name} · Data, ML and Python systems</p>
           </div>

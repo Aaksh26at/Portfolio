@@ -1,4 +1,4 @@
-import type { ElementType, HTMLAttributes, ReactNode } from 'react'
+import type { ComponentType, ElementType, HTMLAttributes, ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
 export type PanelTone =
@@ -55,8 +55,14 @@ export function Panel({
   className,
   ...rest
 }: PanelProps) {
+  // React 19's types resolve a bare `ElementType` tag to the intersection of
+  // every intrinsic element, and void elements like <br> declare
+  // `children?: undefined` — so `children` collapses to `never`. Narrowing to
+  // the props Panel actually forwards keeps the permissive `as` API intact.
+  const Component = Tag as ComponentType<HTMLAttributes<HTMLElement>>
+
   return (
-    <Tag
+    <Component
       className={cn('panel', className)}
       data-tone={tone}
       data-pad={pad === 'none' ? undefined : pad}
@@ -66,6 +72,6 @@ export function Panel({
       {...rest}
     >
       {children}
-    </Tag>
+    </Component>
   )
 }

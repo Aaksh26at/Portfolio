@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Link from 'next/link'
 import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring } from 'framer-motion'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
 import { portfolio } from '@/data/portfolio'
@@ -85,7 +86,9 @@ export function Header() {
           aria-label="Primary"
           className="mx-auto flex min-h-12 w-full max-w-[1440px] items-center justify-between gap-6"
         >
-          <a
+          {/* Link, not <a>: from a case-study route the logo is a real
+              navigation, and a hard reload would tear down the WebGL world. */}
+          <Link
             href="/#home"
             className="group flex min-h-11 shrink-0 items-center gap-3 whitespace-nowrap"
             aria-label={`${portfolio.person.name} — home`}
@@ -102,7 +105,7 @@ export function Header() {
             >
               Data systems · Jaipur
             </span>
-          </a>
+          </Link>
 
           {/* Desktop index. useScrollSpy already ran on every page load;
               until now its result was only used in the mobile drawer. */}
