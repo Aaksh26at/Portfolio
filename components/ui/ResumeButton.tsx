@@ -11,17 +11,28 @@ interface ResumeButtonProps {
   label?: string
 }
 
-export function ResumeButton({ variant = 'ghost', className, label = 'Request Résumé' }: ResumeButtonProps) {
+export function ResumeButton({ variant = 'ghost', className, label }: ResumeButtonProps) {
+  // A published PDF is always the better answer: nobody emails a stranger to
+  // ask for a résumé, they just leave. The mailto survives only as the
+  // fallback for when no file has been published yet.
+  const { resumePath, email, name } = portfolio.person
+  const hasFile = resumePath.length > 0
+
   return (
     <MagneticButton
-      href={`mailto:${portfolio.person.email}?subject=${encodeURIComponent('Request for Aakshat Agarwal’s résumé')}`}
+      href={
+        hasFile
+          ? resumePath
+          : `mailto:${email}?subject=${encodeURIComponent(`Request for ${name}’s résumé`)}`
+      }
+      download={hasFile || undefined}
       variant={variant}
       className={className}
-      onClick={() => track('email_click')}
-      ariaLabel="Request Aakshat Agarwal's résumé by email"
+      onClick={() => track(hasFile ? 'resume_download' : 'email_click')}
+      ariaLabel={hasFile ? `Download ${name}'s résumé (PDF)` : `Request ${name}'s résumé by email`}
     >
       <FileText className="h-4 w-4" aria-hidden="true" />
-      {label}
+      {label ?? (hasFile ? 'Download Résumé' : 'Request Résumé')}
     </MagneticButton>
   )
 }

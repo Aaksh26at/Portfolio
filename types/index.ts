@@ -108,6 +108,12 @@ export interface PortfolioData {
     email: string
     phone: string
     summary: string
+    /**
+     * Path to a résumé PDF under /public, e.g. '/resume/aakshat-agarwal.pdf'.
+     * Empty string means no file is published yet, and the résumé button
+     * falls back to requesting one by email rather than serving a 404.
+     */
+    resumePath: string
     socials: SocialLink[]
   }
   nav: NavItem[]

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring } from 'framer-motion'
-import { ArrowDown, ArrowUpRight, Menu, X } from 'lucide-react'
+import { ArrowDown, Menu, X } from 'lucide-react'
 import { portfolio } from '@/data/portfolio'
 import { useScrollSpy } from '@/hooks/useScrollSpy'
 import { cn } from '@/lib/utils'
@@ -212,13 +212,17 @@ export function Header() {
                   )
                 })}
               </ul>
-              <a
-                href={`mailto:${portfolio.person.email}?subject=${encodeURIComponent('Opportunity for Aakshat Agarwal')}`}
+              {/* Same fix as the desktop button: a mailto here died silently
+                  on any phone with no mail app configured, which is a large
+                  share of the people who reach the site on mobile. */}
+              <Link
+                href="/#contact"
+                onClick={() => setOpen(false)}
                 className="mt-3 flex min-h-12 items-center justify-center gap-2 whitespace-nowrap rounded-[var(--radius-control)] border border-signal bg-signal px-4 text-sm font-semibold text-signal-ink"
               >
                 Start a conversation
-                <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-              </a>
+                <ArrowDown className="h-4 w-4" aria-hidden="true" />
+              </Link>
             </motion.div>
           ) : null}
         </AnimatePresence>

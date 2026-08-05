@@ -23,6 +23,10 @@ export const portfolio: PortfolioData = {
     location: 'Jaipur, Rajasthan, India',
     email: 'aakshatagarwal2004@gmail.com',
     phone: '+91 79768 07739',
+    // Drop the PDF at public/resume/aakshat-agarwal.pdf and this becomes a
+    // direct download. Until then the button asks for it by email, because a
+    // download link to a file that is not there is worse than no download.
+    resumePath: '',
     summary:
       'Aakshat Agarwal is a data and technology professional with skills in Python, SQL, business intelligence, predictive modelling, data analysis, ETL pipeline design, machine learning, cloud services, APIs and dashboard development. He has experience building end-to-end machine-learning applications, interactive dashboards, REST APIs, data-processing pipelines and statistical analyses, and is interested in contributing to data-driven teams that solve real-world business problems using technology.',
     socials: [
@@ -60,7 +64,7 @@ export const portfolio: PortfolioData = {
     floatingMetrics: [
       { value: '96%', label: 'Model accuracy' },
       { value: '<200ms', label: 'API inference' },
-      { value: '2', label: 'ML applications' },
+      { value: '4', label: 'ML applications' },
     ],
   },
 
@@ -91,7 +95,7 @@ export const portfolio: PortfolioData = {
       { value: '8%', label: 'Improvement over baseline' },
       { value: '<1s', label: 'Streamlit inference' },
       { value: '<200ms', label: 'FWI model inference' },
-      { value: '2', label: 'Production-style ML apps' },
+      { value: '4', label: 'Production-style ML apps' },
     ],
   },
 
@@ -172,7 +176,7 @@ export const portfolio: PortfolioData = {
         { value: '8%', label: 'Over baseline' },
       ],
       links: {
-        github: '',
+        github: 'https://github.com/Aaksh26at/Cancer_Predict_streamlit',
         demo: '',
       },
       accent: 'violet',
@@ -239,7 +243,7 @@ export const portfolio: PortfolioData = {
         { value: 'REST', label: 'API' },
       ],
       links: {
-        github: '',
+        github: 'https://github.com/Aaksh26at/Algerian_Fire_Forest',
         demo: '',
       },
       accent: 'cyan',
@@ -369,7 +373,7 @@ export const portfolio: PortfolioData = {
         { value: 'NLP', label: 'Text pipeline' },
       ],
       links: {
-        github: '',
+        github: 'https://github.com/Aaksh26at/AI-Resume-Analyzer-',
         demo: '',
       },
       accent: 'coral',
@@ -553,14 +557,14 @@ export const portfolio: PortfolioData = {
         description:
           'End-to-end ML classification pipeline (≈96% accuracy) with a real-time Streamlit interface.',
         tech: ['Python', 'Streamlit', 'Scikit-learn'],
-        url: '',
+        url: 'https://github.com/Aaksh26at/Cancer_Predict_streamlit',
       },
       {
         name: 'Fire Weather Index Prediction API',
         description:
           "Flask REST API predicting Canada's Fire Weather Index with sub-200ms inference.",
         tech: ['Python', 'Flask', 'Ridge Regression'],
-        url: '',
+        url: 'https://github.com/Aaksh26at/Algerian_Fire_Forest',
       },
       {
         name: 'Customer Churn Prediction',
@@ -574,7 +578,7 @@ export const portfolio: PortfolioData = {
         description:
           'NLP resume–job matcher using TF-IDF + cosine similarity with a skill-gap report.',
         tech: ['Python', 'Scikit-learn', 'NLP'],
-        url: '',
+        url: 'https://github.com/Aaksh26at/AI-Resume-Analyzer-',
       },
     ],
   },
