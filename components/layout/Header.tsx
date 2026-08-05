@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring } from 'framer-motion'
-import { ArrowUpRight, Menu, X } from 'lucide-react'
+import { ArrowDown, ArrowUpRight, Menu, X } from 'lucide-react'
 import { portfolio } from '@/data/portfolio'
 import { useScrollSpy } from '@/hooks/useScrollSpy'
 import { cn } from '@/lib/utils'
@@ -144,13 +144,18 @@ export function Header() {
           <div className="flex shrink-0 items-center gap-2">
             <ThemeToggle />
 
-            <a
-              href={`mailto:${portfolio.person.email}?subject=${encodeURIComponent('Opportunity for Aakshat Agarwal')}`}
+            {/* The section, not a mailto: #contact carries the form, the
+                direct address and a copy-email button, and handing straight
+                off to a mail client skipped all of it — silently, on any
+                machine with no mail handler registered. Arrow points down
+                because this is now an in-page move, not an outbound one. */}
+            <Link
+              href="/#contact"
               className="hidden min-h-11 items-center gap-1.5 whitespace-nowrap border-b border-[var(--color-ink)] text-xs font-semibold text-ink transition-colors duration-200 hover:border-signal hover:text-signal md:inline-flex"
             >
               Contact
-              <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
-            </a>
+              <ArrowDown className="h-3.5 w-3.5" aria-hidden="true" />
+            </Link>
 
             <button
               type="button"
