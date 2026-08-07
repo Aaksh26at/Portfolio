@@ -6,6 +6,7 @@ import { About } from '@/components/sections/About'
 import { Projects } from '@/components/sections/Projects'
 import { Skills } from '@/components/sections/Skills'
 import { DataPipeline } from '@/components/sections/DataPipeline'
+import { Experience } from '@/components/sections/Experience'
 import { Education } from '@/components/sections/Education'
 import { Certifications } from '@/components/sections/Certifications'
 import { GithubProof } from '@/components/sections/GithubProof'
@@ -23,6 +24,7 @@ export default function HomePage() {
         <Projects />
         <Skills />
         <DataPipeline />
+        <Experience />
         <Education />
         <Certifications />
         <GithubProof />

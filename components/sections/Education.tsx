@@ -12,7 +12,7 @@ export function Education() {
       <div className="container-page">
         <SectionHeading
           title="Evidence has a history."
-          index={4}
+          index={5}
           scale="lg"
           measure="wide"
           description="Formal computer-science study, strengthened through project work that moves from analysis into shipped interfaces and APIs."

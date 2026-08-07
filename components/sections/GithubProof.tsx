@@ -17,7 +17,7 @@ export function GithubProof() {
         <div>
           <SectionHeading
             title="Code is the audit trail."
-            index={5}
+            index={6}
             scale="lg"
             measure="wide"
             description="Repositories hold the implementation detail behind the project narratives—data preparation, modelling choices and delivery code."

@@ -66,7 +66,7 @@ export function Hero() {
               <ResumeButton variant="ghost" />
             </div>
             <p className="mt-6 text-xs leading-relaxed text-ink-faint">
-              Python · SQL · Machine learning · Four documented systems
+              Python · SQL · Machine learning · Five documented systems
             </p>
           </Reveal>
         </div>

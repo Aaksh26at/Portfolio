@@ -1,0 +1,9 @@
+# Binary assets must never get line-ending conversion — with core.autocrlf=true
+# on Windows, git will otherwise inject CRLFs into these on checkout and corrupt
+# them. The resume PDF hit exactly this.
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary

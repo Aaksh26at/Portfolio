@@ -81,7 +81,7 @@ export function Contact() {
         <div>
           <SectionHeading
             title="Bring a hard data problem."
-            index={6}
+            index={7}
             scale="xl"
             measure="wide"
             reveal="mask-wipe"

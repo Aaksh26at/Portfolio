@@ -144,16 +144,16 @@ export function Projects() {
         <div className="mt-16 grid gap-12 lg:grid-cols-[minmax(18rem,0.55fr)_minmax(0,1.45fr)] lg:gap-14 xl:gap-20">
           <div className="self-start lg:sticky lg:top-32">
             <SectionHeading
-              title="Four systems. Four kinds of signal."
+              title="Five systems. Five kinds of signal."
               eyebrow="Selected systems"
               index={2}
               scale="lg"
               measure="wide"
-              description="Each chapter moves from an unreliable input to a decision someone can use—classification, forecasting, retention or document matching."
+              description="Each chapter moves from an unreliable input to a decision someone can use—diagnosis, fire risk, retention, document matching, or a month of bills filed without anyone watching."
             />
             <div className="mt-9">
               <Stat
-                value="04"
+                value="05"
                 label="end-to-end project narratives"
                 tone="data"
                 size="md"

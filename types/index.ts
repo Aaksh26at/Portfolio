@@ -70,6 +70,16 @@ export interface SkillCategory {
   skills: { name: string; level: Proficiency }[]
 }
 
+export interface ExperienceItem {
+  role: string
+  organisation: string
+  location: string
+  /** Human-readable range, e.g. 'May 2026 — Present'. */
+  period: string
+  /** What the role actually produced. One claim per bullet, no padding. */
+  highlights: string[]
+}
+
 export interface EducationItem {
   institution: string
   location: string
@@ -123,6 +133,7 @@ export interface PortfolioData {
   projects: Project[]
   skills: SkillCategory[]
   pipeline: string[]
+  experience: ExperienceItem[]
   education: EducationItem[]
   certifications: Certification[]
   learningJourney: string[]

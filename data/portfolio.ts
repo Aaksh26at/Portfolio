@@ -23,10 +23,7 @@ export const portfolio: PortfolioData = {
     location: 'Jaipur, Rajasthan, India',
     email: 'aakshatagarwal2004@gmail.com',
     phone: '+91 79768 07739',
-    // Drop the PDF at public/resume/aakshat-agarwal.pdf and this becomes a
-    // direct download. Until then the button asks for it by email, because a
-    // download link to a file that is not there is worse than no download.
-    resumePath: '',
+    resumePath: '/resume/aakshat-agarwal.pdf',
     summary:
       'Aakshat Agarwal is a data and technology professional with skills in Python, SQL, business intelligence, predictive modelling, data analysis, ETL pipeline design, machine learning, cloud services, APIs and dashboard development. He has experience building end-to-end machine-learning applications, interactive dashboards, REST APIs, data-processing pipelines and statistical analyses, and is interested in contributing to data-driven teams that solve real-world business problems using technology.',
     socials: [
@@ -42,6 +39,7 @@ export const portfolio: PortfolioData = {
     { label: 'About', href: '#about' },
     { label: 'Projects', href: '#projects' },
     { label: 'Skills', href: '#skills' },
+    { label: 'Experience', href: '#experience' },
     { label: 'Education', href: '#education' },
     { label: 'Certifications', href: '#certifications' },
     { label: 'Contact', href: '#contact' },
@@ -59,23 +57,23 @@ export const portfolio: PortfolioData = {
       'Based in Jaipur, India',
       'Open to opportunities',
       'Python · SQL · Machine Learning · Power BI',
-      'Available for entry-level & fresher roles',
+      'Currently a Data / CRM Executive at Kalash Group',
     ],
     floatingMetrics: [
-      { value: '96%', label: 'Model accuracy' },
-      { value: '<200ms', label: 'API inference' },
-      { value: '4', label: 'ML applications' },
+      { value: '97%', label: 'Malignant recall' },
+      { value: '0.938', label: 'Fire model ROC-AUC' },
+      { value: '5', label: 'Shipped projects' },
     ],
   },
 
   snapshot: {
     roles: [
       'Data Analyst',
-      'Data Science Fresher',
-      'AI/ML Fresher',
+      'Data Scientist',
+      'AI/ML Engineer',
       'Python Developer',
       'Backend Developer',
-      'Data Engineering Fresher',
+      'Data Engineer',
     ],
     strengths: [
       'Python & SQL',
@@ -90,12 +88,12 @@ export const portfolio: PortfolioData = {
       'Data-driven problem solving',
     ],
     metrics: [
-      { value: '96%', label: 'Classification accuracy' },
+      { value: '97.07%', label: 'Malignant recall vs 0% baseline' },
       { value: '30', label: 'Clinical attributes analysed' },
-      { value: '8%', label: 'Improvement over baseline' },
+      { value: '0.9957', label: 'ROC-AUC, cancer classifier' },
       { value: '<1s', label: 'Streamlit inference' },
-      { value: '<200ms', label: 'FWI model inference' },
-      { value: '4', label: 'Production-style ML apps' },
+      { value: '0.938', label: 'Fire model ROC-AUC' },
+      { value: '5', label: 'Production-style projects' },
     ],
   },
 
@@ -120,60 +118,61 @@ export const portfolio: PortfolioData = {
       year: '2025',
       status: 'shipped',
       featured: true,
-      tagline: 'End-to-end ML classification for malignant vs. benign tumours.',
+      tagline: 'Classifying breast masses where a missed cancer costs more than a false alarm.',
       description:
-        'An end-to-end machine-learning application that predicts whether a breast tumour is malignant or benign using clinical diagnostic attributes.',
+        'A Streamlit classifier that labels a breast mass malignant or benign from 30 cell-nucleus measurements, tuned so that the errors it makes are the cheaper kind.',
       problem:
-        'Manual differentiation of malignant and benign tumours is slow and error-prone. The goal was an accurate, real-time classifier that supports faster diagnostic decisions.',
+        'Accuracy is the wrong headline for this dataset. It is 62.7% benign, so a model that answers "benign" every time scores 62.74% and catches no cancers at all. The real target is recall on malignancy — and a decision threshold chosen to reflect what a miss actually costs.',
       approach:
-        'Built a full ETL and modelling pipeline: data cleaning with Pandas, feature scaling with NumPy, exploratory data analysis and feature engineering across 30 clinical attributes, then a Scikit-learn classification model served through an interactive Streamlit interface.',
-      technologies: ['Python', 'Streamlit', 'Scikit-learn', 'Pandas', 'NumPy', 'Machine Learning'],
-      keyResult: '≈96% accuracy on a 569-sample medical dataset',
+        'Compared logistic regression, an RBF-kernel SVM and a random forest against an explicit majority-class baseline, scored with repeated stratified cross-validation — 10 folds by 5 repeats — rather than a single split. Selected the SVM on malignant recall with ROC-AUC as the tiebreaker, then moved the decision threshold off 0.5 by weighting a false negative as ten times costlier than a false alarm.',
+      technologies: ['Python', 'Scikit-learn', 'SVM (RBF)', 'Streamlit', 'Pandas', 'NumPy'],
+      keyResult: '97.07% malignant recall at a cost-weighted threshold, against a baseline that catches none',
       achievements: [
-        'Engineered an ML classification pipeline achieving ≈96% accuracy on a 569-sample medical dataset.',
-        'Built a complete ETL pipeline using Pandas for data cleaning and NumPy for feature scaling.',
-        'Conducted EDA and feature engineering across 30 clinical attributes, improving performance ≈8% over baseline.',
-        'Deployed a real-time Streamlit dashboard with sub-second inference latency.',
+        'Scored every model against an explicit majority-class baseline — 62.74% ± 0.70 accuracy, 0% malignant recall, 0.500 ROC-AUC — so the headline number has something to beat.',
+        'Selected an RBF-kernel SVM at 97.54% ± 1.72 accuracy, 97.07% ± 3.27 malignant recall and 0.9957 ROC-AUC, ahead of logistic regression (97.44%) and random forest (96.35%).',
+        'Used repeated stratified cross-validation, 10 folds × 5 repeats, so each figure carries a spread rather than resting on one lucky seed.',
+        'Tuned the decision threshold to 0.225 by weighting false negatives 10× false positives: nine more false alarms in exchange for two more cancers caught.',
+        'Fixed a leakage bug where the scaler was fitted before the train-test split, and consolidated separate model and scaler pickles into a single pipeline artifact.',
       ],
       caseStudy: [
         {
-          heading: 'Problem',
-          body: 'Differentiating malignant from benign tumours quickly and reliably is critical in diagnostics. The project set out to automate that classification from clinical measurements.',
+          heading: 'Why accuracy is the wrong headline',
+          body: 'The Wisconsin diagnostic dataset is 62.7% benign. A model that answers "benign" unconditionally therefore scores 62.74% accuracy while catching zero cancers. Any accuracy figure quoted without that number beside it is close to meaningless, which is why the baseline is reported alongside every model here.',
         },
         {
-          heading: 'Dataset',
-          body: 'A widely used diagnostic dataset of 569 samples, each described by 30 numeric clinical attributes derived from digitised images of cell nuclei.',
+          heading: 'The data',
+          body: '569 samples, each described by 30 numeric features computed from digitised images of cell nuclei — radius, texture, perimeter, area, smoothness and so on, each as a mean, a standard error and a worst-case value.',
         },
         {
-          heading: 'Data cleaning',
-          body: 'Pandas handled missing-value checks, type consistency and structuring, producing a clean, model-ready table.',
+          heading: 'Scoring that survives a reshuffle',
+          body: 'A single train-test split on 569 rows moves by percentage points depending on the seed. Every model here is scored with repeated stratified cross-validation — 10 folds, 5 repeats — so each result comes with a standard deviation and the comparison between models means something.',
         },
         {
-          heading: 'Exploratory analysis',
-          body: 'EDA surfaced the distribution of each attribute and the correlation structure between features and the target class, guiding feature selection.',
+          heading: 'Model comparison',
+          body: 'Against the 62.74% baseline: logistic regression reached 97.44% ± 1.93 accuracy with 96.68% malignant recall; the RBF-kernel SVM reached 97.54% ± 1.72 with 97.07% ± 3.27 recall and 0.9957 ROC-AUC; the random forest trailed at 96.35% with 93.88% recall. The SVM was selected on recall, with ROC-AUC breaking the tie against logistic regression.',
         },
         {
-          heading: 'Feature engineering',
-          body: 'NumPy-based feature scaling normalised attribute ranges so no single measurement dominated the model, contributing to an ≈8% lift over the baseline.',
+          heading: 'Moving the threshold off 0.5',
+          body: 'The default 0.5 cutoff silently assumes a false alarm and a missed cancer cost the same. They do not. Weighting a false negative as ten times costlier puts the optimal threshold at 0.225 — which on this test set trades nine additional false alarms for two additional malignancies detected. That is the trade a screening tool should be making.',
         },
         {
-          heading: 'Model selection & evaluation',
-          body: 'A Scikit-learn classification model was trained and validated, reaching ≈96% accuracy on held-out data.',
+          heading: 'A leakage bug worth naming',
+          body: 'An earlier version fitted the feature scaler before splitting into train and test, letting test-set statistics inform the transform and flattering every score that followed. The scaler now lives inside the pipeline so it is refitted within each fold, and the model and scaler ship as one artifact rather than two pickles that could drift apart.',
         },
         {
           heading: 'Application interface',
-          body: 'A Streamlit front end lets a user enter clinical values and receive a malignant/benign prediction with sub-second latency.',
+          body: 'A Streamlit front end takes the clinical measurements and returns a malignant/benign call with its probability, using the tuned threshold rather than the default so the interface reflects the same cost assumption as the evaluation.',
         },
         {
-          heading: 'Future improvements',
-          body: 'Add probability calibration, model explainability (e.g. feature importance per prediction) and a confusion-matrix view inside the app.',
+          heading: 'What it is not',
+          body: 'This is a classifier trained on one public dataset of 569 cases from a single source, evaluated by cross-validation rather than against an external cohort. It demonstrates a decision process. It is not a diagnostic instrument.',
         },
       ],
       metrics: [
-        { value: '96%', label: 'Accuracy' },
-        { value: '569', label: 'Samples' },
-        { value: '30', label: 'Attributes' },
-        { value: '8%', label: 'Over baseline' },
+        { value: '97.07%', label: 'Malignant recall' },
+        { value: '0.9957', label: 'ROC-AUC' },
+        { value: '62.74%', label: 'Baseline accuracy' },
+        { value: '0.225', label: 'Tuned threshold' },
       ],
       links: {
         github: 'https://github.com/Aaksh26at/Cancer_Predict_streamlit',
@@ -182,65 +181,138 @@ export const portfolio: PortfolioData = {
       accent: 'violet',
     },
     {
-      slug: 'fire-weather-index',
-      title: 'Fire Weather Index Prediction Web App',
-      year: '2025',
+      slug: 'jvvnl-bill-automation',
+      title: 'JVVNL Electricity Bill Automation',
+      year: '2026',
       status: 'shipped',
       featured: true,
-      tagline: "Flask REST API forecasting Canada's Fire Weather Index.",
+      tagline: 'An unattended pipeline that collects, reads and files 34 utility bills a month.',
       description:
-        "A Flask-based machine-learning application that predicts Canada's Fire Weather Index using environmental measurements.",
+        'A scheduled Python system that logs into a state electricity portal, downloads every account\'s monthly bill, parses three different PDF layouts into one master ledger, works out what has actually been paid, and files each PDF where the accountant expects to find it.',
       problem:
-        'Estimating fire risk from raw weather readings requires a fast, reliable regression service that can respond within tight latency budgets.',
+        'Thirty-four electricity accounts were being handled by hand every month: log in, solve a CAPTCHA, pick each account, download the bill, read the numbers off it, type them into a spreadsheet, then save the PDF into the right client folder on a network drive. It is slow, it is dull, and every step is a place to make a quiet mistake that nobody catches until a payment is missed.',
       approach:
-        'Built a Flask REST API around a Ridge Regression model optimised with k-fold cross-validation, taking four environmental inputs — temperature, humidity, wind speed and rainfall — through a production-oriented pipeline covering ingestion, preprocessing, model serialization and API deployment.',
-      technologies: ['Python', 'Flask', 'Scikit-learn', 'Ridge Regression', 'REST API', 'Model Serialization'],
-      keyResult: 'Under ≈200ms inference latency via a REST API',
+        'Selenium drives the portal login through a multi-engine CAPTCHA solver with escalating backoff and lockout detection. Downloaded bills go through a layout classifier into one of three dedicated parsers, because the same utility issues bills in English, in transliterated Hindi, and in Devanagari with CID-encoded fonts. Extracted fields merge into a single formatted workbook keyed on account and bill month, and a separate distribution step files each PDF into its per-client folder. The whole cycle runs from one idempotent entry point on Windows Task Scheduler.',
+      technologies: ['Python', 'Selenium', 'pdfplumber', 'pandas', 'openpyxl', 'OpenCV', 'Tesseract / ddddocr'],
+      keyResult: '34 accounts collected, parsed and filed without supervision',
       achievements: [
-        "Developed a Flask REST API forecasting Canada's Fire Weather Index from 4 environmental KPIs.",
-        'Optimised a Ridge Regression model via k-fold cross-validation.',
-        'Achieved inference latency under ≈200ms, meeting enterprise-grade performance benchmarks.',
-        'Designed a production-ready pipeline covering ingestion, preprocessing, serialization and deployment following MLOps practices.',
+        'Built a layout classifier and three parsers so the same pipeline reads English, transliterated-Hindi and Devanagari bills, extracting 40+ fields from each.',
+        'Replaced a text-order regex with a coordinate-based parser for solar bills, after the two-column layout made pdfplumber return a serial number — and once a day-of-month from a payment date — instead of the meter reading.',
+        'Derived payment status from the utility\'s own ledger: the next bill\'s "Previous Outstanding" settles the previous one, so only the newest bill needs a portal check and every earlier verdict corrects itself.',
+        'Made the run idempotent end to end — already-saved bills are not re-downloaded and already-filed PDFs are not re-copied — so it is safe to schedule hourly.',
+        'Preserved the accountant\'s hand-typed columns across every automated rebuild of the sheet, keyed on account and bill month.',
+        'Verified all 34 accounts field-by-field against their source PDFs: 34 matched, 0 mismatched.',
       ],
       caseStudy: [
         {
-          heading: 'Fire-risk problem',
-          body: "The Fire Weather Index summarises wildfire danger. Predicting it from live weather readings enables earlier, data-driven risk assessment.",
+          heading: 'The manual loop being replaced',
+          body: 'Every month, thirty-four accounts had to be pulled one at a time from the state electricity portal, read off the PDF, typed into a spreadsheet, and saved into the right client folder. The cost is not just the hours. It is that nothing about the process tells you when a number was mistyped or a bill was never fetched.',
         },
         {
-          heading: 'Environmental variables',
-          body: 'The model consumes four inputs — temperature, humidity, wind speed and rainfall — chosen as the primary environmental drivers of fire risk.',
+          heading: 'Getting through the front door',
+          body: 'The portal is behind a login with an image CAPTCHA. The solver tries ddddocr first, falls back to a Tesseract voting pass over several preprocessed variants of the image, then a paid service, then a human. Failures back off exponentially rather than retrying immediately, and an explicit lockout detector aborts the run and saves a resume point instead of hammering the login into a longer block.',
         },
         {
-          heading: 'Preprocessing pipeline',
-          body: 'A structured pipeline ingests raw readings, validates and preprocesses them, and prepares feature vectors for inference.',
+          heading: 'One utility, three bill layouts',
+          body: 'The same provider issues bills in three forms: plain English, transliterated Hindi that extracts as ASCII noise, and Devanagari whose CID-encoded fonts come through as glyph codes. A classifier detects which one it is and dispatches to a parser written for that layout, so a single pipeline handles all of them instead of failing on two thirds of the accounts.',
         },
         {
-          heading: 'Regression approach',
-          body: 'Ridge Regression was selected for its stability with correlated inputs, regularising the fit to reduce overfitting.',
+          heading: 'When the text order lies',
+          body: 'Solar bills carry a generator block that only appears on the English copy, in a two-column layout. Reading it with regex over extracted text worked until it did not: on one bill the pattern returned the right column\'s serial number, and on another it returned 13 — the day from a payment date printed on the same line — instead of a 2166 kWh reading. The fix pairs each label with the numeric value in its own row by word coordinates, and refuses the result unless net generation equals present minus previous.',
         },
         {
-          heading: 'Cross-validation',
-          body: 'k-fold cross-validation tuned the model and gave a trustworthy estimate of generalisation performance.',
+          heading: 'Payment status without asking',
+          body: 'Rather than reconciling receipts for every bill, the system reads the utility\'s own arithmetic: the next month\'s bill states the previous outstanding, and a zero there means the earlier bill was settled. Only the newest bill, which has no successor yet, needs a receipt lookup. Every verdict becomes certain on its own once the following bill arrives, and the model distinguishes paid, unpaid, credit and nil rather than collapsing to a yes/no.',
         },
         {
-          heading: 'API architecture',
-          body: 'A Flask REST endpoint accepts the four inputs as JSON and returns the predicted index, with the trained model serialized for fast loading.',
+          heading: 'Filing where a human would',
+          body: 'Destinations are configuration, not code. Each account maps to a client folder; accounts without one share a fallback. The financial-year segment of every path is substituted at run time, so April needs no code change, and the month subfolder is matched against what already exists — if bills are filed under "June 2026", the new one joins them rather than starting a rival "June".',
         },
         {
-          heading: 'Inference performance',
-          body: 'End-to-end responses land under ≈200ms, satisfying enterprise-grade latency expectations.',
+          heading: 'Safe to run again',
+          body: 'The scheduled entry point never rebuilds the workbook from scratch. New bills are added, existing rows are merged on account and bill month, PDFs already on disk are not re-downloaded, and files already filed are skipped by size comparison. That is what makes an hourly schedule reasonable: most runs correctly do nothing.',
         },
         {
-          heading: 'Future improvements',
-          body: 'Add batch prediction, request validation schemas and a lightweight dashboard visualising risk over a region.',
+          heading: 'Leaving room for the human',
+          body: 'The accountant annotates each row by hand — payment mode, who paid, solar or not. Those columns are not part of the scraper\'s schema, so the canonical rebuild would drop them. They are snapshotted before the rewrite and reattached after, keyed on account and bill month, and unmatched new rows are left blank on purpose rather than guessed at.',
         },
       ],
       metrics: [
-        { value: '<200ms', label: 'Inference' },
-        { value: '4', label: 'Input KPIs' },
-        { value: 'k-fold', label: 'Validation' },
-        { value: 'REST', label: 'API' },
+        { value: '34', label: 'Accounts automated' },
+        { value: '3', label: 'Bill layouts parsed' },
+        { value: '40+', label: 'Fields per bill' },
+        { value: '34/34', label: 'Verified vs source PDFs' },
+      ],
+      links: {
+        github: 'https://github.com/Aaksh26at/jvvnl-bill-scraper',
+        demo: '',
+      },
+      accent: 'blue',
+    },
+    {
+      // The slug is kept at its original value on purpose: it is a live URL,
+      // and renaming it would break every link already shared. The project
+      // itself is no longer an FWI regression — see the case study.
+      slug: 'fire-weather-index',
+      title: 'Fire Risk Classification from Weather',
+      year: '2025',
+      status: 'shipped',
+      featured: true,
+      tagline: 'Predicting Algerian fire days from weather alone, after removing the leakage.',
+      description:
+        'A Flask service that estimates the probability of a fire day in northern Algeria from six weather inputs, trained only on variables that are observed rather than derived from the label.',
+      problem:
+        'The obvious way to model this dataset scores extremely well and means nothing. The Fire Weather Index is a formula computed from the same weather already in the table, and the published fire labels are close to a single threshold on it. Any model handed those columns is reading the answer back. The problem was to build something that still works once the shortcut is removed.',
+      approach:
+        'Restricted the features to temperature, relative humidity, wind speed, rainfall, month and region, dropping all six FWI-system outputs. Compared logistic regression against a random forest under GroupKFold over region-month, so an entire region-month is held out at once and correlated consecutive days cannot straddle a fold. The selected model is served from a Flask app with an HTML form, a JSON endpoint and a health check.',
+      technologies: ['Python', 'Scikit-learn', 'Random Forest', 'GroupKFold', 'Flask', 'Joblib'],
+      keyResult: '0.938 ROC-AUC from weather alone, against a 0.500 baseline',
+      achievements: [
+        'Found two leakage paths in the original framing: FWI is reproducible from ISI and BUI at R² = 0.985, and the single rule FWI > 3.5 reproduces the published fire labels 94.2% of the time.',
+        'Rebuilt the task as fire-occurrence classification from six observed weather variables, excluding FFMC, DMC, DC, ISI, BUI and FWI.',
+        'Validated with GroupKFold over region-month instead of random splits, so adjacent days from the same region and month cannot appear on both sides of a fold.',
+        'Random forest reached 88.1% accuracy, 89.8% recall and 0.938 ROC-AUC against an always-fire baseline of 56.4% accuracy and 0.500 ROC-AUC.',
+        'Served the model through Flask with a form, a JSON /api/predict endpoint returning a fire probability, and a /health check.',
+      ],
+      caseStudy: [
+        {
+          heading: 'What the data is',
+          body: 'Two regions of northern Algeria, June to September 2012, 243 days in total, each labelled fire or not fire. Fire days make up 56.4% of the record, so a model that answers "fire" every time is already right 56.4% of the time. That is the number worth beating.',
+        },
+        {
+          heading: 'The shortcut that had to go',
+          body: 'The dataset ships with the Fire Weather Index system — FFMC, DMC, DC, ISI, BUI and FWI. None of these are observations; they are computed from the same weather columns. Regressing FWI on ISI and BUI returns R² = 0.985. The label is compromised too: the single rule FWI > 3.5 reproduces the published fire labels 94.2% of the time.',
+        },
+        {
+          heading: 'What honesty costs',
+          body: 'Trained with the FWI columns included, the model reaches 94.2% accuracy and 0.992 ROC-AUC — the same figure the FWI > 3.5 rule reaches on its own, without any model at all. That accuracy is the label being handed back, so this project gives it up and reports the harder number instead.',
+        },
+        {
+          heading: 'Features that survive',
+          body: 'Six inputs remain: temperature, relative humidity, wind speed, rainfall, month and region. Each is either measured directly or known in advance, so a prediction made from them is a prediction rather than a restatement.',
+        },
+        {
+          heading: 'Validation that respects place and time',
+          body: 'Fire weather persists for days, so a random split can put Tuesday in training and Wednesday in test and flatter the result. GroupKFold over region-month holds out a whole region-month at once. The gap is visible in both models: the optimistic random split scores the random forest at 0.943 ROC-AUC and logistic regression at 0.890, against 0.938 and 0.877 under grouping.',
+        },
+        {
+          heading: 'Model comparison',
+          body: 'Logistic regression reached 78.6% accuracy and 0.877 ROC-AUC. The random forest reached 88.1% accuracy, 89.8% recall and 0.938 ROC-AUC, and was selected — recall carries the weight here, since a missed fire day costs more than a false alarm.',
+        },
+        {
+          heading: 'Serving',
+          body: 'A Flask app loads the joblib artifact produced by train.py and exposes three surfaces: an HTML form, POST /api/predict returning a fire probability and a verdict at the 0.5 threshold, and GET /health.',
+        },
+        {
+          heading: 'Limits worth stating',
+          body: 'One fire season, two regions, 243 rows. The model estimates fire occurrence on the same day as the weather it is given, so it is a classifier and not a forecast. The provenance of the labels is undocumented, which is exactly why the FWI threshold agreement matters.',
+        },
+      ],
+      metrics: [
+        { value: '0.938', label: 'ROC-AUC' },
+        { value: '88.1%', label: 'Accuracy' },
+        { value: '89.8%', label: 'Recall' },
+        { value: '243', label: 'Days of data' },
       ],
       links: {
         github: 'https://github.com/Aaksh26at/Algerian_Fire_Forest',
@@ -254,63 +326,64 @@ export const portfolio: PortfolioData = {
       year: '2026',
       status: 'shipped',
       featured: true,
-      tagline: 'Predicting telecom churn and turning it into retention action.',
+      tagline: 'Catching four in five churners, and being honest about the cost of that.',
       description:
-        'An end-to-end machine-learning pipeline that predicts which telecom customers are likely to churn, served through an interactive retention dashboard.',
+        'A churn classifier over 7,043 telecom accounts that reports what it costs to catch churners rather than hiding behind an accuracy figure, served through a Streamlit scoring app.',
       problem:
-        'Losing customers is expensive. The goal was to flag at-risk customers early — with enough recall to actually catch churners — so retention teams can act before they leave.',
+        'Accuracy is the wrong target here. 73.5% of these customers do not churn, so a model that answers "will not churn" every time scores 73.46% and identifies nobody worth calling. The useful question is how many real churners you can catch, and how many pointless retention calls that costs.',
       approach:
-        'Cleaned a 7,043-customer dataset, built a Scikit-learn preprocessing + model pipeline (scaling + one-hot encoding), compared Logistic Regression and Random Forest with balanced class weights, and selected the best by ROC-AUC. Predictions are served through a Streamlit dashboard.',
-      technologies: ['Python', 'Pandas', 'NumPy', 'Scikit-learn', 'Streamlit', 'Machine Learning'],
-      keyResult: '0.84 ROC-AUC, catching 78% of churners',
+        'Compared logistic regression and a random forest against an explicit never-churn baseline, both with balanced class weights, scored under repeated stratified cross-validation at 5 splits × 3 repeats. All preprocessing lives inside the pipeline so the scaler and encoder refit within each fold. Logistic regression ships — not because it wins on headline numbers, but for seven points more recall and coefficients a retention team can read.',
+      technologies: ['Python', 'Scikit-learn', 'Pandas', 'Streamlit', 'Joblib'],
+      keyResult: '80.4% of churners caught, at roughly one real save per two calls',
       achievements: [
-        'Built an end-to-end churn pipeline on a 7,043-customer telecom dataset with 19 features.',
-        'Achieved 0.84 ROC-AUC and 74% accuracy, with 78% recall on churners using balanced class weights.',
-        'Identified the top churn drivers — tenure, contract type, fibre-optic internet and monthly charges.',
-        'Deployed an interactive Streamlit dashboard that turns predictions into concrete retention actions.',
+        'Scored every model against a never-churn baseline — 73.46% accuracy, 0% recall, 0.500 ROC-AUC — so the headline figures have something to beat.',
+        'Logistic regression reached 0.8449 ± 0.0107 ROC-AUC, 80.35% ± 2.16 recall on churners and 74.71% accuracy under repeated stratified cross-validation.',
+        'Chose it over the random forest despite the forest scoring marginally higher on ROC-AUC (0.8459, inside the spread), because it gives up seven points of recall on the class that costs money.',
+        'Reported the operating cost plainly: 1,501 churners caught against 1,422 false alarms, i.e. about one genuine save per two retention calls.',
+        'Established that MonthlyCharges cannot be read from the coefficients, because TotalCharges is tenure × MonthlyCharges at R² = 0.9991 and the collinearity splits one signal across three columns.',
       ],
       caseStudy: [
         {
-          heading: 'Problem',
-          body: 'Customer churn directly hits revenue. The project set out to predict churn from customer attributes with high enough recall to be useful to a retention team, not just high headline accuracy.',
+          heading: 'Why not accuracy',
+          body: 'The dataset is 73.5% non-churners. A model that predicts "stays" for everyone scores 73.46% accuracy, beats a naive expectation, and is completely worthless — it flags nobody. That baseline is measured and reported alongside every model here, because an accuracy number without it says nothing.',
         },
         {
-          heading: 'Dataset',
-          body: 'The public Telco Customer Churn dataset — 7,043 customers described by 19 features (contract, tenure, services, charges) with a binary churn label. The base churn rate is ~26.5%.',
+          heading: 'The data',
+          body: 'The public Telco Customer Churn dataset: 7,043 customers, 19 features covering contract, tenure, services and charges, with a binary churn label. The base churn rate is 26.5%.',
         },
         {
-          heading: 'Data cleaning',
-          body: 'Dropped the identifier column, coerced the text TotalCharges field to numeric (blank for new customers), and mapped the churn target to 0/1.',
+          heading: 'Cleaning, and one decision worth naming',
+          body: 'TotalCharges arrives as text and is blank for 11 customers — every one of them at tenure zero, meaning they have never been billed. They are kept with TotalCharges set to 0 rather than dropped, because a brand-new customer is precisely the case a retention model has to handle.',
         },
         {
-          heading: 'Modelling & class imbalance',
-          body: 'A ColumnTransformer scales numeric features and one-hot encodes categoricals inside a single pipeline. Logistic Regression and Random Forest were trained with balanced class weights so the minority churn class was not ignored.',
+          heading: 'Scoring that survives a reshuffle',
+          body: 'A single train-test split on this data moves by more than a percentage point depending on the seed. Every figure comes from RepeatedStratifiedKFold at 5 splits × 3 repeats, so each carries a standard deviation, and the preprocessing is refitted inside each fold rather than on the full dataset.',
         },
         {
-          heading: 'Evaluation',
-          body: 'On a stratified held-out test set the best model reached 0.84 ROC-AUC and 74% accuracy, correctly identifying 78% of customers who actually churned.',
+          heading: 'Choosing the model that loses on paper',
+          body: 'The random forest scores 0.8459 ROC-AUC to logistic regression\'s 0.8449 — a gap of 0.001 against a spread of ±0.011, which is noise. What is not noise is recall: 73.07% for the forest against 80.35% for logistic regression. Since the whole point is catching churners, the regression ships, and its coefficients double as the retention story.',
         },
         {
-          heading: 'Key churn drivers',
-          body: 'Short tenure, month-to-month contracts, fibre-optic internet and high monthly charges were the strongest churn signals — consistent with known telecom retention patterns.',
+          heading: 'What the errors cost',
+          body: 'Out-of-fold across all 7,043 customers: 1,501 churners caught, 368 missed, and 1,422 customers flagged who were never going to leave. That is 51.5% precision — roughly one real save per two retention calls. Whether that trade is worth making depends on the cost of a call against the value of a retained customer, which is a business decision. The model surfaces it rather than burying it.',
         },
         {
-          heading: 'Dashboard',
-          body: 'A Streamlit app loads the saved pipeline and scores a customer profile in real time, returning a churn probability and a suggested retention action.',
+          heading: 'Drivers, and one that does not survive scrutiny',
+          body: 'Tenure dominates as a protective factor (−1.34), followed by two-year contracts (−0.81); month-to-month contracts (+0.62) and fibre-optic internet (+0.52) push the other way. MonthlyCharges lands at −0.42, which does not mean higher bills reduce churn — TotalCharges is tenure × MonthlyCharges at R² = 0.9991, and under collinearity that tight the individual coefficients become unstable and flip sign. Tenure and contract type are the pair worth trusting.',
         },
         {
-          heading: 'Future improvements',
-          body: 'Probability calibration, a tunable decision threshold, SHAP explanations per prediction, and batch scoring from an uploaded CSV.',
+          heading: 'What it is not',
+          body: 'This dataset is a snapshot with no time dimension, so the model classifies customers who have already churned rather than forecasting who will churn next month. No temporal validation is possible, and calling it a forecast would be overclaiming.',
         },
       ],
       metrics: [
-        { value: '0.84', label: 'ROC-AUC' },
-        { value: '74%', label: 'Accuracy' },
+        { value: '0.845', label: 'ROC-AUC' },
+        { value: '80.4%', label: 'Churners caught' },
+        { value: '51.5%', label: 'Flag precision' },
         { value: '7,043', label: 'Customers' },
-        { value: '78%', label: 'Churn recall' },
       ],
       links: {
-        github: '',
+        github: 'https://github.com/Aaksh26at/telco-churn-prediction',
         demo: '',
       },
       accent: 'blue',
@@ -469,12 +542,28 @@ export const portfolio: PortfolioData = {
     'Insight / Prediction',
   ],
 
+  // Real employment, stated no more strongly than the résumé states it. The
+  // "no invented employment" rule at the top of this file cuts both ways: a job
+  // that exists belongs here.
+  experience: [
+    {
+      role: 'Data / CRM Executive',
+      organisation: 'Kalash Group',
+      location: 'Jaipur, Rajasthan, India',
+      period: 'May 2026 — Present',
+      highlights: [
+        'Built and maintained CRM lead-tracking reports, consolidating scattered lead data into structured trackers for sales follow-up and reporting.',
+        'Developed a Python automation that retrieves and digitises electricity bill data, turning a repetitive manual task into a scheduled pipeline that outputs clean records.',
+      ],
+    },
+  ],
+
   education: [
     {
       institution: 'University of Rajasthan',
       location: 'Jaipur, Rajasthan, India',
       degree: 'Master of Computer Applications (MCA) — Computer Science',
-      period: '2024 – Present',
+      period: '2024 – 2026',
     },
     {
       institution: 'University of Rajasthan',
@@ -555,21 +644,28 @@ export const portfolio: PortfolioData = {
       {
         name: 'Breast Cancer Prediction Web App',
         description:
-          'End-to-end ML classification pipeline (≈96% accuracy) with a real-time Streamlit interface.',
+          'Breast-mass classifier at 97.07% malignant recall against a baseline that catches none, with a cost-weighted decision threshold.',
         tech: ['Python', 'Streamlit', 'Scikit-learn'],
         url: 'https://github.com/Aaksh26at/Cancer_Predict_streamlit',
       },
       {
-        name: 'Fire Weather Index Prediction API',
+        name: 'JVVNL Electricity Bill Automation',
         description:
-          "Flask REST API predicting Canada's Fire Weather Index with sub-200ms inference.",
-        tech: ['Python', 'Flask', 'Ridge Regression'],
+          'Scheduled pipeline that scrapes, parses and files 34 utility bills a month across three PDF layouts.',
+        tech: ['Python', 'Selenium', 'pdfplumber'],
+        url: 'https://github.com/Aaksh26at/jvvnl-bill-scraper',
+      },
+      {
+        name: 'Fire Risk Classification from Weather',
+        description:
+          'Flask service classifying Algerian fire days from weather alone — 0.938 ROC-AUC once the FWI-derived features are removed.',
+        tech: ['Python', 'Scikit-learn', 'Flask'],
         url: 'https://github.com/Aaksh26at/Algerian_Fire_Forest',
       },
       {
         name: 'Customer Churn Prediction',
         description:
-          'End-to-end churn pipeline (0.84 ROC-AUC) on 7,043 customers with a Streamlit retention dashboard.',
+          'Churn classifier over 7,043 customers catching 80.4% of churners, with the false-alarm cost reported rather than hidden.',
         tech: ['Python', 'Scikit-learn', 'Streamlit'],
         url: '',
       },

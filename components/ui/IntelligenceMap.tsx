@@ -5,53 +5,93 @@ import { cn } from '@/lib/utils'
 import { Badge } from './Badge'
 import { Panel } from './Panel'
 
-type SignalId = 'diagnose' | 'forecast' | 'retain' | 'match'
+type SignalId = 'diagnose' | 'forecast' | 'retain' | 'match' | 'file'
 
 const signals: Array<{
   id: SignalId
   label: string
+  inputLabel: string
   source: string
   metric: string
   detail: string
   output: string
+  /** Which of the two output nodes this signal terminates at. */
+  out: 'prediction' | 'report'
 }> = [
   {
     id: 'diagnose',
     label: 'Diagnosis',
-    source: '30 clinical attributes',
-    metric: '96%',
-    detail: 'classification accuracy',
+    inputLabel: 'Clinical data',
+    source: '30 cell-nucleus features',
+    metric: '97.07%',
+    detail: 'malignant recall',
     output: 'malignant / benign',
+    out: 'prediction',
   },
   {
     id: 'forecast',
     label: 'Fire risk',
-    source: '4 weather inputs',
-    metric: '<200ms',
-    detail: 'REST inference',
-    output: 'fire weather index',
+    inputLabel: 'Weather data',
+    source: '6 weather inputs',
+    metric: '0.938',
+    detail: 'ROC-AUC',
+    output: 'fire probability',
+    out: 'prediction',
   },
   {
     id: 'retain',
     label: 'Retention',
+    inputLabel: 'Customer data',
     source: '7,043 customers',
-    metric: '0.84',
-    detail: 'ROC-AUC',
+    metric: '80.4%',
+    detail: 'churners caught',
     output: 'churn probability',
+    out: 'prediction',
   },
   {
     id: 'match',
     label: 'Job fit',
+    inputLabel: 'Document text',
     source: 'resume + job text',
     metric: 'TF-IDF',
     detail: 'cosine similarity',
     output: 'skill-gap report',
+    out: 'report',
+  },
+  {
+    id: 'file',
+    label: 'Bill filing',
+    inputLabel: 'Utility portal',
+    source: '34 utility accounts',
+    metric: '3',
+    detail: 'PDF layouts parsed',
+    output: 'ledger row + filed PDF',
+    out: 'report',
   },
 ]
 
+// Node geometry is derived from array position rather than hand-placed, so the
+// map stays correct when a project is added instead of silently highlighting
+// the wrong line. Inputs fan down the left edge into the hub's left face.
+const NODE_TOP = 94
+const NODE_GAP = 80
+const HUB_TOP = 224
+const HUB_GAP = 15
+
+const nodeY = (index: number) => NODE_TOP + index * NODE_GAP
+const inputPath = (index: number) =>
+  `M72 ${nodeY(index)} C176 ${nodeY(index)} 174 ${HUB_TOP + index * HUB_GAP} 270 ${HUB_TOP + index * HUB_GAP}`
+
+const OUT_PATH = {
+  prediction: 'M370 254 C452 254 468 128 564 128',
+  report: 'M370 254 C452 254 468 382 564 382',
+} as const
+
 export function IntelligenceMap() {
   const [active, setActive] = useState<SignalId>('retain')
-  const signal = signals.find((item) => item.id === active) ?? signals[0]
+  const foundIndex = signals.findIndex((item) => item.id === active)
+  const activeIndex = foundIndex === -1 ? 0 : foundIndex
+  const signal = signals[activeIndex]
 
   return (
     // The map is evidence, not emphasis, so it reads in the cobalt data
@@ -72,24 +112,15 @@ export function IntelligenceMap() {
           className="pointer-events-none relative z-[var(--z-base)] h-full w-full"
         >
           <g fill="none" stroke="var(--color-rule-2)" strokeWidth="1">
-            <path d="M72 90 C176 90 174 224 270 224" />
-            <path d="M72 196 C172 196 176 244 270 244" />
-            <path d="M72 302 C172 302 176 264 270 264" />
-            <path d="M72 408 C176 408 174 284 270 284" />
-            <path d="M370 254 C452 254 468 128 564 128" />
-            <path d="M370 254 C452 254 468 382 564 382" />
+            {signals.map((item, index) => (
+              <path key={item.id} d={inputPath(index)} />
+            ))}
+            <path d={OUT_PATH.prediction} />
+            <path d={OUT_PATH.report} />
           </g>
 
           <path
-            d={
-              active === 'diagnose'
-                ? 'M72 90 C176 90 174 224 270 224'
-                : active === 'forecast'
-                  ? 'M72 196 C172 196 176 244 270 244'
-                  : active === 'retain'
-                    ? 'M72 302 C172 302 176 264 270 264'
-                    : 'M72 408 C176 408 174 284 270 284'
-            }
+            d={inputPath(activeIndex)}
             fill="none"
             stroke="var(--color-data)"
             strokeWidth="2"
@@ -97,7 +128,7 @@ export function IntelligenceMap() {
             className="signal-path"
           />
           <path
-            d={active === 'match' ? 'M370 254 C452 254 468 382 564 382' : 'M370 254 C452 254 468 128 564 128'}
+            d={OUT_PATH[signal.out]}
             fill="none"
             stroke="var(--color-data)"
             strokeWidth="2"
@@ -105,17 +136,12 @@ export function IntelligenceMap() {
             className="signal-path"
           />
 
-          {[
-            { y: 90, id: 'diagnose', label: 'Clinical data' },
-            { y: 196, id: 'forecast', label: 'Weather data' },
-            { y: 302, id: 'retain', label: 'Customer data' },
-            { y: 408, id: 'match', label: 'Document text' },
-          ].map((node) => (
-            <g key={node.id} opacity={active === node.id ? 1 : 0.48}>
-              <circle cx="72" cy={node.y} r="11" fill="var(--color-paper-3)" stroke="var(--color-rule)" />
-              <circle cx="72" cy={node.y} r="3" fill={active === node.id ? 'var(--color-data)' : 'var(--color-muted)'} />
-              <text x="96" y={node.y + 5} fill="var(--color-ink-2)" fontSize="13" fontFamily="var(--font-body)">
-                {node.label}
+          {signals.map((item, index) => (
+            <g key={item.id} opacity={active === item.id ? 1 : 0.48}>
+              <circle cx="72" cy={nodeY(index)} r="11" fill="var(--color-paper-3)" stroke="var(--color-rule)" />
+              <circle cx="72" cy={nodeY(index)} r="3" fill={active === item.id ? 'var(--color-data)' : 'var(--color-muted)'} />
+              <text x="96" y={nodeY(index) + 5} fill="var(--color-ink-2)" fontSize="13" fontFamily="var(--font-body)">
+                {item.inputLabel}
               </text>
             </g>
           ))}
@@ -131,18 +157,18 @@ export function IntelligenceMap() {
             </text>
           </g>
 
-          <g opacity={active === 'match' ? 0.42 : 1}>
+          <g opacity={signal.out === 'prediction' ? 1 : 0.42}>
             <circle cx="564" cy="128" r="11" fill="var(--color-paper-3)" stroke="var(--color-rule)" />
             <circle cx="564" cy="128" r="3" fill="var(--color-data)" />
             <text x="548" y="98" textAnchor="end" fill="var(--color-ink-2)" fontSize="13" fontFamily="var(--font-body)">
               Prediction
             </text>
           </g>
-          <g opacity={active === 'match' ? 1 : 0.42}>
+          <g opacity={signal.out === 'report' ? 1 : 0.42}>
             <circle cx="564" cy="382" r="11" fill="var(--color-paper-3)" stroke="var(--color-rule)" />
             <circle cx="564" cy="382" r="3" fill="var(--color-data)" />
             <text x="548" y="418" textAnchor="end" fill="var(--color-ink-2)" fontSize="13" fontFamily="var(--font-body)">
-              Explanation
+              Report
             </text>
           </g>
         </svg>
@@ -156,7 +182,7 @@ export function IntelligenceMap() {
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4" aria-label="Choose a project signal">
+      <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5" aria-label="Choose a project signal">
         {signals.map((item) => (
           <button
             key={item.id}

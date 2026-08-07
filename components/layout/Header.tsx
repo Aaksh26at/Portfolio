@@ -109,7 +109,10 @@ export function Header() {
 
           {/* Desktop index. useScrollSpy already ran on every page load;
               until now its result was only used in the mobile drawer. */}
-          <ul className="hidden items-center gap-1 lg:flex">
+          {/* xl, not lg: the index gained an eighth item (Experience) and at
+              1024px eight labels plus the logo, theme toggle and Contact link
+              no longer fit on one line. Below xl the drawer carries them. */}
+          <ul className="hidden items-center gap-1 xl:flex">
             {portfolio.nav.map((item, index) => {
               const id = item.href.replace('#', '')
               const isActive = active === id
@@ -163,7 +166,7 @@ export function Header() {
               aria-expanded={open}
               aria-controls="mobile-menu"
               aria-label={open ? 'Close menu' : 'Open menu'}
-              className="grid h-11 w-11 place-items-center rounded-[var(--radius-control)] border border-[var(--color-control-rule)] bg-[var(--color-paper)] text-ink lg:hidden"
+              className="grid h-11 w-11 place-items-center rounded-[var(--radius-control)] border border-[var(--color-control-rule)] bg-[var(--color-paper)] text-ink xl:hidden"
             >
               {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </button>
@@ -186,7 +189,7 @@ export function Header() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="ml-auto mt-3 max-h-[calc(100dvh-6rem)] w-full max-w-[28rem] overflow-y-auto rounded-[var(--radius-card)] border border-[var(--color-rule)] bg-[var(--color-paper)] p-3 shadow-3 lg:hidden"
+              className="ml-auto mt-3 max-h-[calc(100dvh-6rem)] w-full max-w-[28rem] overflow-y-auto rounded-[var(--radius-card)] border border-[var(--color-rule)] bg-[var(--color-paper)] p-3 shadow-3 xl:hidden"
             >
               <ul>
                 {portfolio.nav.map((item, index) => {

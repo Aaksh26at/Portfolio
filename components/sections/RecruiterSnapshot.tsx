@@ -7,10 +7,10 @@ import { Stat } from '@/components/ui/Stat'
 export function RecruiterSnapshot() {
   const churn = portfolio.projects.find((project) => project.slug === 'customer-churn-prediction')
   const metrics = [
-    { value: '96%', label: 'Clinical classification accuracy' },
-    { value: '0.84', label: 'ROC-AUC on churn prediction' },
-    { value: '<200ms', label: 'Fire-index API inference' },
-    { value: '4', label: 'Documented data systems' },
+    { value: '97.07%', label: 'Malignant recall vs 0% baseline' },
+    { value: '80.4%', label: 'Churners caught vs 0% baseline' },
+    { value: '0.938', label: 'ROC-AUC on fire risk' },
+    { value: '5', label: 'Documented data systems' },
   ]
 
   return (
