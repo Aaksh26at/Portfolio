@@ -97,7 +97,7 @@ def main():
         "https://github.com/Aaksh26at/Algerian_Fire_Forest",
         "https://github.com/Aaksh26at",
         "https://linkedin.com/in/aakshatagarwal",
-        "https://portfolio-seven-lemon-63.vercel.app",
+        "https://aakshatagarwal.vercel.app",
         "mailto:aakshatagarwal2004@gmail.com",
     ):
         if expected not in uris:

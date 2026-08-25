@@ -203,8 +203,8 @@ story += [
         '<link href="https://linkedin.com/in/aakshatagarwal">'
         "linkedin.com/in/aakshatagarwal</link> | "
         '<link href="https://github.com/Aaksh26at">github.com/Aaksh26at</link> | '
-        '<link href="https://portfolio-seven-lemon-63.vercel.app">'
-        "portfolio-seven-lemon-63.vercel.app</link>",
+        '<link href="https://aakshatagarwal.vercel.app">'
+        "aakshatagarwal.vercel.app</link>",
         CONTACT,
     ),
     Spacer(1, 4),
