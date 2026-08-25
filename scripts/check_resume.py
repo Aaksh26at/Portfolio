@@ -86,6 +86,33 @@ def main():
     if "Resume Analyzer" in text:
         failures.append("AI Resume Analyzer is back on the résumé — page will overflow")
 
+    # Links are checked as annotations, not as drawn text. A URL that is only
+    # painted looks identical on the page but is not clickable, and that is
+    # exactly the failure a reader would hit and the author would never see.
+    uris = {m.decode("latin-1") for m in re.findall(rb"/URI\s*\(([^)]*)\)", data)}
+    for expected in (
+        "https://github.com/Aaksh26at/jvvnl-bill-scraper",
+        "https://github.com/Aaksh26at/Cancer_Predict_streamlit",
+        "https://github.com/Aaksh26at/telco-churn-prediction",
+        "https://github.com/Aaksh26at/Algerian_Fire_Forest",
+        "https://github.com/Aaksh26at",
+        "https://linkedin.com/in/aakshatagarwal",
+        "https://portfolio-seven-lemon-63.vercel.app",
+        "mailto:aakshatagarwal2004@gmail.com",
+    ):
+        if expected not in uris:
+            failures.append(f"no clickable link annotation for {expected}")
+
+    # Each project link must also be readable on paper, where nothing is clickable.
+    for repo in (
+        "jvvnl-bill-scraper",
+        "Cancer_Predict_streamlit",
+        "telco-churn-prediction",
+        "Algerian_Fire_Forest",
+    ):
+        if f"GitHub: {repo}" not in text:
+            failures.append(f"project link for {repo} is not drawn as visible text")
+
     if failures:
         for f in failures:
             print(f"FAIL: {f}")
