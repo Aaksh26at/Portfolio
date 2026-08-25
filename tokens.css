@@ -185,8 +185,8 @@
    * Consumed by THREE.Color().setRGB(r, g, b, THREE.SRGBColorSpace),
    * which declares these as sRGB *input* and converts to linear
    * internally. Do not substitute linear-light values here. */
-  --world-point-size: 0.038;
-  --world-line-opacity: 0.16;
+  --world-point-size: 0.05;
+  --world-line-opacity: 0.26;
   --world-color-signal: 0.878 0.518 0.129;
   --world-color-data: 0.12 0.37 0.82;
   --world-color-ink: 0.149 0.129 0.114;
@@ -259,7 +259,7 @@
 
   --font-body-weight: 350;
 
-  --world-line-opacity: 0.24;
+  --world-line-opacity: 0.34;
   --world-color-signal: 0.98 0.68 0.3;
   --world-color-data: 0.42 0.62 1;
   --world-color-ink: 0.86 0.84 0.8;

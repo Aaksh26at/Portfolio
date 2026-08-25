@@ -387,17 +387,18 @@
 
   /* A soft vignette, not a wipe. The old 0.58-opacity horizontal paper
    * gradient hid most of the scene; the surface bands now supply the
-   * occlusion, so this only needs to settle the outer edges. */
+   * occlusion. Pulled back to 0.34 with a wider clear centre (60%), since
+   * the bands were dimming the world a second time on top of this. */
   .data-world::after {
     content: '';
     position: absolute;
     inset: 0;
     z-index: 2;
     background: radial-gradient(
-      120% 90% at 58% 42%,
+      130% 100% at 58% 42%,
       transparent 0%,
-      transparent 48%,
-      oklch(var(--color-paper-lch) / 0.55) 100%
+      transparent 60%,
+      oklch(var(--color-paper-lch) / 0.34) 100%
     );
   }
 

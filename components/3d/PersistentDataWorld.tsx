@@ -7,6 +7,14 @@ import * as THREE from 'three'
 const POINT_COUNT = 168
 const STAGE_COUNT = 6
 
+/* Idle spin, radians/second, indexed by stage. The volumetric formations
+ * (sphere, clusters, rings, helix) turn continuously — without it the
+ * scene freezes into a flat dot field the moment the pointer stops, and
+ * sizeAttenuation alone leaves the eye nothing to read depth from.
+ * Stages 4 and 5 are flat XY figures (grid, monogram), so they hold at 0
+ * and settle face-on rather than rotating edge-on into illegibility. */
+const STAGE_SPIN = [0.09, 0.075, 0.06, 0.085, 0, 0] as const
+
 type PointerState = { x: number; y: number }
 
 function seeded(index: number, salt: number) {
@@ -131,6 +139,11 @@ function DataWorldScene({
 }) {
   const groupRef = useRef<THREE.Group>(null)
   const ringRef = useRef<THREE.Group>(null)
+  // Spin accumulates, tilt damps, and the two are summed. Damping toward
+  // an ever-growing target would just fight the spin and stall it at a
+  // fixed lag behind itself.
+  const spinRef = useRef(0)
+  const tiltRef = useRef({ x: 0, y: 0 })
   const pointsGeometryRef = useRef<THREE.BufferGeometry>(null)
   const linesGeometryRef = useRef<THREE.BufferGeometry>(null)
   const { viewport } = useThree()
@@ -198,8 +211,18 @@ function DataWorldScene({
     const targetScale = wide ? [1, 0.94, 0.94, 1.06, 0.98, 1.04][stage] : 0.78
     group.position.x = THREE.MathUtils.damp(group.position.x, targetX, 3.5, delta)
     group.position.y = THREE.MathUtils.damp(group.position.y, pointerRef.current.y * -0.18, 4, delta)
-    group.rotation.x = THREE.MathUtils.damp(group.rotation.x, pointerRef.current.y * -0.1, 4, delta)
-    group.rotation.y = THREE.MathUtils.damp(group.rotation.y, pointerRef.current.x * 0.14, 4, delta)
+    const spinRate = STAGE_SPIN[stage]
+    if (spinRate > 0) {
+      spinRef.current += delta * spinRate
+    } else {
+      // Unwind to the nearest whole turn so flat stages arrive face-on.
+      const faceOn = Math.round(spinRef.current / (Math.PI * 2)) * Math.PI * 2
+      spinRef.current = THREE.MathUtils.damp(spinRef.current, faceOn, 2.2, delta)
+    }
+    tiltRef.current.x = THREE.MathUtils.damp(tiltRef.current.x, pointerRef.current.y * -0.1, 4, delta)
+    tiltRef.current.y = THREE.MathUtils.damp(tiltRef.current.y, pointerRef.current.x * 0.14, 4, delta)
+    group.rotation.x = tiltRef.current.x
+    group.rotation.y = spinRef.current + tiltRef.current.y
     group.scale.setScalar(THREE.MathUtils.damp(group.scale.x, targetScale, 3.5, delta))
 
     if (ringRef.current) {
@@ -248,17 +271,17 @@ function DataWorldScene({
 
       <mesh>
         <icosahedronGeometry args={[0.62, 1]} />
-        <meshBasicMaterial color={palette.ink} wireframe transparent opacity={0.22} depthWrite={false} />
+        <meshBasicMaterial color={palette.ink} wireframe transparent opacity={0.38} depthWrite={false} />
       </mesh>
 
       <group ref={ringRef}>
         <mesh rotation={[0, 0, 0.45]}>
-          <torusGeometry args={[2.7, 0.008, 3, 96]} />
-          <meshBasicMaterial color={palette.ink} transparent opacity={0.14} depthWrite={false} />
+          <torusGeometry args={[2.7, 0.011, 3, 96]} />
+          <meshBasicMaterial color={palette.ink} transparent opacity={0.26} depthWrite={false} />
         </mesh>
         <mesh rotation={[1.05, 0.35, -0.2]}>
-          <torusGeometry args={[1.72, 0.01, 3, 80]} />
-          <meshBasicMaterial color={palette.signal} transparent opacity={0.3} depthWrite={false} />
+          <torusGeometry args={[1.72, 0.013, 3, 80]} />
+          <meshBasicMaterial color={palette.signal} transparent opacity={0.44} depthWrite={false} />
         </mesh>
       </group>
     </group>
