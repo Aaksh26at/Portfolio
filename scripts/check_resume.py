@@ -44,6 +44,45 @@ def drawn_text(stream):
     return " ".join(f[1:-1] for f in frags)
 
 
+def link_box_collisions():
+    """Catch link annotations that close over the text line above them.
+
+    ReportLab sizes a link's clickable box from its baseline up by a full font
+    size, which is taller than a tightly-led line. Nothing is drawn, so the
+    rendered page looks perfect and every text check here passes — but viewers
+    that outline links rule a line through the neighbouring text, which is how
+    this was found: by eye, in a PDF reader, after it had shipped.
+    """
+    try:
+        import pymupdf
+    except ImportError:
+        return ["pymupdf is needed to check link boxes — pip install pymupdf"]
+
+    page = pymupdf.open(PDF)[0]
+    spans = [
+        (s["bbox"][1], s["bbox"][3], s["text"].strip())
+        for b in page.get_text("dict")["blocks"]
+        for line in b.get("lines", [])
+        for s in line["spans"]
+        if s["text"].strip()
+    ]
+
+    out = []
+    for link in page.get_links():
+        uri, box = link.get("uri"), link["from"]
+        if not uri:
+            continue
+        for top, bottom, text in spans:
+            # Its own line starts at or below the box top; anything whose
+            # bottom edge falls inside the box is a line it has swallowed.
+            if box.y0 < bottom <= box.y1 and top < box.y0:
+                out.append(
+                    f"link box for {uri} (top {box.y0:.2f}) overlaps {text[:34]!r} "
+                    f"above it (bottom {bottom:.2f}) — increase the leading"
+                )
+    return out
+
+
 def main():
     if not PDF.exists():
         sys.exit(f"FAIL: {PDF} does not exist — run scripts/generate_resume.py")
@@ -112,6 +151,8 @@ def main():
     ):
         if f"GitHub: {repo}" not in text:
             failures.append(f"project link for {repo} is not drawn as visible text")
+
+    failures += link_box_collisions()
 
     if failures:
         for f in failures:

@@ -59,8 +59,15 @@ NAME = ParagraphStyle(
 TITLE = ParagraphStyle(
     "title", fontName="Helvetica", fontSize=9.8, leading=12, alignment=TA_CENTER
 )
+# leading is 12, not the 10 the rest of the header would suggest, because these
+# two lines are the only wrapped-in-links text on the page. ReportLab gives a
+# link annotation a box reaching a full font size ABOVE its own baseline, so at
+# leading 10 each line's boxes closed over the descenders of the line above it.
+# The page itself draws nothing there — but viewers that outline links then rule
+# a line straight through "Data Analyst" and "Jaipur, Rajasthan, India".
+# `check_resume.py` fails the build if these boxes ever collide again.
 CONTACT = ParagraphStyle(
-    "contact", fontName="Helvetica", fontSize=8.1, leading=10, alignment=TA_CENTER
+    "contact", fontName="Helvetica", fontSize=8.1, leading=12, alignment=TA_CENTER
 )
 SECTION = ParagraphStyle(
     "section", fontName="Helvetica-Bold", fontSize=9.8, leading=12, spaceBefore=7.5
@@ -189,6 +196,8 @@ story = []
 story += [
     Paragraph("Aakshat Agarwal", NAME),
     Paragraph("Data Analyst", TITLE),
+    # Clears the title of the first contact line's link boxes — see CONTACT.
+    Spacer(1, 2),
     # The header URLs were already spelled out but were dead text in the PDF.
     # They are linked here and left black: the text is visibly a URL already,
     # so colouring it would change the look without telling a reader anything.
