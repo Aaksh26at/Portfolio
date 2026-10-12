@@ -52,11 +52,13 @@ export const metadata: Metadata = {
     title: siteConfig.title,
     description: siteConfig.description,
     siteName: siteConfig.name,
+    images: ['/opengraph-image'],
   },
   twitter: {
     card: 'summary_large_image',
     title: siteConfig.title,
     description: siteConfig.description,
+    images: ['/opengraph-image'],
   },
   robots: {
     index: true,
@@ -79,10 +81,12 @@ function StructuredData() {
   const person = {
     '@context': 'https://schema.org',
     '@type': 'Person',
+    '@id': `${siteConfig.url}/#person`,
     name: portfolio.person.name,
     jobTitle: 'Data Analyst, AI/ML and Python Developer',
     email: `mailto:${portfolio.person.email}`,
     url: siteConfig.url,
+    mainEntityOfPage: siteConfig.url,
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Jaipur',
@@ -102,8 +106,10 @@ function StructuredData() {
   const website = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
+    '@id': `${siteConfig.url}/#website`,
     name: siteConfig.name,
     url: siteConfig.url,
+    publisher: { '@id': `${siteConfig.url}/#person` },
   }
   return (
     <script

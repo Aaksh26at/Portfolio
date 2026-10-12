@@ -1,26 +1,22 @@
-/** The deployed home of this site. Used as the production fallback below. */
-export const PRODUCTION_URL = 'https://aakshatagarwal.vercel.app'
+/** The canonical public domain for this site. */
+export const PRODUCTION_URL = 'https://aakshat.in'
 
 /**
- * `NEXT_PUBLIC_SITE_URL` wins where it is set, but it must not be the only
- * thing standing between production and a wrong absolute URL. It was unset on
- * Vercel through 2026-08-25, so the old `?? 'http://localhost:3000'` fallback
- * shipped: robots.txt pointed crawlers at `http://localhost:3000/sitemap.xml`,
- * and every `<loc>` in the sitemap named localhost too. Nothing errored — the
- * build is identical either way, and the damage is only visible in the
- * response. Falling back per environment keeps a missing variable from being
- * publishable again.
+ * Production always emits the canonical domain, even if the hosting provider
+ * exposes a preview URL. Local development can override localhost when needed.
  */
-const fallbackUrl =
-  process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : PRODUCTION_URL
+const siteUrl =
+  process.env.NODE_ENV === 'development'
+    ? process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
+    : PRODUCTION_URL
 
 /** Site-wide constants used for SEO metadata, sitemap and structured data. */
 export const siteConfig = {
   name: 'Aakshat Agarwal',
-  title: 'Aakshat Agarwal | Data Analyst, AI/ML and Python Developer',
+  title: 'Aakshat Agarwal | Data Analyst & Python Developer in Jaipur',
   description:
-    'Portfolio of Aakshat Agarwal, a Jaipur-based data and technology professional working with Python, SQL, machine learning, data analytics, business intelligence, Flask, cloud tools and data pipelines.',
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? fallbackUrl,
+    'Aakshat Agarwal is a data analyst and Python developer in Jaipur, India. Explore his machine learning, analytics, automation and data engineering projects.',
+  url: siteUrl,
   keywords: [
     'Aakshat Agarwal',
     'Data Analyst Jaipur',
