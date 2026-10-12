@@ -92,7 +92,7 @@ All optional — copy [`.env.example`](.env.example) to `.env.local` to use them
 | `CONTACT_FROM_EMAIL` | Verified Resend "from" address. |
 | `CONTACT_TO_EMAIL` | Where messages are delivered (defaults to Aakshat's email). |
 | `NEXT_PUBLIC_GA_ID` | Google Analytics 4 ID (`G-XXXX…`). Analytics is off unless set. |
-| `NEXT_PUBLIC_SITE_URL` | Optional local development URL for absolute SEO/OG links. Production uses the canonical `https://aakshat.in` URL in `lib/site.ts`. |
+| `NEXT_PUBLIC_SITE_URL` | Optional local development URL for absolute SEO/OG links. Production uses the canonical `https://www.aakshat.in` URL in `lib/site.ts`. |
 
 > Secrets are **never** committed or exposed to the browser — only `NEXT_PUBLIC_*` values reach the client, by design.
 

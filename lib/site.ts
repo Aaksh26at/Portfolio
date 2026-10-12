@@ -1,5 +1,5 @@
 /** The canonical public domain for this site. */
-export const PRODUCTION_URL = 'https://aakshat.in'
+export const PRODUCTION_URL = 'https://www.aakshat.in'
 
 /**
  * Production always emits the canonical domain, even if the hosting provider
