@@ -1,4 +1,4 @@
-import { ArrowDownRight, MapPin } from 'lucide-react'
+import { ArrowDownRight, Github, Linkedin, MapPin } from 'lucide-react'
 import { portfolio } from '@/data/portfolio'
 import { MagneticButton } from '@/components/ui/MagneticButton'
 import { ResumeButton } from '@/components/ui/ResumeButton'
@@ -6,6 +6,9 @@ import { Reveal } from '@/components/ui/Reveal'
 
 export function Hero() {
   const { hero, person } = portfolio
+  const profileLinks = person.socials.filter(
+    (social) => social.icon === 'github' || social.icon === 'linkedin',
+  )
 
   return (
     <section
@@ -31,8 +34,11 @@ export function Hero() {
         <div className="mt-auto max-w-[72rem] pt-24">
           <Reveal variant="mask-wipe" amount={0.3}>
             <h1 className="font-display text-[length:var(--text-marquee)] font-bold leading-[0.9] tracking-[var(--track-display-tight)] text-ink">
-              I turn raw data into working decisions.
+              {person.name}
             </h1>
+            <p className="mt-6 max-w-4xl font-display text-[length:var(--text-display-s)] font-bold leading-[1.05] tracking-[var(--track-display-tight)] text-ink">
+              {person.role}
+            </p>
           </Reveal>
         </div>
 
@@ -65,6 +71,24 @@ export function Hero() {
               </MagneticButton>
               <ResumeButton variant="ghost" />
             </div>
+            <nav className="mt-7 flex flex-wrap gap-3" aria-label="Professional profiles">
+              {profileLinks.map((social) => {
+                const Icon = social.icon === 'github' ? Github : Linkedin
+                return (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${person.name} on ${social.label}`}
+                    className="inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-pill)] border border-[var(--color-control-rule)] px-4 text-sm font-medium text-ink transition-colors duration-200 hover:border-signal hover:text-signal-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal-strong"
+                  >
+                    <Icon className="h-4 w-4" aria-hidden="true" />
+                    {social.label}
+                  </a>
+                )
+              })}
+            </nav>
             <p className="mt-6 text-xs leading-relaxed text-ink-faint">
               Python · SQL · Machine learning · Five documented systems
             </p>
