@@ -74,7 +74,7 @@ export interface ExperienceItem {
   role: string
   organisation: string
   location: string
-  /** Human-readable range, e.g. 'May 2026 — Present'. */
+  /** Human-readable range, e.g. 'March 2026 — Present'. */
   period: string
   /** What the role actually produced. One claim per bullet, no padding. */
   highlights: string[]

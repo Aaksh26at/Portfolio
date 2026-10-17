@@ -57,7 +57,7 @@ export const portfolio: PortfolioData = {
       'Based in Jaipur, India',
       'Open to opportunities',
       'Python · SQL · Machine Learning · Power BI',
-      'Currently a Data / CRM Executive at Kalash Group',
+      'Building AI automations at Kalash Group',
     ],
     floatingMetrics: [
       { value: '97%', label: 'Malignant recall' },
@@ -547,13 +547,15 @@ export const portfolio: PortfolioData = {
   // that exists belongs here.
   experience: [
     {
-      role: 'Data / CRM Executive',
+      role: 'AI Automation Developer',
       organisation: 'Kalash Group',
       location: 'Jaipur, Rajasthan, India',
-      period: 'May 2026 — Present',
+      period: 'March 2026 — Present',
       highlights: [
-        'Built and maintained CRM lead-tracking reports, consolidating scattered lead data into structured trackers for sales follow-up and reporting.',
-        'Developed a Python automation that retrieves and digitises electricity bill data, turning a repetitive manual task into a scheduled pipeline that outputs clean records.',
+        'Use ChatGPT and Claude Code to design and build automations for repetitive business workflows.',
+        'Built software integrated with Tally to create accounting entries and support related accounting workflows.',
+        'Built a Moneycontrol automation that uses bulk templates to add or sell shares.',
+        'Delivered two additional internal automation projects for Kalash Group.',
       ],
     },
   ],
