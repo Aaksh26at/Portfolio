@@ -195,7 +195,7 @@ story = []
 # Header
 story += [
     Paragraph("Aakshat Agarwal", NAME),
-    Paragraph("Data Analyst", TITLE),
+    Paragraph("AI Automation Developer | Data Analyst", TITLE),
     # Clears the title of the first contact line's link boxes — see CONTACT.
     Spacer(1, 2),
     # The header URLs were already spelled out but were dead text in the PDF.
@@ -212,8 +212,8 @@ story += [
         '<link href="https://linkedin.com/in/aakshatagarwal">'
         "linkedin.com/in/aakshatagarwal</link> | "
         '<link href="https://github.com/Aaksh26at">github.com/Aaksh26at</link> | '
-        '<link href="https://aakshatagarwal.vercel.app">'
-        "aakshatagarwal.vercel.app</link>",
+        '<link href="https://www.aakshat.in">'
+        "www.aakshat.in</link>",
         CONTACT,
     ),
     Spacer(1, 4),
@@ -222,10 +222,10 @@ story += [
 story += section("PROFESSIONAL SUMMARY")
 story += [
     Paragraph(
-        "Data analyst with hands-on experience turning raw data into reports and "
-        "decisions using Python, SQL and Excel. Built data pipelines, dashboards and "
-        "machine-learning models across academic and work projects. Seeking a data "
-        "analyst role where I can deliver clear, actionable insights.",
+        "AI Automation Developer at Kalash Group, building internal tools with ChatGPT, "
+        "Claude Code and software integrations to reduce repetitive work. Built Tally-"
+        "integrated accounting software and a Moneycontrol share-trading workflow. "
+        "Also experienced in Python, SQL, analytics and machine-learning projects.",
         BODY,
     )
 ]
@@ -242,13 +242,12 @@ for label, items in [
     story.append(Paragraph(f"<b>{label}:</b>  {items}", BODY))
 
 story += section("EXPERIENCE")
-story += entry("Data / CRM Executive — Kalash Group, Jaipur", date="May 2026 – Present")
+story += entry("AI Automation Developer | Kalash Group, Jaipur", date="March 2026 - Present")
 story += bullets(
-    "Built and maintained CRM lead-tracking reports in Excel, consolidating scattered "
-    "lead data into structured trackers for sales follow-up and reporting.",
-    "Developed a Python automation tool to retrieve and digitize electricity bill data, "
-    "cutting a manual, repetitive task down to an automated pipeline that outputs clean "
-    "Excel records.",
+    "Use ChatGPT and Claude Code to build internal automations for repetitive business workflows.",
+    "Built software integrated with Tally to create accounting entries and automate related work.",
+    "Built a Moneycontrol automation to add or sell shares using bulk templates.",
+    "Delivered two additional internal automation projects for Kalash Group.",
 )
 
 story += section("PROJECTS")

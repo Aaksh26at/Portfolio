@@ -113,6 +113,10 @@ def main():
         "Fire Risk Classification",
         "Electricity Bill Data Scraper",
         "Kalash Group",
+        "AI Automation Developer",
+        "March 2026",
+        "Tally",
+        "Moneycontrol",
         "97.07%",
         "0.845 ROC-AUC",
         "0.938 ROC-AUC",
@@ -136,7 +140,7 @@ def main():
         "https://github.com/Aaksh26at/Algerian_Fire_Forest",
         "https://github.com/Aaksh26at",
         "https://linkedin.com/in/aakshatagarwal",
-        "https://aakshatagarwal.vercel.app",
+        "https://www.aakshat.in",
         "mailto:aakshatagarwal2004@gmail.com",
     ):
         if expected not in uris:
