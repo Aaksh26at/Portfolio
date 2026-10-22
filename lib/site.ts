@@ -13,14 +13,17 @@ const siteUrl =
 /** Site-wide constants used for SEO metadata, sitemap and structured data. */
 export const siteConfig = {
   name: 'Aakshat Agarwal',
-  title: 'Aakshat Agarwal | Data Analyst & Python Developer in Jaipur',
+  title: 'Aakshat Agarwal | AI Automation Developer & Data Analyst',
   description:
-    'Aakshat Agarwal is a data analyst and Python developer in Jaipur, India. Explore his machine learning, analytics, automation and data engineering projects.',
+    'Aakshat Agarwal is an AI Automation Developer at Kalash Group and a Data Analyst in Jaipur, India. He builds business automations, Tally-integrated tools, Moneycontrol workflows and data-driven applications.',
   url: siteUrl,
   keywords: [
     'Aakshat Agarwal',
+    'AI Automation Developer Jaipur',
     'Data Analyst Jaipur',
     'Python Developer Jaipur',
+    'Tally Automation',
+    'Moneycontrol Automation',
     'AI ML Fresher',
     'Data Science Portfolio',
     'Machine Learning Developer',
