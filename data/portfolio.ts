@@ -47,12 +47,12 @@ export const portfolio: PortfolioData = {
 
   hero: {
     availability: 'Available for Data, AI/ML and Python opportunities',
-    heading: 'Turning data into',
-    headingAccent: 'intelligent, actionable products.',
+    heading: 'AI Automation Developer',
+    headingAccent: 'at Kalash Group.',
     supportingHeading:
-      'I build data-driven applications, predictive models and analytical experiences.',
+      'Building business automations with Python, ChatGPT and Claude Code.',
     paragraph:
-      "I'm Aakshat Agarwal, a data and technology professional from Jaipur working with Python, SQL, machine learning, business intelligence, cloud tools and backend technologies.",
+      "I'm Aakshat Agarwal, a Jaipur-based AI Automation Developer and Data Analyst. I build practical tools that reduce repetitive work—from Tally-integrated accounting entries to bulk share workflows in Moneycontrol.",
     trustIndicators: [
       'Based in Jaipur, India',
       'Open to opportunities',
