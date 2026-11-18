@@ -18,7 +18,7 @@ export const portfolio: PortfolioData = {
   person: {
     name: 'Aakshat Agarwal',
     initials: 'AA',
-    role: 'Data Analyst · AI/ML Enthusiast · Python Developer',
+    role: 'AI Automation Developer · Python Developer',
     supportingRole:
       'Desktop accounting systems, API integrations and deployed AI tools.',
     location: 'Jaipur, Rajasthan, India',
@@ -53,11 +53,11 @@ export const portfolio: PortfolioData = {
     supportingHeading:
       'Building desktop workflows, API integrations and deployed AI tools.',
     paragraph:
-      "I'm Aakshat Agarwal, a Jaipur-based AI Automation Developer and Data Analyst. I build practical tools that reduce repetitive work—from Tally-integrated accounting entries to bulk share workflows in Moneycontrol.",
+      "I'm Aakshat Agarwal, a Jaipur-based AI Automation Developer. I build Python software for real workflows: a TallyPrime accounting platform, a deployed job-search agent and document automation tools.",
     trustIndicators: [
       'Based in Jaipur, India',
       'Open to opportunities',
-      'Python · SQL · Machine Learning · Power BI',
+      'Python · Flask · PySide6 · TallyPrime',
       'Building AI automations at Kalash Group',
     ],
     floatingMetrics: [
