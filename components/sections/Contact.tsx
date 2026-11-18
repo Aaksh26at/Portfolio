@@ -13,6 +13,7 @@ export function Contact() {
   const { contact } = portfolio
   const [status, setStatus] = useState<Status>('idle')
   const [error, setError] = useState('')
+  const [uncertain, setUncertain] = useState(false)
   const [copied, setCopied] = useState(false)
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '', company: '' })
 
@@ -31,7 +32,10 @@ export function Contact() {
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
+    if (status === 'submitting') return
     setError('')
+    setStatus('idle')
+    setUncertain(false)
     if (form.company) {
       setStatus('success')
       return
@@ -52,10 +56,11 @@ export function Contact() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       })
-      const data = (await response.json()) as { ok: boolean; delivered?: boolean; error?: string }
+      const data = (await response.json()) as { ok: boolean; accepted?: boolean; reason?: string; error?: string }
       if (!response.ok || !data.ok) throw new Error(data.error ?? 'The message could not be sent. Try email instead.')
-      track('contact_submit')
-      setStatus(data.delivered ? 'success' : 'fallback')
+      if (data.accepted) track('contact_submit')
+      setUncertain(data.reason === 'delivery_uncertain')
+      setStatus(data.accepted ? 'success' : 'fallback')
     } catch (caught) {
       setStatus('error')
       setError(caught instanceof Error ? caught.message : 'The message could not be sent. Try email instead.')
@@ -120,7 +125,7 @@ export function Contact() {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} noValidate className="panel p-6 sm:p-9 lg:p-10" data-tone="raised" data-elev="3">
+        <form onSubmit={handleSubmit} aria-describedby="contact-status" aria-busy={status === 'submitting'} noValidate className="panel p-6 sm:p-9 lg:p-10" data-tone="raised" data-elev="3">
           <div className="absolute -left-[9999px]" aria-hidden="true">
             <label htmlFor="company">Company</label>
             <input id="company" name="company" type="text" tabIndex={-1} autoComplete="off" value={form.company} onChange={(event) => setForm({ ...form, company: event.target.value })} />
@@ -137,30 +142,31 @@ export function Contact() {
           <div className="mt-9 grid gap-5 sm:grid-cols-2">
             <div>
               <label htmlFor="name" className="mb-2 block text-sm font-medium text-ink">Name</label>
-              <input id="name" name="name" type="text" required aria-required="true" autoComplete="name" value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} className={inputBase} placeholder="Aarav Mehta" />
+              <input id="name" name="name" type="text" maxLength={120} required aria-required="true" autoComplete="name" value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} className={inputBase} placeholder="Aarav Mehta" />
             </div>
             <div>
               <label htmlFor="email" className="mb-2 block text-sm font-medium text-ink">Email address</label>
-              <input id="email" name="email" type="email" required aria-required="true" aria-invalid={Boolean(error) && !isValidEmail(form.email)} autoComplete="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} className={inputBase} placeholder="aarav@company.com" />
+              <input id="email" name="email" type="email" maxLength={254} required aria-required="true" aria-invalid={Boolean(error) && !isValidEmail(form.email)} autoComplete="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} className={inputBase} placeholder="aarav@company.com" />
             </div>
           </div>
 
           <div className="mt-5">
             <label htmlFor="subject" className="mb-2 block text-sm font-medium text-ink">Subject</label>
-            <input id="subject" name="subject" type="text" required aria-required="true" value={form.subject} onChange={(event) => setForm({ ...form, subject: event.target.value })} className={inputBase} placeholder="Data analyst role in Jaipur" />
+            <input id="subject" name="subject" type="text" maxLength={160} required aria-required="true" value={form.subject} onChange={(event) => setForm({ ...form, subject: event.target.value })} className={inputBase} placeholder="Python developer opportunity" />
           </div>
 
           <div className="mt-5">
             <label htmlFor="message" className="mb-2 block text-sm font-medium text-ink">Message</label>
-            <textarea id="message" name="message" required aria-required="true" rows={7} value={form.message} onChange={(event) => setForm({ ...form, message: event.target.value })} className={`${inputBase} min-h-40 resize-y`} placeholder="Share the role, problem or project context." />
+            <textarea id="message" name="message" maxLength={5000} required aria-required="true" rows={7} value={form.message} onChange={(event) => setForm({ ...form, message: event.target.value })} className={`${inputBase} min-h-40 resize-y`} placeholder="Share the role, problem or project context." />
           </div>
 
           <div className="min-h-7" id="contact-status">
             {error ? <p role="alert" className="mt-3 text-sm text-[var(--color-error)]">{error}</p> : null}
-            {status === 'success' ? <p role="status" className="mt-3 text-sm text-[var(--color-success)]">Your message was sent. I’ll reply as soon as I can.</p> : null}
+            {status === 'success' ? <p role="status" className="mt-3 text-sm text-[var(--color-success)]">Your message has been submitted. Thank you for getting in touch.</p> : null}
             {status === 'fallback' ? (
-              <p role="status" className="mt-3 text-sm text-ink-muted">Delivery is not configured on this deployment. <a href={mailtoHref} className="font-semibold text-signal-strong underline">Open this message in your email app</a>.</p>
+              <p role="status" className="mt-3 text-sm text-ink-muted">{uncertain ? 'We couldn’t confirm delivery.' : 'The form couldn’t send your message.'} Your message is still here. <a href={mailtoHref} className="font-semibold text-signal-strong underline">Open this message in your email app</a>.</p>
             ) : null}
+            {status === 'error' ? <p className="mt-3 text-sm text-ink-muted">Your message is still here. <a href={mailtoHref} className="font-semibold text-signal-strong underline">Send it using your email app</a>.</p> : null}
           </div>
 
           <button

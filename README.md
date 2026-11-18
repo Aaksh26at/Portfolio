@@ -140,9 +140,19 @@ The scene lives in [`components/3d/PersistentDataWorld.tsx`](components/3d/Persi
 
 ## 14. Contact-form configuration
 
-- **Without** `RESEND_API_KEY` / `CONTACT_FROM_EMAIL`: the form validates and returns a graceful fallback; the UI offers a pre-filled `mailto:` link so no message is lost.
-- **With** them set: messages are emailed to `CONTACT_TO_EMAIL` via Resend, with the sender's address as reply-to.
-- A hidden honeypot field blocks basic spam bots.
+In Vercel -> Portfolio -> Settings -> Environment Variables, set these for Production:
+
+- `RESEND_API_KEY`: a Resend sending key, stored only in hosting settings.
+- `CONTACT_FROM_EMAIL`: a sender allowed by that Resend account. A verified domain sender is preferred. The Resend onboarding sender can only send to the account owner's email.
+- `CONTACT_TO_EMAIL`: `aakshatagarwal2004@gmail.com`.
+
+Redeploy after changing variables. Render settings for the separate job agent do not automatically apply to this Vercel project. If reusing its allowed sender, that application's `ALERT_FROM` value maps to `CONTACT_FROM_EMAIL` here.
+
+The API validates JSON types, field lengths and total request size; a filled honeypot is dropped. It sends HTML-escaped and plain-text messages with the visitor as reply-to. This honeypot is basic bot filtering, not distributed rate limiting.
+
+`accepted: true` means Resend acknowledged the send request, not confirmed inbox delivery. Verify the test in Resend delivery logs and the recipient inbox. Failures return a non-sensitive reason (`not_configured`, `provider_error`, or `delivery_uncertain`); private message content and credentials are not logged. No automatic send retry occurs after uncertain delivery. The form preserves entered text and offers a prefilled email link when sending cannot be completed or confirmed.
+
+Run `node scripts/check_contact.cjs` for mocked route checks (no messages sent), then `npm run build`. After deployment, submit one clearly labelled test to the owner inbox and check receipt before treating delivery as verified.
 
 ## 15. Accessibility notes
 
