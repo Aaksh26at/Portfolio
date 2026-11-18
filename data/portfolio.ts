@@ -317,7 +317,7 @@ export const portfolio: PortfolioData = {
       approach:
         'Compared logistic regression and a random forest against an explicit never-churn baseline, both with balanced class weights, scored under repeated stratified cross-validation at 5 splits × 3 repeats. All preprocessing lives inside the pipeline so the scaler and encoder refit within each fold. Logistic regression ships — not because it wins on headline numbers, but for seven points more recall and coefficients a retention team can read.',
       technologies: ['Python', 'Scikit-learn', 'Pandas', 'Streamlit', 'Joblib'],
-      keyResult: '80.4% of churners caught, at roughly one real save per two calls',
+      keyResult: 'Offline evaluation: 0.845 ROC-AUC and 80.4% churn recall',
       achievements: [
         'Scored every model against a never-churn baseline — 73.46% accuracy, 0% recall, 0.500 ROC-AUC — so the headline figures have something to beat.',
         'Logistic regression reached 0.8449 ± 0.0107 ROC-AUC, 80.35% ± 2.16 recall on churners and 74.71% accuracy under repeated stratified cross-validation.',

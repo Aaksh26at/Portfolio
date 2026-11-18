@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, ExternalLink, Github } from 'lucide-react'
 import { portfolio } from '@/data/portfolio'
+import { projectResults } from '@/data/project-results'
 import { Badge } from '@/components/ui/Badge'
 import { MagneticButton } from '@/components/ui/MagneticButton'
 import { Reveal } from '@/components/ui/Reveal'
@@ -93,6 +94,7 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
                   <p className="mt-3 font-display text-2xl font-bold leading-snug tracking-[var(--track-display)] text-ink">
                     {project.keyResult}
                   </p>
+                  {projectResults[project.slug] ? <p className="mt-4 max-w-3xl text-sm leading-relaxed text-ink-muted">{projectResults[project.slug].context}</p> : null}
                   <ul className="mt-5 flex flex-wrap gap-2">
                     {project.technologies.map((technology) => (
                       <li key={technology}>

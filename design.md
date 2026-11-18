@@ -18,7 +18,7 @@ Use generous margins, fine rules and moderately rounded containers. Avoid decora
 
 ## Visitor journey
 
-Introduction and resume actions -> four selected projects -> professional experience -> skills -> about and education -> contact. Earlier projects and certifications remain accessible in native disclosure elements. Public case-study routes remain intact.
+Introduction and resume actions -> compact recruiter summary -> four selected projects -> professional experience -> skills -> about and education -> contact. Earlier projects and certifications remain accessible in native disclosure elements. Public case-study routes remain intact.
 
 The header has four section links, contact and the existing theme toggle. Below 1024px it becomes a disclosure menu, closes on Escape/outside click/link activation and restores focus to its trigger on Escape. It does not trap focus or lock scrolling because it is not a modal.
 
@@ -31,3 +31,7 @@ New composition styles live in app/redesign.css; tokens.css remains authoritativ
 ## Accessibility and motion
 
 Native links/buttons/summary controls, visible focus, minimum 44px control targets and explicit control names. Important hero/project content is visible without entrance animation. The existing reduced-motion setting and persisted theme remain supported. Do not claim visual browser QA when preview infrastructure is unavailable.
+
+## Recruiter evidence
+
+Keep the recruiter summary compact and based on profile data. Each featured project shows a short deliverable summary, two technical metrics and context. Coverage counts and offline evaluation are labeled explicitly. Any future business impact number needs a recorded measurement; do not infer hours saved from workflow coverage.

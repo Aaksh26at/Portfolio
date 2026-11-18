@@ -8,10 +8,10 @@ A compact portfolio with cool neutral surfaces, cobalt and mint accents, clear p
 
 ## 1. Project overview
 
-The current UI uses a compact technical-studio layout: `Introduction`, filterable `SelectedWork`, experience, skills, `Background` (including education and certification disclosures), and contact. Shared composition styles live in `app/redesign.css`; see `design.md` for the current visual contract. The original long-form homepage sections remain in source for reference.
+The current UI uses a compact technical-studio layout: `Introduction`, a compact `RecruiterBrief`, filterable `SelectedWork`, experience, skills, `Background` (including education and certification disclosures), and contact. Shared composition styles live in `app/redesign.css`; see `design.md` for the current visual contract. The original long-form homepage sections remain in source for reference.
 
 - Single-page experience (`/`) with smooth in-page navigation, plus dynamic project **case-study pages** (`/projects/[slug]`).
-- All content lives in **one typed file**: [`data/portfolio.ts`](data/portfolio.ts). Edit it to update text — no component changes needed.
+- Main profile content lives in the typed file: [`data/portfolio.ts`](data/portfolio.ts). Edit it to update text — no component changes needed.
 - The design system is locked in [`design.md`](design.md), with [`tokens.css`](tokens.css) as the authoritative source of values.
 - Works **without WebGL** (static fallback), **without JavaScript** for core content, and respects **reduced-motion**.
 - The contact form works **with or without** an email service (graceful `mailto:` fallback).
@@ -137,6 +137,12 @@ The scene lives in [`components/3d/PersistentDataWorld.tsx`](components/3d/Persi
 - Pointer parallax is gated behind `(hover: hover) and (pointer: fine)`, and narrow viewports collapse the horizontal offset in `useFrame`.
 - Missing WebGL **or** `prefers-reduced-motion: reduce` → the canvas is never created and the CSS fallback renders instead.
 - The material palette refreshes on the `portfolio-theme-change` event without rebuilding the scene.
+
+## Recruiter summary and project results
+
+`RecruiterBrief` uses the existing target-role list, current employment and location, with tracked resume and contact actions. `data/project-results.ts` holds the four featured projects' technical outcome summaries, metric labels and evaluation context. `ProjectResults` renders these on the homepage, and the same context appears on each case study.
+
+Published results describe implemented workflow coverage, supported document formats, tests and offline model evaluation. No measured time-saving, revenue, hiring or retention claim has been added. Keep implementation metrics distinct from business outcomes when updating these entries.
 
 ## Visitor analytics (GA4)
 
