@@ -140,7 +140,9 @@ The scene lives in [`components/3d/PersistentDataWorld.tsx`](components/3d/Persi
 
 ## Visitor analytics (GA4)
 
-Analytics stays off until `NEXT_PUBLIC_GA_ID` is a valid GA4 Measurement ID. Create a Google Analytics property and Web data stream for `https://www.aakshat.in`, then copy its `G-...` Measurement ID. In Vercel -> Portfolio -> Production environment variables, add `NEXT_PUBLIC_GA_ID` as a Config value and redeploy. This public identifier is compiled into the browser bundle; changing the hosting variable requires a new build.
+The owner's production Web stream is configured with the public Measurement ID `G-TNQELT3EQT` in `.env.production`. It is not a secret or API credential. Development has no ID by default. Vercel's `NEXT_PUBLIC_GA_ID` setting, if present, overrides the file; changing the ID requires a new production build. To disable tracking, set that environment variable to an empty value and rebuild. The helper renders no tracking for empty or invalid IDs.
+
+For a replacement property, create a Google Analytics Web data stream for `https://www.aakshat.in` and use its `G-...` Measurement ID.
 
 Keep Enhanced Measurement page views and browser-history page changes enabled for Next.js navigation. Our code initializes the Google tag once per document; it does not send additional manual `page_view` events. The three portfolio events are:
 
