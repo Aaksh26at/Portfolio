@@ -20,7 +20,7 @@ export function DataPipeline() {
           scale="md"
           align="center"
           mark="none"
-          description="Reliability comes before modelling. The path stays visible from the first row of raw data to the final prediction, dashboard or API response."
+          description="Make inputs, rules and review decisions visible. The same discipline connects accounting documents, job feeds and analytical datasets to useful software."
         />
 
         <ol className="relative mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-7 lg:gap-4">

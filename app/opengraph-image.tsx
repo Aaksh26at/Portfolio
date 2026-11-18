@@ -69,7 +69,7 @@ export default function OpenGraphImage() {
               fontSize: 19,
             }}
           >
-            {['Machine learning', 'Analytics', 'Backend engineering'].map((item, index) => (
+            {['Business automation', 'AI applications', 'Python engineering'].map((item, index) => (
               <div key={item} style={{ display: 'flex', gap: 10 }}>
                 <span style={{ color: '#3C5CE8' }}>0{index + 1}</span>
                 <span>{item}</span>

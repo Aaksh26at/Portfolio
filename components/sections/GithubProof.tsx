@@ -16,7 +16,7 @@ export function GithubProof() {
       <div className="container-page grid gap-10 lg:grid-cols-2 lg:gap-16">
         <div>
           <SectionHeading
-            title="Code is the audit trail."
+            title="Public work. Inspectable code."
             index={6}
             scale="lg"
             measure="wide"

@@ -14,7 +14,7 @@ export function About() {
     <section id="about" data-world="1" className="section surface surface--paper">
       <div className="container-page">
         <SectionHeading
-          title="Analysis is the start. The product is the finish."
+          title="Understand the workflow. Build the system."
           eyebrow="Working principle"
           index={1}
           scale="xl"

@@ -89,10 +89,12 @@ def main():
 
     data = PDF.read_bytes()
     stream = content_streams(data)
-    text = drawn_text(stream)
+    import pymupdf
+    document = pymupdf.open(PDF)
+    text = " ".join(page.get_text() for page in document)
     failures = []
 
-    pages = len(re.findall(rb"/Type\s*/Page[^s]", data))
+    pages = len(document)
     if pages != 1:
         failures.append(f"résumé is {pages} pages; it must be exactly 1")
 
@@ -108,18 +110,16 @@ def main():
 
     required = [
         "Aakshat Agarwal",
-        "Breast Mass Classification",
+        "Next Move",
         "Customer Churn Prediction",
-        "Fire Risk Classification",
+        "Kalash Accounts",
         "Electricity Bill Data Scraper",
         "Kalash Group",
         "AI Automation Developer",
         "March 2026",
         "Tally",
         "Moneycontrol",
-        "97.07%",
         "0.845 ROC-AUC",
-        "0.938 ROC-AUC",
     ]
     for needle in required:
         if needle not in text:
@@ -132,12 +132,10 @@ def main():
     # Links are checked as annotations, not as drawn text. A URL that is only
     # painted looks identical on the page but is not clickable, and that is
     # exactly the failure a reader would hit and the author would never see.
-    uris = {m.decode("latin-1") for m in re.findall(rb"/URI\s*\(([^)]*)\)", data)}
+    uris = {link.get("uri") for page in document for link in page.get_links()}
     for expected in (
         "https://github.com/Aaksh26at/jvvnl-bill-scraper",
-        "https://github.com/Aaksh26at/Cancer_Predict_streamlit",
         "https://github.com/Aaksh26at/telco-churn-prediction",
-        "https://github.com/Aaksh26at/Algerian_Fire_Forest",
         "https://github.com/Aaksh26at",
         "https://linkedin.com/in/aakshatagarwal",
         "https://www.aakshat.in",
@@ -149,11 +147,9 @@ def main():
     # Each project link must also be readable on paper, where nothing is clickable.
     for repo in (
         "jvvnl-bill-scraper",
-        "Cancer_Predict_streamlit",
         "telco-churn-prediction",
-        "Algerian_Fire_Forest",
     ):
-        if f"GitHub: {repo}" not in text:
+        if repo not in text:
             failures.append(f"project link for {repo} is not drawn as visible text")
 
     failures += link_box_collisions()

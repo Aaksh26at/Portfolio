@@ -1,4 +1,5 @@
 import type { PortfolioData } from '@/types'
+import { automationProjects } from './automation-projects'
 
 /* ============================================================================
    CENTRAL PORTFOLIO CONTENT
@@ -19,13 +20,13 @@ export const portfolio: PortfolioData = {
     initials: 'AA',
     role: 'Data Analyst · AI/ML Enthusiast · Python Developer',
     supportingRole:
-      'Building intelligent data products, predictive models, dashboards and scalable analytical solutions.',
+      'Desktop accounting systems, API integrations and deployed AI tools.',
     location: 'Jaipur, Rajasthan, India',
     email: 'aakshatagarwal2004@gmail.com',
     phone: '+91 79768 07739',
     resumePath: '/resume/aakshat-agarwal.pdf',
     summary:
-      'Aakshat Agarwal is a data and technology professional with skills in Python, SQL, business intelligence, predictive modelling, data analysis, ETL pipeline design, machine learning, cloud services, APIs and dashboard development. He has experience building end-to-end machine-learning applications, interactive dashboards, REST APIs, data-processing pipelines and statistical analyses, and is interested in contributing to data-driven teams that solve real-world business problems using technology.',
+      'AI Automation Developer at Kalash Group in Jaipur, building Python applications for business workflows. Work includes a PySide6 accounting platform integrated with TallyPrime, a deployed Gemini job-search agent, utility-bill automation and analytics projects. Focused on useful integrations, reviewable outputs and reliable delivery.',
     socials: [
       { label: 'GitHub', href: 'https://github.com/Aaksh26at', icon: 'github' },
       { label: 'LinkedIn', href: 'https://linkedin.com/in/aakshatagarwal', icon: 'linkedin' },
@@ -46,11 +47,11 @@ export const portfolio: PortfolioData = {
   ],
 
   hero: {
-    availability: 'Available for Data, AI/ML and Python opportunities',
+    availability: 'Open to junior Python and automation opportunities',
     heading: 'AI Automation Developer',
     headingAccent: 'at Kalash Group.',
     supportingHeading:
-      'Building business automations with Python, ChatGPT and Claude Code.',
+      'Building desktop workflows, API integrations and deployed AI tools.',
     paragraph:
       "I'm Aakshat Agarwal, a Jaipur-based AI Automation Developer and Data Analyst. I build practical tools that reduce repetitive work—from Tally-integrated accounting entries to bulk share workflows in Moneycontrol.",
     trustIndicators: [
@@ -60,47 +61,31 @@ export const portfolio: PortfolioData = {
       'Building AI automations at Kalash Group',
     ],
     floatingMetrics: [
-      { value: '97%', label: 'Malignant recall' },
-      { value: '0.938', label: 'Fire model ROC-AUC' },
-      { value: '5', label: 'Shipped projects' },
+      { value: '7', label: 'Employer boards integrated' },
+      { value: '96+', label: 'Job-agent automated checks' },
+      { value: '0.845', label: 'Churn model ROC-AUC' },
     ],
   },
 
   snapshot: {
-    roles: [
-      'Data Analyst',
-      'Data Scientist',
-      'AI/ML Engineer',
-      'Python Developer',
-      'Backend Developer',
-      'Data Engineer',
-    ],
+    roles: ['Junior Python Developer', 'Automation Developer', 'Python Backend Developer'],
     strengths: [
-      'Python & SQL',
-      'Machine-learning pipelines',
-      'Data cleaning & EDA',
-      'Predictive modelling',
-      'ETL pipelines',
-      'REST APIs',
-      'Power BI & Tableau',
-      'Cloud fundamentals',
-      'Business intelligence',
-      'Data-driven problem solving',
+      'Python & SQL', 'Flask & REST APIs', 'Desktop workflows with PySide6',
+      'TallyPrime HTTP/XML integration', 'Document processing', 'Gemini tool-calling agents',
+      'Supabase persistence', 'Automated regression checks',
     ],
     metrics: [
-      { value: '97.07%', label: 'Malignant recall vs 0% baseline' },
-      { value: '30', label: 'Clinical attributes analysed' },
-      { value: '0.9957', label: 'ROC-AUC, cancer classifier' },
-      { value: '<1s', label: 'Streamlit inference' },
-      { value: '0.938', label: 'Fire model ROC-AUC' },
-      { value: '5', label: 'Production-style projects' },
+      { value: '7', label: 'Job-agent employer boards' },
+      { value: '96+', label: 'Job-agent automated checks' },
+      { value: '3', label: 'Utility bill layouts parsed' },
+      { value: '0.845', label: 'Churn model ROC-AUC' },
     ],
   },
 
   about: {
     paragraphs: [
-      'I enjoy converting raw information into useful products, insights and automated solutions. My work spans data analysis, machine learning, dashboard development, API creation and data-pipeline design. I am especially interested in projects where analytical thinking and software development work together to solve a practical problem.',
-      'Alongside technical development, I am strengthening my understanding of AI, machine learning, Python, SQL, data engineering and backend systems through continuous learning and project-based practice.',
+      'At Kalash Group, I build Python applications around everyday accounting and operational work. Kalash Accounts combines bank statements, broker contract notes, rent invoices and inter-company reconciliation with a review interface and TallyPrime integration.',
+      'My personal work includes Next Move, a deployed AI job-search workspace with persistent application tracking and daily email digests. I also build document automation and data-analysis projects, and practise the Python, SQL and software fundamentals behind them.',
     ],
     personalDetails: [
       'Located in Jaipur, India',
@@ -112,12 +97,13 @@ export const portfolio: PortfolioData = {
   },
 
   projects: [
+    ...automationProjects,
     {
       slug: 'breast-cancer-prediction',
       title: 'Breast Cancer Prediction Web App',
       year: '2025',
       status: 'shipped',
-      featured: true,
+      featured: false,
       tagline: 'Classifying breast masses where a missed cancer costs more than a false alarm.',
       description:
         'A Streamlit classifier that labels a breast mass malignant or benign from 30 cell-nucleus measurements, tuned so that the errors it makes are the cheaper kind.',
@@ -257,7 +243,7 @@ export const portfolio: PortfolioData = {
       title: 'Fire Risk Classification from Weather',
       year: '2025',
       status: 'shipped',
-      featured: true,
+      featured: false,
       tagline: 'Predicting Algerian fire days from weather alone, after removing the leakage.',
       description:
         'A Flask service that estimates the probability of a fire day in northern Algeria from six weather inputs, trained only on variables that are observed rather than derived from the label.',
@@ -393,7 +379,7 @@ export const portfolio: PortfolioData = {
       title: 'AI Resume Analyzer & Job-Description Matcher',
       year: '2026',
       status: 'shipped',
-      featured: true,
+      featured: false,
       tagline: 'NLP app scoring resume–job fit with a skill-gap report.',
       description:
         'An NLP application that scores how well a resume matches a job description and reports the exact skills to add.',
@@ -533,13 +519,13 @@ export const portfolio: PortfolioData = {
   ],
 
   pipeline: [
-    'Raw Data',
-    'Cleaning',
-    'Exploration',
-    'Feature Engineering',
-    'Model / Analysis',
-    'API / Dashboard',
-    'Insight / Prediction',
+    'Understand the workflow',
+    'Read the inputs',
+    'Validate and clean',
+    'Apply explicit rules',
+    'Review exceptions',
+    'Deliver the interface',
+    'Test the boundaries',
   ],
 
   // Real employment, stated no more strongly than the résumé states it. The
@@ -553,7 +539,7 @@ export const portfolio: PortfolioData = {
       period: 'March 2026 — Present',
       highlights: [
         'Use ChatGPT and Claude Code to design and build automations for repetitive business workflows.',
-        'Built software integrated with Tally to create accounting entries and support related accounting workflows.',
+        'Built a Python/PySide6 accounting application integrated with TallyPrime through HTTP/XML, covering bank statements, broker contract notes, rent invoicing and loan reconciliation.',
         'Built a Moneycontrol automation that uses bulk templates to add or sell shares.',
         'Delivered two additional internal automation projects for Kalash Group.',
       ],
@@ -669,7 +655,7 @@ export const portfolio: PortfolioData = {
         description:
           'Churn classifier over 7,043 customers catching 80.4% of churners, with the false-alarm cost reported rather than hidden.',
         tech: ['Python', 'Scikit-learn', 'Streamlit'],
-        url: '',
+        url: 'https://github.com/Aaksh26at/telco-churn-prediction',
       },
       {
         name: 'AI Resume Analyzer',

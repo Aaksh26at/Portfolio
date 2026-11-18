@@ -114,9 +114,10 @@ function ProjectPlate({
                 rel="noopener noreferrer"
                 className="link-underline inline-flex min-h-11 items-center gap-2 whitespace-nowrap text-sm text-ink-muted hover:text-ink"
               >
-                <ExternalLink className="h-4 w-4" aria-hidden="true" /> Demo
+                <ExternalLink className="h-4 w-4" aria-hidden="true" /> {project.links.demoLabel || 'Demo'}
               </a>
             ) : null}
+            {!project.links.github && project.links.sourceLabel ? <span className="text-xs text-ink-muted">{project.links.sourceLabel}</span> : null}
           </div>
         </div>
       </Panel>
@@ -126,6 +127,8 @@ function ProjectPlate({
 
 export function Projects() {
   const [selected, setSelected] = useState<Project | null>(null)
+  const featured = portfolio.projects.filter((project) => project.featured)
+  const otherProjects = portfolio.projects.filter((project) => !project.featured)
 
   const openProject = (project: Project) => {
     setSelected(project)
@@ -144,17 +147,17 @@ export function Projects() {
         <div className="mt-16 grid gap-12 lg:grid-cols-[minmax(18rem,0.55fr)_minmax(0,1.45fr)] lg:gap-14 xl:gap-20">
           <div className="self-start lg:sticky lg:top-32">
             <SectionHeading
-              title="Five systems. Five kinds of signal."
+              title="Real workflows. Working software."
               eyebrow="Selected systems"
               index={2}
               scale="lg"
               measure="wide"
-              description="Each chapter moves from an unreliable input to a decision someone can use—diagnosis, fire risk, retention, document matching, or a month of bills filed without anyone watching."
+              description="Accounting operations, a deployed AI agent, document automation and customer analytics. Each case study explains the implementation, the evidence and its limits."
             />
             <div className="mt-9">
               <Stat
-                value="05"
-                label="end-to-end project narratives"
+                value={String(featured.length).padStart(2, '0')}
+                label="featured project case studies"
                 tone="data"
                 size="md"
                 rule="top"
@@ -163,7 +166,7 @@ export function Projects() {
           </div>
 
           <div className="min-w-0 space-y-8 sm:space-y-12">
-            {portfolio.projects.map((project, index) => (
+            {featured.map((project, index) => (
               <ProjectPlate
                 key={project.slug}
                 project={project}
@@ -173,6 +176,23 @@ export function Projects() {
             ))}
           </div>
         </div>
+        {otherProjects.length ? (
+          <div className="mt-16 border-t border-[var(--color-rule)] pt-8">
+            <h3 className="font-display text-2xl font-bold text-ink">More experiments & earlier work</h3>
+            <p className="mt-3 text-sm text-ink-muted">Earlier case studies stay available, with their original evaluation context.</p>
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              {otherProjects.map((project) => (
+                <Panel key={project.slug} tone="outline" pad="sm">
+                  <a href={`/projects/${project.slug}`} className="group block min-h-11">
+                    <span className="font-display text-lg font-semibold text-ink">{project.title}</span>
+                    <p className="mt-3 text-sm leading-relaxed text-ink-muted">{project.tagline}</p>
+                    <span className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-ink">Read case study <ArrowUpRight className="h-4 w-4" aria-hidden="true" /></span>
+                  </a>
+                </Panel>
+              ))}
+            </div>
+          </div>
+        ) : null}
       </div>
 
       <AnimatePresence>

@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { Badge } from './Badge'
 import { Panel } from './Panel'
 
-type SignalId = 'diagnose' | 'forecast' | 'retain' | 'match' | 'file'
+type SignalId = 'accounts' | 'jobs' | 'retain' | 'file'
 
 const signals: Array<{
   id: SignalId
@@ -18,56 +18,10 @@ const signals: Array<{
   /** Which of the two output nodes this signal terminates at. */
   out: 'prediction' | 'report'
 }> = [
-  {
-    id: 'diagnose',
-    label: 'Diagnosis',
-    inputLabel: 'Clinical data',
-    source: '30 cell-nucleus features',
-    metric: '97.07%',
-    detail: 'malignant recall',
-    output: 'malignant / benign',
-    out: 'prediction',
-  },
-  {
-    id: 'forecast',
-    label: 'Fire risk',
-    inputLabel: 'Weather data',
-    source: '6 weather inputs',
-    metric: '0.938',
-    detail: 'ROC-AUC',
-    output: 'fire probability',
-    out: 'prediction',
-  },
-  {
-    id: 'retain',
-    label: 'Retention',
-    inputLabel: 'Customer data',
-    source: '7,043 customers',
-    metric: '80.4%',
-    detail: 'churners caught',
-    output: 'churn probability',
-    out: 'prediction',
-  },
-  {
-    id: 'match',
-    label: 'Job fit',
-    inputLabel: 'Document text',
-    source: 'resume + job text',
-    metric: 'TF-IDF',
-    detail: 'cosine similarity',
-    output: 'skill-gap report',
-    out: 'report',
-  },
-  {
-    id: 'file',
-    label: 'Bill filing',
-    inputLabel: 'Utility portal',
-    source: '34 utility accounts',
-    metric: '3',
-    detail: 'PDF layouts parsed',
-    output: 'ledger row + filed PDF',
-    out: 'report',
-  },
+  { id: 'accounts', label: 'Accounting', inputLabel: 'Accounting documents', source: 'Bank, broker and rent inputs', metric: 'HTTP/XML', detail: 'TallyPrime integration', output: 'reviewed vouchers + reports', out: 'report' },
+  { id: 'jobs', label: 'Job search', inputLabel: 'Jobs + resume facts', source: 'Public feeds + 7 employer boards', metric: '96+', detail: 'automated checks', output: 'tracked applications + digest', out: 'report' },
+  { id: 'file', label: 'Bill automation', inputLabel: 'Utility portal', source: '34 utility accounts', metric: '3', detail: 'PDF layouts parsed', output: 'ledger row + filed PDF', out: 'report' },
+  { id: 'retain', label: 'Retention', inputLabel: 'Customer data', source: '7,043 customers', metric: '0.845', detail: 'ROC-AUC', output: 'churn probability', out: 'prediction' },
 ]
 
 // Node geometry is derived from array position rather than hand-placed, so the
@@ -88,7 +42,7 @@ const OUT_PATH = {
 } as const
 
 export function IntelligenceMap() {
-  const [active, setActive] = useState<SignalId>('retain')
+  const [active, setActive] = useState<SignalId>('accounts')
   const foundIndex = signals.findIndex((item) => item.id === active)
   const activeIndex = foundIndex === -1 ? 0 : foundIndex
   const signal = signals[activeIndex]
@@ -98,9 +52,9 @@ export function IntelligenceMap() {
     // family throughout — amber stays reserved for actions and marks.
     <Panel as="figure" tone="raised" clip pad="sm" data-depth="static">
       <figcaption className="flex items-center justify-between gap-4">
-        <span className="signal-label">Applied intelligence map</span>
-        <Badge tone="neutral" variant="ghost" dot="live">
-          signal online
+        <span className="signal-label">System workflow map</span>
+        <Badge tone="neutral" variant="ghost">
+          illustrated architecture
         </Badge>
       </figcaption>
 
@@ -108,7 +62,7 @@ export function IntelligenceMap() {
         <svg
           viewBox="0 0 640 510"
           role="img"
-          aria-label={`Intelligence system map. ${signal.source} flows through a model producing ${signal.output}; highlighted result: ${signal.metric} ${signal.detail}.`}
+          aria-label={`Intelligence system map. ${signal.source} flows through processing and review into ${signal.output}; highlighted result: ${signal.metric} ${signal.detail}.`}
           className="pointer-events-none relative z-[var(--z-base)] h-full w-full"
         >
           <g fill="none" stroke="var(--color-rule-2)" strokeWidth="1">
@@ -150,7 +104,7 @@ export function IntelligenceMap() {
             <circle cx="320" cy="254" r="72" fill="none" stroke="var(--color-rule)" />
             <circle cx="320" cy="254" r="54" fill="none" stroke="var(--color-rule-2)" strokeDasharray="3 7" />
             <text x="320" y="244" textAnchor="middle" fill="var(--color-ink-2)" fontSize="11" letterSpacing="1.5" fontFamily="var(--font-body)">
-              MODEL / ANALYSIS
+              PROCESS / REVIEW
             </text>
             <text x="320" y="275" textAnchor="middle" fill="var(--color-ink)" fontSize="23" fontWeight="700" fontFamily="var(--font-display)">
               {signal.metric}
@@ -182,7 +136,7 @@ export function IntelligenceMap() {
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5" aria-label="Choose a project signal">
+      <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4" aria-label="Choose a project signal">
         {signals.map((item) => (
           <button
             key={item.id}

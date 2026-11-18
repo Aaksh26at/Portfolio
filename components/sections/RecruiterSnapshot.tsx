@@ -6,12 +6,7 @@ import { Stat } from '@/components/ui/Stat'
 
 export function RecruiterSnapshot() {
   const churn = portfolio.projects.find((project) => project.slug === 'customer-churn-prediction')
-  const metrics = [
-    { value: '97.07%', label: 'Malignant recall vs 0% baseline' },
-    { value: '80.4%', label: 'Churners caught vs 0% baseline' },
-    { value: '0.938', label: 'ROC-AUC on fire risk' },
-    { value: '5', label: 'Documented data systems' },
-  ]
+  const metrics = portfolio.snapshot.metrics
 
   return (
     // Strip: the figures sit directly on the band. Boxing them inside a
@@ -25,7 +20,7 @@ export function RecruiterSnapshot() {
       <div className="container-page">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <SectionHeading
-            title="Applied ML from dataset to interface."
+            title="Python systems, from workflow to delivery."
             eyebrow="Proof, not positioning"
             scale="sm"
             mark="none"

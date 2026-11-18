@@ -52,6 +52,8 @@ export interface Project {
   links: {
     github?: string
     demo?: string
+    sourceLabel?: string
+    demoLabel?: string
   }
   accent: 'violet' | 'cyan' | 'blue' | 'coral'
 }

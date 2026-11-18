@@ -108,7 +108,9 @@ All optional — copy [`.env.example`](.env.example) to `.env.local` to use them
 
 ## 10. Résumé
 
-There is no résumé PDF in the repo, by design. The résumé buttons (`components/ui/ResumeButton.tsx`) open a pre-addressed `mailto:` so a request arrives as a real conversation. To switch to a hosted file instead, point `ResumeButton` at a `href` of your choosing.
+The résumé buttons download `public/resume/aakshat-agarwal.pdf`, the reviewed one-page résumé featuring Next Move and Kalash Accounts. Run `python scripts/check_resume.py` (requires PyMuPDF) before replacing it. `scripts/generate_resume.py` is a historical layout generator with older project content; do not use it to overwrite the current résumé.
+
+Automation case studies live in `data/automation-projects.ts` and are included by `data/portfolio.ts`. Internal company source and the personal agent repository remain private. Hosting remains on the existing GitHub/Vercel deployment and custom domain.
 
 ## 11. Project visuals
 

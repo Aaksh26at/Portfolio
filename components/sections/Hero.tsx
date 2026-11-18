@@ -90,7 +90,7 @@ export function Hero() {
               })}
             </nav>
             <p className="mt-6 text-xs leading-relaxed text-ink-faint">
-              Python · SQL · Machine learning · Five documented systems
+              Python · APIs · Automation · Deployed applications
             </p>
           </Reveal>
         </div>

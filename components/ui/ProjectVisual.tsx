@@ -115,8 +115,62 @@ function BillsVisual() {
   )
 }
 
+function AccountingVisual() {
+  const inputs = ['BANK STATEMENTS', 'CONTRACT NOTES', 'RENT INVOICES', 'LOAN BALANCES']
+  return (
+    <svg viewBox="0 0 620 330" className="project-visual__plot h-full w-full" role="img" aria-label="Conceptual architecture: accounting inputs pass through mapping, reconciliation and review into approved Tally imports or read-only reports">
+      {inputs.map((label, index) => (
+        <g key={label}>
+          <path d={`M190 ${66 + index * 57} C220 ${66 + index * 57} 220 155 244 155`} fill="none" stroke="var(--color-rule)" strokeWidth="1.5" />
+          <rect x="36" y={46 + index * 57} width="154" height="40" rx="6" fill="var(--color-paper-3)" stroke="var(--color-rule)" />
+          <text x="113" y={71 + index * 57} textAnchor="middle" fill="var(--color-ink-2)" fontSize="11" fontFamily="var(--font-body)">{label}</text>
+        </g>
+      ))}
+      <rect x="244" y="100" width="150" height="112" rx="9" fill="var(--color-data-soft)" stroke="var(--color-data)" strokeWidth="2" />
+      <text x="319" y="131" textAnchor="middle" fill="var(--color-ink)" fontSize="18" fontWeight="700" fontFamily="var(--font-display)">REVIEW</text>
+      <text x="319" y="159" textAnchor="middle" fill="var(--color-ink-2)" fontSize="12" fontFamily="var(--font-body)">Map · reconcile</text>
+      <text x="319" y="182" textAnchor="middle" fill="var(--color-ink-2)" fontSize="12" fontFamily="var(--font-body)">Confirm · approve</text>
+      <path d="M394 138 C426 138 420 100 448 100 M394 178 C426 178 420 221 448 221" fill="none" stroke="var(--color-data)" strokeWidth="1.8" />
+      <rect x="448" y="66" width="138" height="68" rx="7" fill="var(--color-paper-3)" stroke="var(--color-rule)" />
+      <text x="517" y="94" textAnchor="middle" fill="var(--color-ink)" fontSize="13" fontWeight="600" fontFamily="var(--font-body)">TALLYPRIME</text>
+      <text x="517" y="116" textAnchor="middle" fill="var(--color-muted)" fontSize="11" fontFamily="var(--font-body)">approved imports</text>
+      <rect x="448" y="187" width="138" height="68" rx="7" fill="var(--color-paper-3)" stroke="var(--color-rule)" />
+      <text x="517" y="215" textAnchor="middle" fill="var(--color-ink)" fontSize="13" fontWeight="600" fontFamily="var(--font-body)">EXCEL / PDF</text>
+      <text x="517" y="237" textAnchor="middle" fill="var(--color-muted)" fontSize="11" fontFamily="var(--font-body)">read-only reports</text>
+      <text x="310" y="302" textAnchor="middle" fill="var(--color-muted)" fontSize="11" fontFamily="var(--font-body)">PYTHON · PYSIDE6 · HTTP/XML · CONCEPTUAL ARCHITECTURE</text>
+    </svg>
+  )
+}
+
+function JobAgentVisual() {
+  return (
+    <svg viewBox="0 0 620 330" className="project-visual__plot h-full w-full" role="img" aria-label="Conceptual architecture: public job sources feed resume-based matching and review, with a tracker, interview practice and scheduled digest; applicants submit their own applications">
+      <rect x="38" y="77" width="156" height="154" rx="8" fill="var(--color-paper-3)" stroke="var(--color-rule)" />
+      <text x="116" y="107" textAnchor="middle" fill="var(--color-ink)" fontSize="13" fontWeight="600" fontFamily="var(--font-body)">JOB SOURCES</text>
+      {['Himalayas', 'Remotive', '7 employer boards'].map((label, i) => <text key={label} x="116" y={143 + i * 29} textAnchor="middle" fill="var(--color-ink-2)" fontSize="12" fontFamily="var(--font-body)">{label}</text>)}
+      <path d="M194 154 H240" fill="none" stroke="var(--color-data)" strokeWidth="2" />
+      <rect x="240" y="103" width="156" height="103" rx="9" fill="var(--color-data-soft)" stroke="var(--color-data)" strokeWidth="2" />
+      <text x="318" y="136" textAnchor="middle" fill="var(--color-ink)" fontSize="15" fontWeight="700" fontFamily="var(--font-display)">MATCH + REVIEW</text>
+      <text x="318" y="164" textAnchor="middle" fill="var(--color-ink-2)" fontSize="12" fontFamily="var(--font-body)">Resume facts</text>
+      <text x="318" y="185" textAnchor="middle" fill="var(--color-ink-2)" fontSize="12" fontFamily="var(--font-body)">Tools + assistance</text>
+      {['APPLICATION TRACKER', 'INTERVIEW PRACTICE', 'DAILY EMAIL'].map((label, i) => (
+        <g key={label}>
+          <path d={`M396 154 C422 154 420 ${77 + i * 77} 444 ${77 + i * 77}`} fill="none" stroke="var(--color-data)" strokeWidth="1.5" />
+          <rect x="444" y={55 + i * 77} width="148" height="44" rx="6" fill="var(--color-paper-3)" stroke="var(--color-rule)" />
+          <text x="518" y={82 + i * 77} textAnchor="middle" fill="var(--color-ink-2)" fontSize="10.5" fontFamily="var(--font-body)">{label}</text>
+        </g>
+      ))}
+      <text x="310" y="302" textAnchor="middle" fill="var(--color-muted)" fontSize="11" fontFamily="var(--font-body)">CONCEPTUAL ARCHITECTURE · APPLICATIONS REMAIN IN THE CANDIDATE'S HANDS</text>
+    </svg>
+  )
+}
+
 export function ProjectVisual({ project }: { project: Project }) {
-  const visual = project.slug === 'breast-cancer-prediction'
+  const visual = project.slug === 'kalash-accounts'
+    ? <AccountingVisual />
+    : project.slug === 'next-move-job-agent'
+      ? <JobAgentVisual />
+      : project.slug === 'breast-cancer-prediction'
     ? <CancerVisual />
     : project.slug === 'fire-weather-index'
       ? <FireVisual />

@@ -233,13 +233,13 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
                   ) : (
                     <span className="inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-control)] border border-[var(--color-rule)] px-5 py-2.5 text-sm text-ink-muted">
                       <Github className="h-4 w-4" aria-hidden="true" />
-                      Repository coming soon
+                      {project.links.sourceLabel || 'Repository not published'}
                     </span>
                   )}
                   {project.links.demo ? (
                     <MagneticButton href={project.links.demo} variant="primary" external iconTrail={false}>
                       <ExternalLink className="h-4 w-4" aria-hidden="true" />
-                      Live demo
+                      {project.links.demoLabel || 'Live demo'}
                     </MagneticButton>
                   ) : null}
                 </div>

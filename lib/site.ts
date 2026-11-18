@@ -13,9 +13,9 @@ const siteUrl =
 /** Site-wide constants used for SEO metadata, sitemap and structured data. */
 export const siteConfig = {
   name: 'Aakshat Agarwal',
-  title: 'Aakshat Agarwal | AI Automation Developer & Data Analyst',
+  title: 'Aakshat Agarwal | AI Automation & Python Developer',
   description:
-    'Aakshat Agarwal is an AI Automation Developer at Kalash Group and a Data Analyst in Jaipur, India. He builds business automations, Tally-integrated tools, Moneycontrol workflows and data-driven applications.',
+    'Aakshat Agarwal is an AI Automation Developer at Kalash Group and a Data Analyst in Jaipur, India. He builds a TallyPrime accounting platform, deployed AI tools, document automations and data-driven applications.',
   url: siteUrl,
   keywords: [
     'Aakshat Agarwal',
