@@ -11,12 +11,12 @@ export function Experience() {
     <section id="experience" data-world="4" className="section surface surface--inset">
       <div className="container-page">
         <SectionHeading
-          title="Work that someone depends on."
+          title="Building beyond the side project."
           eyebrow="Experience"
-          index={4}
-          scale="lg"
+          index={2}
+          scale="md"
           measure="wide"
-          description="Employment, kept separate from the project narratives and the job simulations—this is the work with a colleague waiting on the output."
+          description="My current role: turning accounting and operational workflows into practical Python applications."
         />
 
         <ol className="mt-14 border-t border-[var(--color-rule)]">

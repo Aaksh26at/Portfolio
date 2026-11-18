@@ -9,19 +9,19 @@
  */
 :root {
   /* ── warm paper ─────────────────────────────────────────────── */
-  --color-paper-lch: 97% 0.010 85;
-  --color-paper-2-lch: 94.5% 0.014 82;
-  --color-paper-3-lch: 91% 0.018 80;
+  --color-paper-lch: 98% 0.004 255;
+  --color-paper-2-lch: 96% 0.007 255;
+  --color-paper-3-lch: 93% 0.011 255;
 
   /* ── warm ink ───────────────────────────────────────────────── */
-  --color-ink-lch: 17% 0.012 60;
-  --color-ink-2-lch: 34% 0.014 62;
-  --color-neutral-lch: 41% 0.014 63;
-  --color-muted-lch: 46% 0.014 65;
+  --color-ink-lch: 23% 0.026 258;
+  --color-ink-2-lch: 35% 0.026 258;
+  --color-neutral-lch: 43% 0.025 258;
+  --color-muted-lch: 48% 0.022 258;
 
   /* ── rules ──────────────────────────────────────────────────── */
-  --color-rule-lch: 84% 0.016 80;
-  --color-rule-2-lch: 90% 0.012 82;
+  --color-rule-lch: 87% 0.012 255;
+  --color-rule-2-lch: 92% 0.009 255;
   --color-rule-strong-lch: 64% 0.02 75;
   --color-control-rule-lch: 46% 0.016 65;
 
@@ -30,15 +30,15 @@
    * that still clears 3:1 on paper. It is never small body text —
    * use `signal-strong` there. All chroma values sit on the sRGB
    * gamut boundary for their lightness; raising them gets clipped. */
-  --color-signal-lch: 66% 0.163 55;
-  --color-signal-strong-lch: 45% 0.12 48;
-  --color-signal-soft-lch: 93% 0.045 72;
-  --color-signal-ink-lch: 22% 0.03 55;
+  --color-signal-lch: 72% 0.13 168;
+  --color-signal-strong-lch: 38% 0.08 168;
+  --color-signal-soft-lch: 94% 0.03 168;
+  --color-signal-ink-lch: 20% 0.035 168;
 
   /* ── DATA family · cobalt · evidence, charts, WebGL ─────────── */
-  --color-data-lch: 52% 0.168 255;
+  --color-data-lch: 49% 0.16 262;
   --color-data-2-lch: 64% 0.14 250;
-  --color-data-soft-lch: 93% 0.03 250;
+  --color-data-soft-lch: 94% 0.025 262;
   --color-data-ink-lch: 97% 0.008 250;
 
   --color-focus-lch: 48% 0.132 250;
@@ -51,13 +51,13 @@
   --color-overlay-lch: 18% 0.02 58;
 
   /* ── mode-invariant ink band · stays dark in both themes ────── */
-  --color-band-lch: 19% 0.02 58;
-  --color-band-2-lch: 24% 0.022 58;
-  --color-band-ink-lch: 96% 0.012 80;
-  --color-band-ink-2-lch: 80% 0.014 78;
-  --color-band-muted-lch: 66% 0.014 75;
-  --color-band-rule-lch: 34% 0.02 58;
-  --color-band-signal-lch: 76% 0.15 62;
+  --color-band-lch: 22% 0.03 258;
+  --color-band-2-lch: 27% 0.03 258;
+  --color-band-ink-lch: 97% 0.007 255;
+  --color-band-ink-2-lch: 84% 0.015 255;
+  --color-band-muted-lch: 73% 0.02 255;
+  --color-band-rule-lch: 38% 0.03 258;
+  --color-band-signal-lch: 79% 0.13 168;
   --color-band-data-lch: 70% 0.14 250;
 
   --shadow-color-lch: 30% 0.035 60;
@@ -103,11 +103,11 @@
   --color-band-data: oklch(var(--color-band-data-lch));
 
   /* ── type ───────────────────────────────────────────────────── */
-  --font-display: 'Fraunces Variable', ui-serif, Georgia, 'Times New Roman', serif;
+  --font-display: 'IBM Plex Sans Variable', ui-sans-serif, system-ui, sans-serif;
   --font-body: 'IBM Plex Sans Variable', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-outlier: var(--font-display);
-  --font-body-weight: 380;
+  --font-body-weight: 400;
   --font-display-variation: 'opsz' 144;
   --font-outlier-variation: 'opsz' 144;
   --track-display: -0.028em;
@@ -147,8 +147,8 @@
   /* ── shape ──────────────────────────────────────────────────── */
   --rule-thin: 1px;
   --rule-strong: 2px;
-  --radius-card: 0.85rem;
-  --radius-control: 0.65rem;
+  --radius-card: 1.25rem;
+  --radius-control: 0.6rem;
   --radius-pill: 999px;
 
   /* ── elevation ladder ───────────────────────────────────────── */
@@ -172,8 +172,8 @@
   --shadow-card: var(--shadow-2);
 
   /* ── section rhythm ─────────────────────────────────────────── */
-  --rhythm: clamp(5.5rem, 9vw, 9.5rem);
-  --rhythm-half: clamp(2.75rem, 4.5vw, 4.75rem);
+  --rhythm: clamp(4rem, 6vw, 6.5rem);
+  --rhythm-half: clamp(3.5rem, 6vw, 6rem);
   --rhythm-hero: clamp(7rem, 12vh, 10rem);
 
   --depth-perspective: 1100px;
@@ -203,11 +203,11 @@
 }
 
 :root[data-theme='dark'] {
-  --color-paper-lch: 15% 0.012 60;
-  --color-paper-2-lch: 19% 0.014 58;
-  --color-paper-3-lch: 24% 0.016 58;
+  --color-paper-lch: 18% 0.02 258;
+  --color-paper-2-lch: 22% 0.025 258;
+  --color-paper-3-lch: 27% 0.028 258;
 
-  --color-ink-lch: 95% 0.01 85;
+  --color-ink-lch: 96% 0.007 255;
   --color-ink-2-lch: 81% 0.012 80;
   --color-neutral-lch: 73% 0.014 78;
   --color-muted-lch: 66% 0.012 76;
@@ -217,10 +217,10 @@
   --color-rule-strong-lch: 50% 0.02 62;
   --color-control-rule-lch: 60% 0.018 70;
 
-  --color-signal-lch: 76% 0.15 62;
-  --color-signal-strong-lch: 84% 0.118 68;
-  --color-signal-soft-lch: 28% 0.055 58;
-  --color-signal-ink-lch: 16% 0.03 55;
+  --color-signal-lch: 79% 0.13 168;
+  --color-signal-strong-lch: 83% 0.1 168;
+  --color-signal-soft-lch: 27% 0.035 168;
+  --color-signal-ink-lch: 18% 0.03 168;
 
   --color-data-lch: 68% 0.145 250;
   --color-data-2-lch: 78% 0.11 245;
@@ -237,8 +237,8 @@
 
   /* the band lifts one step so it still separates from the page,
    * and its rule lifts with it to stay a visible divider */
-  --color-band-lch: 24% 0.022 58;
-  --color-band-2-lch: 29% 0.024 58;
+  --color-band-lch: 20% 0.025 258;
+  --color-band-2-lch: 25% 0.03 258;
   --color-band-rule-lch: 38% 0.02 58;
 
   --shadow-color-lch: 4% 0.01 58;

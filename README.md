@@ -2,11 +2,13 @@
 
 A production-ready personal portfolio for **Aakshat Agarwal** — Data Analyst, AI/ML enthusiast and Python developer based in Jaipur, India.
 
-Warm editorial design on a bone reading surface, one persistent WebGL data world behind the page, light and dark modes, and a locked design system that every component is built from.
+A compact portfolio with cool neutral surfaces, cobalt and mint accents, clear project previews, and persisted light/dark themes. The active homepage puts selected work, experience and contact ahead of supporting credentials.
 
 ---
 
 ## 1. Project overview
+
+The current UI uses a compact technical-studio layout: `Introduction`, filterable `SelectedWork`, experience, skills, `Background` (including education and certification disclosures), and contact. Shared composition styles live in `app/redesign.css`; see `design.md` for the current visual contract. The original long-form homepage sections remain in source for reference.
 
 - Single-page experience (`/`) with smooth in-page navigation, plus dynamic project **case-study pages** (`/projects/[slug]`).
 - All content lives in **one typed file**: [`data/portfolio.ts`](data/portfolio.ts). Edit it to update text — no component changes needed.
@@ -18,7 +20,7 @@ Warm editorial design on a bone reading surface, one persistent WebGL data world
 
 | Area        | Tech |
 |-------------|------|
-| Framework   | Next.js 14 (App Router) |
+| Framework   | Next.js 15 (App Router) |
 | Language    | TypeScript (strict) |
 | Styling     | Tailwind CSS + `tokens.css` custom properties |
 | Animation   | Framer Motion |
@@ -96,15 +98,9 @@ All optional — copy [`.env.example`](.env.example) to `.env.local` to use them
 
 > Secrets are **never** committed or exposed to the browser — only `NEXT_PUBLIC_*` values reach the client, by design.
 
-## 9. The design system
+## 9. Design system
 
-[`design.md`](design.md) is the contract; read it before adding anything visual. The short version:
-
-- **Colour carries meaning.** Amber (`--color-signal`) is for actions, marks and emphasis. Cobalt (`--color-data`) is for evidence only — charts, plates, metrics, the WebGL world. They are not interchangeable, and combined accent use stays under ~3% of any viewport.
-- **The band** (`--color-band-*`) is mode-invariant: it stays dark in dark mode so the page rhythm survives the theme toggle.
-- **One surface system.** Every `<section>` carries exactly one `.section*` class and one `.surface--*` class, and never hand-rolls block padding.
-- **Primitives are the vocabulary** — `Panel`, `SectionHeading`, `Badge`, `Stat`, `MagneticButton`, `Reveal`. A section that needs a container, chip, heading, measurement or entrance uses one of these rather than a local copy.
-- **Values live in `tokens.css`**, exposed to Tailwind through [`tailwind.config.ts`](tailwind.config.ts) as `base · ink · signal · data · band · rule` with `<alpha-value>` support.
+Read [`design.md`](design.md) before visual changes. Shared values live in `tokens.css`; the current compositions are styled in `app/redesign.css`. Use IBM Plex Sans for display/body, IBM Plex Mono for technical metadata, native controls with visible focus, and 44px minimum touch targets. The active homepage has no WebGL scene or decorative background grid. Case studies and existing UI primitives share the same theme tokens.
 
 ## 10. Résumé
 

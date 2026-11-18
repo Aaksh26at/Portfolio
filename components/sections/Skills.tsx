@@ -12,14 +12,14 @@ export function Skills() {
       <div className="container-page">
         <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-end lg:gap-16">
           <SectionHeading
-            title="The capability matrix."
+            title="The tools behind the work."
             index={3}
-            scale="lg"
+            scale="md"
             mark="line"
             measure="wide"
           />
           <p className="max-w-2xl text-base leading-relaxed text-ink-muted sm:text-lg">
-            A practical inventory of tools used to inspect data, build models, expose results and
+            Tools I use to connect systems, process documents, analyse data and
             keep the delivery path reliable.
           </p>
         </div>

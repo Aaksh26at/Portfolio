@@ -1,121 +1,33 @@
-# Design — Aakshat Agarwal Portfolio
+# Portfolio design: quiet technical studio
 
-A locked design system for this app. Every route reads this file before emitting code. Extend it when the system needs to grow; do not invent local themes.
+This redesign replaces the earlier atmospheric, serif-led layout. The user requested a new UI/UX and internet research. Preserve the AA identity, real project evidence, custom domain, contact behavior and resume download.
 
-`tokens.css` is the single source of truth for values. This document explains the intent behind them; where the two disagree, `tokens.css` wins and this file is the bug.
+## Reference principles
 
-## Provenance
+- Brittany Chiang (https://brittanychiang.com/): experience and project evidence are easy to reach.
+- Rauno Freiberg (https://rauno.me/): concise navigation and deliberate interface details.
+- Paco Coursey (https://paco.me/): short introduction and a direct project index.
 
-Structural direction studied from Joseph Santamaria's scroll-driven 3D portfolio: the persistent-world layer and chapter transitions. None of the source's artwork, copy, models, palette or visual identity is borrowed — the warm editorial treatment is this project's own.
+These inform structure, not a copied layout, source code or personal claims.
 
-## Genre
+## Visual language
 
-Editorial-atmospheric — a warm bone reading surface, one persistent data world behind it, and technical clarity in the foreground.
+Cool near-white surfaces, navy ink, cobalt links and restrained mint highlights. Dark mode uses blue graphite and retains the same hierarchy. Colors remain centralized in tokens.css. IBM Plex Sans handles headings and body; IBM Plex Mono handles small technical labels. The older Fraunces font is no longer loaded.
 
-## Macrostructure family
+Use generous margins, fine rules and moderately rounded containers. Avoid decorative background grids, ambient 3D, fake terminal output and invented product screenshots. The hero workflow and project SVGs are clearly identified architecture illustrations. No new image or font downloads are required.
 
-- Marketing / homepage: **Narrative Workflow** — one continuous 3D data world changes formation across the content chapters.
-- App views: **Workbench** — functional light surfaces, compact controls and no independent decorative scenes.
-- Content / case studies: **Long Document** — one calm reading column; only the evidence plate takes a tinted surface.
+## Visitor journey
 
-## Component voice
+Introduction and resume actions -> four selected projects -> professional experience -> skills -> about and education -> contact. Earlier projects and certifications remain accessible in native disclosure elements. Public case-study routes remain intact.
 
-- Hero: **H1 Marquee** — the statement owns the first view; supporting copy and actions sit in the handoff below it.
-- Navigation: **N9 Edge-aligned minimal** — AA wordmark hard-left, compact theme control hard-right, mobile disclosure only when required.
-- Footer: **Ft2 Inline single line** — one rule, identity, tracked proof links and copyright, continuing the band that Contact opens.
+The header has four section links, contact and the existing theme toggle. Below 1024px it becomes a disclosure menu, closes on Escape/outside click/link activation and restores focus to its trigger on Escape. It does not trap focus or lock scrolling because it is not a modal.
 
-## Colour
+Projects have two columns on desktop and one below 768px. Category filters use native buttons with aria-pressed; result counts use an aria-live status. Case-study links are prominent. Private/internal source is a label, never a misleading GitHub link. Authenticated demo access is explicitly labeled.
 
-Two families carry meaning, and they are not interchangeable.
+## Shared implementation
 
-- **Signal · amber** — CTAs, marks, emphasis, chapter numbers. `--color-signal` is a *fill* colour held at the lightest value that still clears 3:1 on paper; it is never small body text. Use `--color-signal-strong` for text.
-- **Data · cobalt** — evidence only: charts, project plates, metrics, the WebGL world. If it represents a measurement, it is cobalt.
+New composition styles live in app/redesign.css; tokens.css remains authoritative for shared values. SiteHeader is re-exported by Header so case studies share the redesign. Existing buttons, theme toggle, contact form, project visuals and case-study primitives are reused. Retired homepage sections remain in source for reference, outside the active page composition.
 
-Amber fills always carry ink labels, never paper: amber at L66 is ~2.4:1 against white but ~5.3:1 against warm ink. Combined accent use stays below roughly 3% of any viewport. Gradient text, aurora blobs, glass blur and decorative floating orbs are prohibited.
+## Accessibility and motion
 
-Chroma values sit on the sRGB gamut boundary for their lightness — raising them gets clipped, not saturated.
-
-### The band
-
-`--color-band-*` is a mode-invariant ink surface: it stays dark in dark mode too, so the page rhythm survives the theme toggle. It is not "dark mode" and must never be aliased to the paper scale.
-
-### Dark mode
-
-The toggle follows the operating-system preference until the visitor chooses a mode, then persists that choice locally. Dark mode keeps both hues, lifts elevated surfaces through lightness, reduces body weight to 350, lifts the band one step so it still separates from the page, and refreshes the WebGL material palette without rebuilding the scene.
-
-## Typography
-
-- Display: **Fraunces Variable**, weight 700, `opsz 144`.
-- Body: **IBM Plex Sans Variable**, weight 350–600 (`--font-body-weight`, 380 light / 350 dark).
-- Mono: **IBM Plex Mono** 400/600 — measurements, chapter indices, tabular figures. Always paired with `.tnum`.
-- Outlier: the AA wordmark is a *cut* of the display face at maximum optical size with optical sizing disabled, not a third family.
-- Display tracking: `--track-display` (-0.028em) and `--track-display-tight` (-0.038em). Do not hand-roll tracking values.
-- Type-scale anchor: `--text-display`; the short hero statement uses `--text-marquee`.
-
-## Surfaces and rhythm
-
-One system. Every `<section>` carries exactly one `.section*` class and one `.surface--*` class, and never hand-rolls its own block padding.
-
-- `.surface--paper` transparent · `--inset` paper-3 · `--wash-signal` amber tint · `--wash-data` cobalt tint · `--outline` ink rules · `--band` mode-invariant ink.
-- Filled surfaces get the full `--rhythm`; transparent paper sections get `--rhythm-half`, because their whitespace already reads as separation.
-- Tinted and inked surfaces re-declare the colour tokens locally, so every descendant re-tones for free. Never hand-write a dark variant of a component that sits on the band.
-
-## Spacing
-
-4-point named scale in `tokens.css`. Pages use named tokens or fluid `clamp()` values; raw values are limited to WebGL geometry, SVG coordinates and content-driven breakpoints.
-
-## Primitives
-
-These are the vocabulary. A section that needs a container, a chip, a heading, a measurement or an entrance uses one of these — it does not hand-roll a local copy.
-
-- **Panel** — the one container. Tone axis: `raised · inset · outline · band · signal · data · flush`, plus `pad`, `elevation`, `interactive`, `clip`.
-- **SectionHeading** — the one heading vocabulary. `scale · align · mark · eyebrow · index · measure · reveal`.
-- **Badge** — chips, on a `tone × variant` matrix. `dot="live"` is the status form.
-- **Stat** — a measurement over its label; mono and tabular by default.
-- **MagneticButton** — the action primitive. `primary · signal · ghost · soft` × `sm · md · lg`. Pointer-follow writes `--mx/--my` as custom properties so the transform stays in CSS.
-- **Reveal** — the scroll entrance. `fade-rise · stagger · rule-draw · mask-wipe · lift · none`.
-
-## Motion
-
-- Easings: exponential `--ease-out`, accelerating `--ease-in`, symmetric `--ease-in-out`.
-- Page reveal: one assembly of raw points into the hero data sculpture.
-- Sections are assigned distinct Reveal variants so the page never reads as one animation repeated eleven times.
-- The persistent WebGL scene never auto-spins. It responds to direct pointer input and changes formation only when a real content chapter becomes active.
-- Reduced motion is checked **in JS** via `useReducedMotion`, not left to the CSS media block: framer-motion drives inline styles and WAAPI, which `@media (prefers-reduced-motion)` cannot reach. WebGL is replaced with a static structural fallback and all spatial transitions collapse to still states.
-
-## Microinteractions stance
-
-- Silent success when the result is visible; copy-to-clipboard changes its label in place.
-- Focus rings appear instantly and meet the 3:1 boundary contrast requirement.
-- Hover changes one signal—surface, border or colour—and always has a keyboard/tap equivalent.
-- Touch targets are at least 44 × 44 CSS pixels.
-- The theme toggle is a 44 × 44 native button with a literal sun/moon state, instant focus ring, quiet press feedback and no celebratory confirmation.
-
-## CTA voice
-
-- Primary: ink fill that inverts to amber on hover, compact radius, specific action copy.
-- Secondary: quiet paper surface with a visible rule.
-- Clickable labels never wrap.
-
-## Per-page allowances
-
-- The homepage uses one Tier-D persistent R3F scene: under 100 draw calls, client-lazy, deterministic geometry, no external model payload and a static fallback.
-- Project pages share the same world but keep project-specific SVG data plates in the foreground.
-- Content and error pages may hold the scene at one formation and reduce motion to zero.
-
-## What pages MUST share
-
-- AA wordmark, N9 navigation with persisted theme control and Ft2 footer.
-- The signal/data colour split, the Fraunces / IBM Plex pairing, and the surface-and-rhythm system.
-- CTA voice, focus treatment, the primitives above, and the persistent world layer.
-
-## What pages MAY differ on
-
-- Homepage chapters choose among dataset, constellation, project-cluster, pipeline, growth and AA-convergence formations.
-- Case-study diagrams remain domain-specific: diagnostic clusters, risk gauge, retention curve or similarity matrix.
-
-## Exports
-
-`tokens.css` holds the authoritative declarations for both modes — light under `:root`, dark under `:root[data-theme='dark']` — including the colour scales, the band, type, spacing, motion, shape, the elevation ladder, section rhythm and the WebGL sRGB triplets.
-
-Tailwind reads the `*-lch` triplets through `tailwind.config.ts`, which exposes `base · ink · signal · data · band · rule` with `<alpha-value>` support. Arbitrary values read the ready `var(--color-*)` forms. Both are remapped by the tinted and inked surfaces, so a component written once works on every surface.
+Native links/buttons/summary controls, visible focus, minimum 44px control targets and explicit control names. Important hero/project content is visible without entrance animation. The existing reduced-motion setting and persisted theme remain supported. Do not claim visual browser QA when preview infrastructure is unavailable.

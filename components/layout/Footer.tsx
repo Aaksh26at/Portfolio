@@ -19,7 +19,7 @@ export function Footer() {
               {portfolio.person.initials}
             </Link>
             <span className="hidden h-4 w-px bg-[var(--color-rule)] sm:block" aria-hidden="true" />
-            <p className="text-sm text-ink-muted">{portfolio.person.name} · Data, ML and Python systems</p>
+            <p className="text-sm text-ink-muted">{portfolio.person.name} · Python & automation</p>
           </div>
 
           <nav aria-label="Footer" className="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-7">

@@ -80,12 +80,12 @@ export function Contact() {
       <div className="container-page grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-start lg:gap-16 xl:gap-24">
         <div>
           <SectionHeading
-            title="Bring a hard data problem."
-            index={7}
-            scale="xl"
+            title="Have a role in mind?"
+            index={5}
+            scale="md"
             measure="wide"
             reveal="mask-wipe"
-            description="Open to data, AI/ML, Python, backend and analytics opportunities—and conversations where analytical thinking needs to become a useful product."
+            description="Open to junior Python, automation and backend opportunities. Tell me about the team, the role or the workflow you want to improve."
           />
 
           <ul className="mt-10 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
