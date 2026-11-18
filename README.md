@@ -138,6 +138,26 @@ The scene lives in [`components/3d/PersistentDataWorld.tsx`](components/3d/Persi
 - Missing WebGL **or** `prefers-reduced-motion: reduce` → the canvas is never created and the CSS fallback renders instead.
 - The material palette refreshes on the `portfolio-theme-change` event without rebuilding the scene.
 
+## Visitor analytics (GA4)
+
+Analytics stays off until `NEXT_PUBLIC_GA_ID` is a valid GA4 Measurement ID. Create a Google Analytics property and Web data stream for `https://www.aakshat.in`, then copy its `G-...` Measurement ID. In Vercel -> Portfolio -> Production environment variables, add `NEXT_PUBLIC_GA_ID` as a Config value and redeploy. This public identifier is compiled into the browser bundle; changing the hosting variable requires a new build.
+
+Keep Enhanced Measurement page views and browser-history page changes enabled for Next.js navigation. Our code initializes the Google tag once per document; it does not send additional manual `page_view` events. The three portfolio events are:
+
+| Event | Meaning | Extra parameter |
+| --- | --- | --- |
+| `project_view` | A known case-study route opened, including direct visits and client navigation | `project` (slug) |
+| `resume_download` | The resume PDF download link was clicked, not proof of a completed file download | `file_name` |
+| `contact_submit` | Resend acknowledged a valid form submission, not proof of inbox delivery | `form_id` |
+
+Open GA4 Realtime while visiting a case study and clicking the resume button. Test a contact submission only when intentionally sending a message. To compare projects in reports, create an event-scoped custom dimension named Project with event parameter `project` under Admin -> Custom definitions. Mark `contact_submit` as a key event if you want it treated as a conversion. Use these specific event names; automatic GA4 `form_submit` or `file_download` events, if enabled in Enhanced Measurement, have different meanings.
+
+No visitor-entered names, email addresses, subjects or message contents are passed to our custom events. Only fixed identifiers are allowed. Google signals and advertising personalization are disabled in the tag configuration. Counts can be reduced by browser tracking protection or ad blockers and do not identify individual recruiters.
+
+Run `node scripts/check_analytics.cjs` to test queue initialization, route deduplication and field filtering without sending events to Google.
+
+References: [Create a property and Web stream](https://support.google.com/analytics/answer/9304153?hl=en), [Find the Measurement ID](https://support.google.com/analytics/answer/12270356), [Next.js-style SPA measurement](https://developers.google.com/analytics/devguides/collection/ga4/single-page-applications), [Custom event parameters](https://developers.google.com/analytics/devguides/collection/ga4/event-parameters).
+
 ## 14. Contact-form configuration
 
 In Vercel -> Portfolio -> Settings -> Environment Variables, set these for Production:

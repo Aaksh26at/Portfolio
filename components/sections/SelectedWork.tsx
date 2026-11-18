@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { ArrowUpRight, Github, Plus } from 'lucide-react'
 import { portfolio } from '@/data/portfolio'
 import { ProjectVisual } from '@/components/ui/ProjectVisual'
-import { track } from '@/lib/analytics'
 
 const categories = ['All work', 'Automation', 'AI & web', 'Data science'] as const
 type Category = typeof categories[number]
@@ -28,7 +27,7 @@ export function SelectedWork() {
         <div className="work-grid">{visible.map(project => {
           const item = presentation[project.slug]
           return <article className="work-card" key={project.slug}>
-            <a className={`work-preview work-preview--${project.slug}`} href={`/projects/${project.slug}`} aria-label={`Read ${item?.title || project.title} case study`} onClick={() => track('project_view', { project: project.slug })}><ProjectVisual project={project} /><span className="preview-action" aria-hidden="true"><ArrowUpRight size={22} /></span></a>
+            <a className={`work-preview work-preview--${project.slug}`} href={`/projects/${project.slug}`} aria-label={`Read ${item?.title || project.title} case study`}><ProjectVisual project={project} /><span className="preview-action" aria-hidden="true"><ArrowUpRight size={22} /></span></a>
             <div className="work-card-body"><div className="work-meta"><span>{item?.kind}</span><span>{project.year}</span></div><h3><a href={`/projects/${project.slug}`}>{item?.title || project.title}</a></h3><p className="work-description">{project.tagline}</p><ul className="work-tech" aria-label="Technologies">{project.technologies.slice(0, 4).map(tool => <li key={tool}>{tool}</li>)}</ul><div className="work-card-footer"><a className="case-link" href={`/projects/${project.slug}`}>View case study<ArrowUpRight size={16} aria-hidden="true" /></a>{project.links.github ? <a href={project.links.github} target="_blank" rel="noopener noreferrer" className="source-link"><Github size={15} aria-hidden="true" />Source code</a> : <span className="source-label">{project.links.sourceLabel}</span>}</div>{project.links.demo && <a href={project.links.demo} target="_blank" rel="noopener noreferrer" className="project-live-link">{project.links.demoLabel || 'Open live demo'}<ArrowUpRight size={14} aria-hidden="true" /></a>}</div>
           </article>
         })}</div>
