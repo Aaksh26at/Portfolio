@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { saveMessage, messageDelivery } from '@/lib/admin-store'
 
 export const maxDuration = 20
 const MAX_BODY_BYTES = 32_768
@@ -65,11 +66,15 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: 'Please provide a name, valid email, subject and message.' }, { status: 422 })
   }
   const apiKey = process.env.RESEND_API_KEY?.trim()
+  let inboxId: string | null = null
+  try { inboxId = await saveMessage({ name, email, subject, message }) }
+  catch { console.warn('[contact] Inbox storage unavailable; continuing with email delivery.') }
   const from = process.env.CONTACT_FROM_EMAIL?.trim()
   const to = process.env.CONTACT_TO_EMAIL?.trim() || 'aakshatagarwal2004@gmail.com'
   if (!apiKey || !from) {
+    await messageDelivery(inboxId, 'not_configured')
     console.warn('[contact] Email service is not configured.')
-    return NextResponse.json({ ok: true, accepted: false, reason: 'not_configured' })
+    return NextResponse.json({ ok: true, accepted: !!inboxId, stored: !!inboxId, reason: 'not_configured' })
   }
   try {
     const response = await fetch('https://api.resend.com/emails', {
@@ -83,15 +88,18 @@ export async function POST(request: Request) {
       }),
     })
     if (!response.ok) {
+      await messageDelivery(inboxId, 'provider_error')
       console.warn('[contact] Email provider rejected the request. HTTP status:', response.status)
-      return NextResponse.json({ ok: true, accepted: false, reason: 'provider_error' })
+      return NextResponse.json({ ok: true, accepted: !!inboxId, stored: !!inboxId, reason: 'provider_error' })
     }
     const result = await response.json() as { id?: unknown }
     if (typeof result.id !== 'string' || !result.id) throw new Error('No provider acknowledgement')
+    await messageDelivery(inboxId, 'accepted')
     // Provider acceptance is not proof of inbox delivery. No automatic retries.
-    return NextResponse.json({ ok: true, accepted: true })
+    return NextResponse.json({ ok: true, accepted: true, stored: !!inboxId })
   } catch {
+    await messageDelivery(inboxId, 'delivery_uncertain')
     console.warn('[contact] Email provider acknowledgement could not be confirmed.')
-    return NextResponse.json({ ok: true, accepted: false, reason: 'delivery_uncertain' })
+    return NextResponse.json({ ok: true, accepted: !!inboxId, stored: !!inboxId, reason: 'delivery_uncertain' })
   }
 }

@@ -13,10 +13,11 @@ function eventFor(icon: string): AnalyticsEvent | null {
   return null
 }
 
-export function SocialLinks({ className }: { className?: string }) {
+export function SocialLinks({ className, email, phone }: { className?: string; email?: string; phone?: string }) {
   return (
     <ul className={cn('flex items-center gap-3', className)}>
-      {portfolio.person.socials.map((social) => {
+      {portfolio.person.socials.map((original) => {
+        const social = { ...original, href: original.icon === 'mail' && email ? `mailto:${email}` : original.icon === 'phone' && phone ? `tel:${phone.replace(/[^+0-9]/g, '')}` : original.href }
         const Icon = socialIcons[social.icon]
         const ev = eventFor(social.icon)
         const isExternal = social.href.startsWith('http')

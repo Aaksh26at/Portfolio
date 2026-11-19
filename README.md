@@ -1,5 +1,7 @@
 # Aakshat Agarwal — Portfolio
 
+**Owner workspace:** `/admin` now includes protected profile/project editing and a contact-message inbox. Follow [ADMIN-SETUP.md](ADMIN-SETUP.md) to activate it using server-only Vercel credentials and the Supabase schema. Until configured, the admin stays locked and public pages use the existing portfolio content.
+
 A production-ready personal portfolio for **Aakshat Agarwal** — Data Analyst, AI/ML enthusiast and Python developer based in Jaipur, India.
 
 A compact portfolio with cool neutral surfaces, cobalt and mint accents, clear project previews, and persisted light/dark themes. The active homepage puts selected work, experience and contact ahead of supporting credentials.

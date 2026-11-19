@@ -1,12 +1,14 @@
 import type { MetadataRoute } from 'next'
 import { siteConfig } from '@/lib/site'
-import { portfolio } from '@/data/portfolio'
+import { publicContent } from '@/lib/admin-store'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const dynamic = 'force-dynamic'
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteConfig.url.replace(/\/$/, '')
 
-  const projectRoutes: MetadataRoute.Sitemap = portfolio.projects
-    .filter((p) => p.status === 'shipped')
+  const content = await publicContent()
+  const projectRoutes: MetadataRoute.Sitemap = content.projects
+    .filter((p) => p.published)
     .map((p) => ({
       url: `${base}/projects/${p.slug}`,
       changeFrequency: 'monthly',

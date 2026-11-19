@@ -1,8 +1,9 @@
 import { GA_ID } from '@/lib/analytics'
-import { portfolio } from '@/data/portfolio'
+import { publicContent } from '@/lib/admin-store'
 import { AnalyticsClient } from '@/components/AnalyticsClient'
 
-export function Analytics() {
+export async function Analytics() {
   if (!GA_ID) return null
-  return <AnalyticsClient projectSlugs={portfolio.projects.map(project => project.slug)} />
+  const content = await publicContent()
+  return <AnalyticsClient projectSlugs={content.projects.filter(p => p.published).map(project => project.slug)} />
 }

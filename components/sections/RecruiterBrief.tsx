@@ -2,7 +2,7 @@ import { ArrowUpRight } from 'lucide-react'
 import { portfolio } from '@/data/portfolio'
 import { ResumeButton } from '@/components/ui/ResumeButton'
 
-export function RecruiterBrief() {
+export function RecruiterBrief({ location = portfolio.person.location }: { location?: string }) {
   const currentRole = portfolio.experience[0]
   return (
     <section aria-labelledby="recruiter-heading" className="recruiter-section">
@@ -32,7 +32,7 @@ export function RecruiterBrief() {
             </div>
             <div>
               <dt>Based in</dt>
-              <dd>{portfolio.person.location}</dd>
+              <dd>{location}</dd>
             </div>
           </dl>
         </div>

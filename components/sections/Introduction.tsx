@@ -2,18 +2,19 @@ import { ArrowDownRight, ArrowUpRight, Check, FileInput, MapPin, Workflow } from
 import { portfolio } from '@/data/portfolio'
 import { MagneticButton } from '@/components/ui/MagneticButton'
 import { ResumeButton } from '@/components/ui/ResumeButton'
+import { defaultContent, type SiteContent } from '@/lib/admin-content'
 
-export function Introduction() {
+export function Introduction({ profile = defaultContent.profile }: { profile?: SiteContent['profile'] }) {
   return (
     <section id="home" aria-label="Introduction" className="section section--hero surface surface--paper new-hero">
       <div className="container-page">
         <div className="hero-layout"><div>
-          <p className="availability"><span aria-hidden="true" />Open to Python & automation roles</p>
-          <p className="hero-intro">Hello, I’m {portfolio.person.name}.</p>
-          <h1 className="hero-title">Less repetitive work.<br /><span>More useful software.</span></h1>
-          <p className="hero-copy">I build Python applications that connect the tools people use every day. Accounting workflows, AI agents and document automation — built around a real problem.</p>
+          <p className="availability"><span aria-hidden="true" />{profile.availability}</p>
+          <p className="hero-intro">Hello, I’m {profile.name}.</p>
+          <h1 className="hero-title">{profile.heading}<br /><span>{profile.headingAccent}</span></h1>
+          <p className="hero-copy">{profile.introduction}</p>
           <div className="mt-8 flex flex-wrap gap-3"><MagneticButton href="#projects" variant="primary" size="lg" magnet={0}>Explore my work<ArrowDownRight className="h-4 w-4" aria-hidden="true" /></MagneticButton><ResumeButton variant="ghost" /></div>
-          <div className="hero-location"><MapPin size={14} aria-hidden="true" />Jaipur, India<span aria-hidden="true">/</span>AI Automation Developer at Kalash Group</div>
+          <div className="hero-location"><MapPin size={14} aria-hidden="true" />{profile.location}<span aria-hidden="true">/</span>{profile.role}</div>
         </div><aside className="workflow-plate" aria-label="Illustrated accounting workflow">
           <div className="workflow-topline"><span className="workflow-symbol" aria-hidden="true"><Workflow size={20} /></span><span>From manual to connected</span><span className="font-mono text-xs">01 / 03</span></div>
           <p className="workflow-caption">A little structure.<br />A lot less repetition.</p>

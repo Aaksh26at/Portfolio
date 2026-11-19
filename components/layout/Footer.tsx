@@ -1,8 +1,10 @@
 import Link from 'next/link'
 import { portfolio } from '@/data/portfolio'
 import { SocialLinks } from '@/components/ui/SocialLinks'
+import { publicContent } from '@/lib/admin-store'
 
-export function Footer() {
+export async function Footer() {
+  const { profile } = await publicContent()
   const year = new Date().getFullYear()
 
   return (
@@ -19,13 +21,14 @@ export function Footer() {
               {portfolio.person.initials}
             </Link>
             <span className="hidden h-4 w-px bg-[var(--color-rule)] sm:block" aria-hidden="true" />
-            <p className="text-sm text-ink-muted">{portfolio.person.name} · Python & automation</p>
+            <p className="text-sm text-ink-muted">{profile.name} · Python & automation</p>
           </div>
 
           <nav aria-label="Footer" className="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-7">
             {/* Replaces the hand-rolled link list, which carried no
                 analytics; SocialLinks already tracks each destination. */}
-            <SocialLinks />
+            <SocialLinks email={profile.email} phone={profile.phone} />
+            <Link href="/admin" className="text-sm text-ink-muted">Admin</Link>
             <p className="whitespace-nowrap text-xs text-ink-faint">© {year} · Jaipur, India</p>
           </nav>
         </div>

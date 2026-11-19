@@ -178,7 +178,7 @@ export function ProjectVisual({ project }: { project: Project }) {
         ? <ChurnVisual />
         : project.slug === 'jvvnl-bill-automation'
           ? <BillsVisual />
-          : <ResumeVisual />
+          : project.slug === 'resume-screening' ? <ResumeVisual /> : <div className="flex h-full flex-col items-center justify-center gap-4 p-6 text-center"><span className="font-display text-2xl">{project.title}</span><span className="text-sm text-ink-muted">{project.technologies.slice(0, 4).join(' · ')}</span></div>
 
   return (
     <div className="project-visual relative flex h-full w-full flex-col overflow-hidden bg-[var(--color-paper)] text-ink">

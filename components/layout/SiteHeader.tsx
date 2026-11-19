@@ -10,7 +10,7 @@ import { ThemeToggle } from '@/components/ui/ThemeToggle'
 const links = portfolio.nav.filter(item => item.href !== '#contact').map(item => ({ label: item.label, id: item.href.slice(1) }))
 const sectionIds = ['home', ...links.map(link => link.id), 'contact']
 
-export function Header() {
+export function Header({ name = portfolio.person.name }: { name?: string }) {
   const [open, setOpen] = useState(false)
   const active = useScrollSpy(sectionIds)
   const root = useRef<HTMLElement>(null)
@@ -26,7 +26,7 @@ export function Header() {
   return (
     <header ref={root} className="site-header">
       <nav className="container-page header-inner" aria-label="Primary">
-        <Link href="/#home" className="site-wordmark" aria-label={`${portfolio.person.name} — home`}><span className="wordmark-icon">aa<span>.</span></span><span className="wordmark-name">Aakshat Agarwal<span>Python & automation</span></span></Link>
+        <Link href="/#home" className="site-wordmark" aria-label={`${name} — home`}><span className="wordmark-icon">aa<span>.</span></span><span className="wordmark-name">{name}<span>Python & automation</span></span></Link>
         <ul className="desktop-nav">{links.map(link => <li key={link.id}><Link href={`/#${link.id}`} aria-current={active === link.id ? 'location' : undefined}>{link.label}</Link></li>)}</ul>
         <div className="header-actions"><ThemeToggle /><Link className="header-contact" href="/#contact">Let’s talk<ArrowUpRight size={15} aria-hidden="true" /></Link><button ref={toggle} type="button" className="menu-toggle" onClick={() => setOpen(value => !value)} aria-label={open ? 'Close navigation' : 'Open navigation'} aria-expanded={open} aria-controls="mobile-menu">{open ? <X size={20} /> : <Menu size={20} />}</button></div>
       </nav>

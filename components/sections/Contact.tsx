@@ -9,8 +9,8 @@ import { SectionHeading } from '@/components/ui/SectionHeading'
 
 type Status = 'idle' | 'submitting' | 'success' | 'fallback' | 'error'
 
-export function Contact() {
-  const { contact } = portfolio
+export function Contact({ publicContact }: { publicContact?: Pick<typeof portfolio.contact, 'email' | 'phone' | 'location'> }) {
+  const contact = { ...portfolio.contact, ...publicContact }
   const [status, setStatus] = useState<Status>('idle')
   const [error, setError] = useState('')
   const [uncertain, setUncertain] = useState(false)

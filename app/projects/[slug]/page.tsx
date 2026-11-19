@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, ExternalLink, Github } from 'lucide-react'
-import { portfolio } from '@/data/portfolio'
+import { publicContent } from '@/lib/admin-store'
 import { projectResults } from '@/data/project-results'
 import { Badge } from '@/components/ui/Badge'
 import { MagneticButton } from '@/components/ui/MagneticButton'
@@ -19,15 +19,12 @@ interface PageProps {
   params: Promise<{ slug: string }>
 }
 
-export function generateStaticParams() {
-  return portfolio.projects
-    .filter((project) => project.status === 'shipped')
-    .map((project) => ({ slug: project.slug }))
-}
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const project = portfolio.projects.find((item) => item.slug === slug)
+  const content = await publicContent()
+  const project = content.projects.find((item) => item.slug === slug && item.published)
   if (!project) return { title: 'Project not found' }
   return {
     title: project.title,
@@ -53,9 +50,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ProjectCaseStudyPage({ params }: PageProps) {
   const { slug } = await params
-  const project = portfolio.projects.find(
-    (item) => item.slug === slug && item.status === 'shipped',
-  )
+  const content = await publicContent()
+  const project = content.projects.find(item => item.slug === slug && item.published)
   if (!project) notFound()
 
   return (

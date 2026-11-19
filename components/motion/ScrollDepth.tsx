@@ -1,6 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { usePathname } from 'next/navigation'
 
 const PersistentDataWorld = dynamic(
   () => import('@/components/3d/PersistentDataWorld').then((module) => module.PersistentDataWorld),
@@ -15,5 +16,7 @@ const PersistentDataWorld = dynamic(
 )
 
 export function ScrollDepth() {
+  const pathname = usePathname()
+  if (pathname.startsWith('/admin')) return null
   return <PersistentDataWorld />
 }

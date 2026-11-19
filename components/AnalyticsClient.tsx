@@ -8,7 +8,9 @@ import { GA_ID, trackProjectRoute } from '@/lib/analytics'
 export function AnalyticsClient({ projectSlugs }: { projectSlugs: string[] }) {
   const pathname = usePathname()
   useEffect(() => {
+    if (pathname.startsWith('/admin')) return
     trackProjectRoute(pathname, projectSlugs)
   }, [pathname, projectSlugs])
+  if (pathname.startsWith('/admin')) return null
   return <Script id="portfolio-ga4" src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
 }

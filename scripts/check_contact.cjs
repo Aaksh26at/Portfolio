@@ -12,8 +12,15 @@ const source = ts.transpileModule(fs.readFileSync(file, 'utf8'), {
 const env = {}
 let fetchCalls = []
 let provider = async () => Response.json({ id: 'test-message-id' })
+let inboxId = null
+let inboxFails = false
+const inboxUpdates = []
+const customRequire = id => id === '@/lib/admin-store' ? {
+  saveMessage: async () => { if (inboxFails) throw new Error('offline'); return inboxId },
+  messageDelivery: async (id, status) => { if (id) inboxUpdates.push(status) },
+} : require(id)
 const sandbox = {
-  exports: {}, require, Request, Response, Uint8Array, TextDecoder, AbortSignal,
+  exports: {}, require: customRequire, Request, Response, Uint8Array, TextDecoder, AbortSignal,
   process: { env }, console: { warn() {} },
   fetch: async (...args) => { fetchCalls.push(args); return provider(...args) },
 }
@@ -64,6 +71,15 @@ async function main() {
   assert.equal(fetchCalls.length, 1, 'Do not retry an uncertain email send')
   provider = async () => Response.json({})
   assert.equal((await post(valid, 200)).reason, 'delivery_uncertain')
+  inboxId = 'stored-message'
+  provider = async () => Response.json({ error: 'rejected' }, { status: 403 })
+  const stored = await post(valid, 200)
+  assert.equal(stored.accepted, true)
+  assert.equal(stored.stored, true, 'Inbox captures the message when email notification fails')
+  assert.equal(inboxUpdates.at(-1), 'provider_error')
+  inboxFails = true
+  provider = async () => Response.json({ id: 'test-message-id' })
+  assert.equal((await post(valid, 200)).accepted, true, 'Storage outage must not stop email notifications')
   console.log(`PASS: ${checks} contact-route cases; validation, size limits, bot field, email escaping, reply-to and provider failure handling`)
 }
 main().catch(error => { console.error(error); process.exitCode = 1 })
